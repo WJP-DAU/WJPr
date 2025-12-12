@@ -16,7 +16,7 @@ WJPr is hosted on GitHub. To install the package, ensure you have the `devtools`
 
 ```R
 # Install WJPr from GitHub
-devtools::install_github("ctoruno/WJPr")
+devtools::install_github("WJP-DAU/WJPr")
 ```
 
 ## Usage
