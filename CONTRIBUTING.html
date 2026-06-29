@@ -66,7 +66,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Guía de Contribución para WJPr</h1>
-      <small class="dont-index">Source: <a href="https://github.com/worldjusticeproject-org/WJPr/blob/HEAD/CONTRIBUTING.md" class="external-link"><code>CONTRIBUTING.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/worldjusticeproject-org/WJPr/blob/main/CONTRIBUTING.md" class="external-link"><code>CONTRIBUTING.md</code></a></small>
     </div>
 
 <div id="guía-de-contribución-para-wjpr" class="section level1">
@@ -148,68 +148,68 @@
 <h2 id="convenciones-de-nomenclatura">Convenciones de Nomenclatura<a class="anchor" aria-label="anchor" href="#convenciones-de-nomenclatura"></a></h2>
 <div class="section level3">
 <h3 id="archivos">Archivos<a class="anchor" aria-label="anchor" href="#archivos"></a></h3>
-<table class="table"><thead><tr class="header"><th>Tipo</th>
+<table class="table"><thead><tr><th>Tipo</th>
 <th>Convención</th>
 <th>Ejemplo</th>
-</tr></thead><tbody><tr class="odd"><td>Función de gráfico</td>
+</tr></thead><tbody><tr><td>Función de gráfico</td>
 <td><code>{tipo}Chart.R</code></td>
 <td>
 <code>barsChart.R</code>, <code>radarChart.R</code>
 </td>
-</tr><tr class="even"><td>Utilidades</td>
+</tr><tr><td>Utilidades</td>
 <td><code>{nombre}.R</code></td>
 <td>
 <code>utils.R</code>, <code>check_data.R</code>
 </td>
-</tr><tr class="odd"><td>Datos</td>
+</tr><tr><td>Datos</td>
 <td>
 <code>data.R</code> (documentación)</td>
 <td>-</td>
 </tr></tbody></table></div>
 <div class="section level3">
 <h3 id="funciones">Funciones<a class="anchor" aria-label="anchor" href="#funciones"></a></h3>
-<table class="table"><thead><tr class="header"><th>Tipo</th>
+<table class="table"><thead><tr><th>Tipo</th>
 <th>Prefijo</th>
 <th>Ejemplo</th>
-</tr></thead><tbody><tr class="odd"><td>Gráficos</td>
+</tr></thead><tbody><tr><td>Gráficos</td>
 <td><code>wjp_</code></td>
 <td>
 <code><a href="reference/wjp_bars.html">wjp_bars()</a></code>, <code><a href="reference/wjp_radar.html">wjp_radar()</a></code>
 </td>
-</tr><tr class="even"><td>Utilidades</td>
+</tr><tr><td>Utilidades</td>
 <td><code>wjp_</code></td>
 <td>
 <code><a href="reference/wjp_fonts.html">wjp_fonts()</a></code>, <code><a href="reference/wjp_check_data.html">wjp_check_data()</a></code>
 </td>
-</tr><tr class="odd"><td>Tema</td>
+</tr><tr><td>Tema</td>
 <td><code>WJP_</code></td>
 <td><code><a href="reference/WJP_theme.html">WJP_theme()</a></code></td>
 </tr></tbody></table></div>
 <div class="section level3">
 <h3 id="parámetros-estándar">Parámetros Estándar<a class="anchor" aria-label="anchor" href="#par%C3%A1metros-est%C3%A1ndar"></a></h3>
 <p>Todas las funciones de gráfico DEBEN usar estos nombres de parámetros cuando aplique:</p>
-<table class="table"><thead><tr class="header"><th>Parámetro</th>
+<table class="table"><thead><tr><th>Parámetro</th>
 <th>Descripción</th>
 <th>Tipo</th>
-</tr></thead><tbody><tr class="odd"><td><code>data</code></td>
+</tr></thead><tbody><tr><td><code>data</code></td>
 <td>Data frame con los datos</td>
 <td>data.frame</td>
-</tr><tr class="even"><td><code>target</code></td>
+</tr><tr><td><code>target</code></td>
 <td>Variable con valores numéricos a graficar</td>
 <td>string</td>
-</tr><tr class="odd"><td><code>grouping</code></td>
+</tr><tr><td><code>grouping</code></td>
 <td>Variable de agrupación (eje X o Y)</td>
 <td>string</td>
-</tr><tr class="even"><td><code>colors</code></td>
+</tr><tr><td><code>colors</code></td>
 <td>Variable para colores</td>
 <td>string</td>
-</tr><tr class="odd"><td><code>cvec</code></td>
+</tr><tr><td><code>cvec</code></td>
 <td>Vector nombrado de colores hex</td>
 <td>named vector</td>
-</tr><tr class="even"><td><code>labels</code></td>
+</tr><tr><td><code>labels</code></td>
 <td>Variable con etiquetas</td>
 <td>string</td>
-</tr><tr class="odd"><td><code>ptheme</code></td>
+</tr><tr><td><code>ptheme</code></td>
 <td>Tema ggplot2</td>
 <td>ggplot theme</td>
 </tr></tbody></table><hr></div>
@@ -454,58 +454,35 @@
 <p>Antes de enviar un PR, verifica:</p>
 <div class="section level3">
 <h3 id="código">Código<a class="anchor" aria-label="anchor" href="#c%C3%B3digo"></a></h3>
-<ul class="task-list"><li>
-<input type="checkbox">Función sigue la estructura estándar</li>
-<li>
-<input type="checkbox">Parámetros usan nombres estándar (<code>target</code>, <code>grouping</code>, <code>colors</code>, etc.)</li>
-<li>
-<input type="checkbox">Manejo correcto de parámetros NULL</li>
-<li>
-<input type="checkbox">No hay duplicados en rename cuando parámetros coinciden</li>
-<li>
-<input type="checkbox">Usa <code>all_of()</code> para selección de columnas</li>
-<li>
-<input type="checkbox">Colores aplicados solo si <code>cvec</code> no es NULL</li>
-<li>
-<input type="checkbox">Tema aplicado con <code>ptheme</code> parameter</li>
-<li>
-<input type="checkbox">Retorna objeto ggplot</li>
+<ul class="task-list"><li><label><input type="checkbox">Función sigue la estructura estándar</label></li>
+<li><label><input type="checkbox">Parámetros usan nombres estándar (<code>target</code>, <code>grouping</code>, <code>colors</code>, etc.)</label></li>
+<li><label><input type="checkbox">Manejo correcto de parámetros NULL</label></li>
+<li><label><input type="checkbox">No hay duplicados en rename cuando parámetros coinciden</label></li>
+<li><label><input type="checkbox">Usa <code>all_of()</code> para selección de columnas</label></li>
+<li><label><input type="checkbox">Colores aplicados solo si <code>cvec</code> no es NULL</label></li>
+<li><label><input type="checkbox">Tema aplicado con <code>ptheme</code> parameter</label></li>
+<li><label><input type="checkbox">Retorna objeto ggplot</label></li>
 </ul></div>
 <div class="section level3">
 <h3 id="documentación">Documentación<a class="anchor" aria-label="anchor" href="#documentaci%C3%B3n"></a></h3>
-<ul class="task-list"><li>
-<input type="checkbox">Roxygen2 completo con todos los tags obligatorios</li>
-<li>
-<input type="checkbox"><code>@export</code> tag presente</li>
-<li>
-<input type="checkbox"><code><a href="https://lifecycle.r-lib.org/reference/badge.html" class="external-link">lifecycle::badge()</a></code> en descripción</li>
-<li>
-<input type="checkbox">Ejemplo reproducible y funcional</li>
-<li>
-<input type="checkbox">Parámetros documentados con tipo y descripción</li>
+<ul class="task-list"><li><label><input type="checkbox">Roxygen2 completo con todos los tags obligatorios</label></li>
+<li><label><input type="checkbox"><code>@export</code> tag presente</label></li>
+<li><label><input type="checkbox"><code><a href="https://lifecycle.r-lib.org/reference/badge.html" class="external-link">lifecycle::badge()</a></code> en descripción</label></li>
+<li><label><input type="checkbox">Ejemplo reproducible y funcional</label></li>
+<li><label><input type="checkbox">Parámetros documentados con tipo y descripción</label></li>
 </ul></div>
 <div class="section level3">
 <h3 id="testing">Testing<a class="anchor" aria-label="anchor" href="#testing"></a></h3>
-<ul class="task-list"><li>
-<input type="checkbox">Ejemplo en documentación ejecuta sin errores</li>
-<li>
-<input type="checkbox"><code><a href="https://devtools.r-lib.org/reference/check.html" class="external-link">devtools::check()</a></code> pasa sin errores</li>
-<li>
-<input type="checkbox"><code><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">devtools::document()</a></code> actualiza NAMESPACE</li>
+<ul class="task-list"><li><label><input type="checkbox">Ejemplo en documentación ejecuta sin errores</label></li>
+<li><label><input type="checkbox"><code>devtools::check()</code> pasa sin errores</label></li>
+<li><label><input type="checkbox"><code>devtools::document()</code> actualiza NAMESPACE</label></li>
 </ul></div>
 <div class="section level3">
 <h3 id="archivos-1">Archivos<a class="anchor" aria-label="anchor" href="#archivos-1"></a></h3>
-<ul class="task-list"><li>
-<input type="checkbox">Archivo nombrado como <code>{tipo}Chart.R</code>
-</li>
-<li>
-<input type="checkbox">Agregada imagen de ejemplo en <code>man/figures/</code>
-</li>
-<li>
-<input type="checkbox">Actualizado <code>data-raw/generate-examples.R</code>
-</li>
-<li>
-<input type="checkbox">Actualizado <code>CLAUDE.md</code> con nueva función</li>
+<ul class="task-list"><li><label><input type="checkbox">Archivo nombrado como <code>{tipo}Chart.R</code></label></li>
+<li><label><input type="checkbox">Agregada imagen de ejemplo en <code>man/figures/</code></label></li>
+<li><label><input type="checkbox">Actualizado <code>data-raw/generate-examples.R</code></label></li>
+<li><label><input type="checkbox">Actualizado <code>CLAUDE.md</code> con nueva función</label></li>
 </ul><hr></div>
 </div>
 <div class="section level2">
@@ -536,13 +513,13 @@
 <h3 id="id_4-verificar">4. Verificar<a class="anchor" aria-label="anchor" href="#id_4-verificar"></a></h3>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Regenerar documentación</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">document</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">document</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Verificar paquete</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/check.html" class="external-link">check</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">check</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Probar localmente</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">load_all</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">load_all</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co"># Ejecutar ejemplo de la función</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -583,7 +560,7 @@
 <div class="section level3">
 <h3 id="cómo-pruebo-sin-instalar-el-paquete">¿Cómo pruebo sin instalar el paquete?<a class="anchor" aria-label="anchor" href="#c%C3%B3mo-pruebo-sin-instalar-el-paquete"></a></h3>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">load_all</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># Carga funciones sin instalar</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">load_all</span><span class="op">(</span><span class="op">)</span>  <span class="co"># Carga funciones sin instalar</span></span></code></pre></div>
 <hr></div>
 </div>
 <div class="section level2">

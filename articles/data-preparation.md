@@ -6,6 +6,7 @@ structure, and understanding this structure will help you create charts
 quickly and avoid common errors.
 
 ``` r
+
 library(dplyr)
 library(tidyr)
 library(WJPr)
@@ -32,7 +33,7 @@ Here’s an example of the same data in both formats:
 | Narnia    |       38.1 |       41.2 |       44.3 |
 | Neverland |       52.3 |       49.8 |       47.5 |
 
-Wide format - one column per year
+Wide format - one column per year {.table}
 
 **Long format (what WJPr expects):**
 
@@ -48,7 +49,7 @@ Wide format - one column per year
 | Neverland | 2019 |  49.8 |
 | Neverland | 2022 |  47.5 |
 
-Long format - one row per observation
+Long format - one row per observation {.table}
 
 ### Converting Wide to Long
 
@@ -57,6 +58,7 @@ Use
 to convert your data:
 
 ``` r
+
 wide_data <- data.frame(
   country = c("Atlantis", "Narnia", "Neverland"),
   trust_2017 = c(45.2, 38.1, 52.3),
@@ -94,19 +96,20 @@ knitr::kable(long_data)
 WJPr functions use consistent parameter names across all chart types.
 Here’s what each parameter expects:
 
-| Parameter  | Purpose                     | Expected Type    | Example                         |
-|------------|-----------------------------|------------------|---------------------------------|
-| `target`   | Values to plot (Y-axis)     | Numeric          | Percentages, scores, counts     |
-| `grouping` | Categories (X-axis or rows) | Character/Factor | Countries, institutions, years  |
-| `colors`   | Color grouping variable     | Character/Factor | Groups, categories, years       |
-| `labels`   | Text labels to display      | Character        | “45%”, “High”, formatted values |
-| `cvec`     | Color mapping               | Named vector     | `c("Group A" = "#FF0000")`      |
+| Parameter | Purpose | Expected Type | Example |
+|----|----|----|----|
+| `target` | Values to plot (Y-axis) | Numeric | Percentages, scores, counts |
+| `grouping` | Categories (X-axis or rows) | Character/Factor | Countries, institutions, years |
+| `colors` | Color grouping variable | Character/Factor | Groups, categories, years |
+| `labels` | Text labels to display | Character | “45%”, “High”, formatted values |
+| `cvec` | Color mapping | Named vector | `c("Group A" = "#FF0000")` |
 
 ### Minimal Required Structure
 
 For most charts, you need at minimum:
 
 ``` r
+
 minimal_data <- data.frame(
   category = c("A", "B", "C", "D"),
   value    = c(25, 45, 30, 50)
@@ -122,11 +125,12 @@ knitr::kable(minimal_data, caption = "Minimal structure: grouping + target")
 | C        |    30 |
 | D        |    50 |
 
-Minimal structure: grouping + target
+Minimal structure: grouping + target {.table}
 
 ### Complete Structure with All Options
 
 ``` r
+
 complete_data <- data.frame(
   category     = c("A", "B", "C", "D"),
   value        = c(25, 45, 30, 50),
@@ -146,7 +150,7 @@ knitr::kable(complete_data, caption = "Complete structure with all optional colu
 | C        |    30 | Type 2 | 30%         |        35 |     3 |
 | D        |    50 | Type 2 | 50%         |        55 |     4 |
 
-Complete structure with all optional columns
+Complete structure with all optional columns {.table}
 
 ## Preparing Data: Step by Step
 
@@ -155,6 +159,7 @@ Complete structure with all optional columns
 Start from raw data and calculate the values you want to plot:
 
 ``` r
+
 gpp_data <- WJPr::gpp
 
 step1 <- gpp_data %>%
@@ -173,6 +178,7 @@ step1 <- gpp_data %>%
 Group and summarize to get one value per category:
 
 ``` r
+
 step2 <- step1 %>%
   group_by(country, year) %>%
   summarise(
@@ -200,6 +206,7 @@ knitr::kable(step2)
 Create columns for labels, colors, and ordering:
 
 ``` r
+
 step3 <- step2 %>%
   filter(year == 2022) %>%
   mutate(
@@ -222,6 +229,7 @@ knitr::kable(step3)
 Now your data is ready for WJPr:
 
 ``` r
+
 wjp_fonts()
 
 wjp_bars(
@@ -244,6 +252,7 @@ wjp_bars(
 One value per category:
 
 ``` r
+
 pattern_simple <- data.frame(
   institution = c("Police", "Courts", "Parliament", "Government"),
   trust       = c(45, 38, 29, 35),
@@ -256,6 +265,7 @@ pattern_simple <- data.frame(
 Multiple groups per category:
 
 ``` r
+
 pattern_grouped <- data.frame(
   institution = rep(c("Police", "Courts", "Parliament"), 2),
   gender      = rep(c("Male", "Female"), each = 3),
@@ -268,6 +278,7 @@ pattern_grouped <- data.frame(
 Values across time:
 
 ``` r
+
 pattern_time <- data.frame(
   year  = rep(2017:2022, 2),
   group = rep(c("Urban", "Rural"), each = 6),
@@ -280,6 +291,7 @@ pattern_time <- data.frame(
 Start and end values:
 
 ``` r
+
 pattern_dumbbell <- data.frame(
   category = rep(c("A", "B", "C"), 2),
   period   = rep(c("2017", "2022"), each = 3),
@@ -292,6 +304,7 @@ pattern_dumbbell <- data.frame(
 Parts that sum to 100%:
 
 ``` r
+
 pattern_composition <- data.frame(
   country   = rep(c("Atlantis", "Narnia"), each = 2),
   response  = rep(c("Agree", "Disagree"), 2),
@@ -305,6 +318,7 @@ pattern_composition <- data.frame(
 Multiple variables per unit:
 
 ``` r
+
 pattern_radar <- data.frame(
   dimension = c("Speed", "Quality", "Cost", "Access", "Trust"),
   score     = c(0.72, 0.65, 0.48, 0.81, 0.55),
@@ -318,6 +332,7 @@ WJPr includes a helper function to validate your data structure before
 plotting:
 
 ``` r
+
 # Check if data is ready for a bar chart
 wjp_check_data(
   data     = my_data,
@@ -342,6 +357,7 @@ This will check:
 **Problem:**
 
 ``` r
+
 # This won't work
 bad_data <- data.frame(
   country    = c("A", "B"),
@@ -354,6 +370,7 @@ bad_data <- data.frame(
 [`pivot_longer()`](https://tidyr.tidyverse.org/reference/pivot_longer.html):
 
 ``` r
+
 good_data <- bad_data %>%
   pivot_longer(
     cols      = starts_with("year_"),
@@ -367,6 +384,7 @@ good_data <- bad_data %>%
 **Problem:**
 
 ``` r
+
 # cvec names don't match data values
 cvec = c("Group1" = "#FF0000")  # But data has "group1" (lowercase)
 ```
@@ -374,6 +392,7 @@ cvec = c("Group1" = "#FF0000")  # But data has "group1" (lowercase)
 **Solution:** Ensure exact match between cvec names and data values:
 
 ``` r
+
 # Check unique values first
 unique(data$color_column)
 
@@ -386,6 +405,7 @@ cvec = c("group1" = "#FF0000")
 **Problem:**
 
 ``` r
+
 # Values stored as text
 data$value <- c("45%", "50%", "38%")
 ```
@@ -393,6 +413,7 @@ data$value <- c("45%", "50%", "38%")
 **Solution:** Keep numeric values separate from labels:
 
 ``` r
+
 data <- data %>%
   mutate(
     value = c(45, 50, 38),
@@ -407,6 +428,7 @@ data <- data %>%
 **Solution:** Aggregate first:
 
 ``` r
+
 data <- raw_data %>%
   group_by(country, year) %>%
   summarise(
@@ -417,16 +439,16 @@ data <- raw_data %>%
 
 ## Quick Reference: Data Structure by Chart Type
 
-| Chart Type                                                                                     | Required Columns                  | Optional Columns                |
-|------------------------------------------------------------------------------------------------|-----------------------------------|---------------------------------|
-| [`wjp_bars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_bars.md)           | target, grouping                  | colors, labels, lab_pos, order  |
-| [`wjp_dots()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dots.md)           | target, grouping, colors          | order, sd, sample_size (for CI) |
-| [`wjp_lines()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lines.md)         | target, grouping, colors, ngroups | labels                          |
-| [`wjp_dumbbells()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dumbbells.md) | target, grouping, color, cgroups  | labels, labpos                  |
-| [`wjp_divbars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_divbars.md)     | target, grouping, diverging       | labels, order                   |
-| [`wjp_radar()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_radar.md)         | target, axis_var, labels, colors  | order_var                       |
-| [`wjp_rose()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_rose.md)           | target, grouping, labels          | order_var                       |
-| [`wjp_slope()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_slope.md)         | target, grouping, colors, ngroups | labels                          |
-| [`wjp_gauge()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_gauge.md)         | target, colors                    | labels, factor_order            |
-| [`wjp_lollipops()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lollipops.md) | target, grouping                  | order                           |
-| [`wjp_edgebars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_edgebars.md)   | target, grouping, labels          | x_lab_pos                       |
+| Chart Type | Required Columns | Optional Columns |
+|----|----|----|
+| [`wjp_bars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_bars.md) | target, grouping | colors, labels, lab_pos, order |
+| [`wjp_dots()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dots.md) | target, grouping, colors | order, sd, sample_size (for CI) |
+| [`wjp_lines()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lines.md) | target, grouping, colors, ngroups | labels |
+| [`wjp_dumbbells()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dumbbells.md) | target, grouping, color, cgroups | labels, labpos |
+| [`wjp_divbars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_divbars.md) | target, grouping, diverging | labels, order |
+| [`wjp_radar()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_radar.md) | target, axis_var, labels, colors | order_var |
+| [`wjp_rose()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_rose.md) | target, grouping, labels | order_var |
+| [`wjp_slope()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_slope.md) | target, grouping, colors, ngroups | labels |
+| [`wjp_gauge()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_gauge.md) | target, colors | labels, factor_order |
+| [`wjp_lollipops()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lollipops.md) | target, grouping | order |
+| [`wjp_edgebars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_edgebars.md) | target, grouping, labels | x_lab_pos |

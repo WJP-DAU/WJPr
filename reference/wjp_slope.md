@@ -91,7 +91,8 @@ select(year, gend, q1a) %>%
     year %in% c(2017, 2019)
   ) %>%
   mutate(
-    q1a = as.double(q1a),
+    gend = as.double(unclass(gend)),
+    q1a = as.double(unclass(q1a)),
     trust = case_when(
       q1a <= 2  ~ 1,
       q1a <= 4  ~ 0
@@ -103,7 +104,7 @@ select(year, gend, q1a) %>%
   ) %>%
   group_by(year, gender) %>%
   summarise(
-    trust = mean(trust, na.rm = T)*100,
+    trust = mean(trust, na.rm = TRUE)*100,
     .groups = "keep"
   ) %>%
   mutate(

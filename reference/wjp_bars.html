@@ -70,7 +70,7 @@ object with a bar chart following WJP style guidelines."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Plot a Bar Chart following WJP style guidelines</h1>
-      <small class="dont-index">Source: <a href="https://github.com/worldjusticeproject-org/WJPr/blob/HEAD/R/barsChart.R" class="external-link"><code>R/barsChart.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/worldjusticeproject-org/WJPr/blob/main/R/barsChart.R" class="external-link"><code>R/barsChart.R</code></a></small>
       <div class="d-none name"><code>wjp_bars.Rd</code></div>
     </div>
 
@@ -177,7 +177,7 @@ object with a bar chart following WJP style guidelines.</p>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">country</span>, <span class="va">year</span>, <span class="va">q1a</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">country</span>, <span class="va">year</span><span class="op">)</span> <span class="op"><a href="pipe.html">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>    q1a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="va">q1a</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    q1a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">as.double</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">unclass</a></span><span class="op">(</span><span class="va">q1a</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    trust <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>      <span class="va">q1a</span> <span class="op">&lt;=</span> <span class="fl">2</span>  <span class="op">~</span> <span class="fl">1</span>,</span></span>
 <span class="r-in"><span>      <span class="va">q1a</span> <span class="op">&lt;=</span> <span class="fl">4</span>  <span class="op">~</span> <span class="fl">0</span>,</span></span>

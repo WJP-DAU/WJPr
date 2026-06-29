@@ -99,7 +99,7 @@ filter(
   mutate(
     across(
       !year,
-      \(x) as.double(x)
+      \(x) as.double(unclass(x))
     ),
     across(
       !year,

@@ -14,6 +14,7 @@ Las funciones de gráficos viven en `R/` y siguen la convención:
 La función exportada debe usar el prefijo `wjp_`:
 
 ``` r
+
 wjp_waterfall <- function(
     data,
     target,
@@ -32,6 +33,7 @@ wjp_waterfall <- function(
 Toda función pública necesita documentación roxygen completa:
 
 ``` r
+
 #' Plot a Waterfall Chart following WJP style guidelines
 #'
 #' @description
@@ -54,6 +56,7 @@ Toda función pública necesita documentación roxygen completa:
 Después de documentar, ejecutar:
 
 ``` r
+
 roxygen2::roxygenise()
 ```
 
@@ -65,6 +68,7 @@ Las funciones deben renombrar columnas de entrada a nombres internos
 estables. Esto hace que el código sea consistente entre gráficos:
 
 ``` r
+
 data <- data |>
   dplyr::rename(
     target_var = dplyr::all_of(target),
@@ -88,6 +92,7 @@ if (is.null(colors)) {
 Agregar errores claros para casos que producirían gráficos inválidos:
 
 ``` r
+
 if (!is.data.frame(data)) {
   stop("`data` must be a data frame.", call. = FALSE)
 }
@@ -106,6 +111,7 @@ Las funciones deben retornar un objeto `ggplot` y respetar `cvec` y
 `ptheme`:
 
 ``` r
+
 plt <- ggplot2::ggplot(data, ggplot2::aes(grouping_var, target_var)) +
   ggplot2::geom_col()
 
@@ -136,6 +142,7 @@ Agregar al menos una prueba en `tests/testthat/` que confirme:
 Ejemplo:
 
 ``` r
+
 test_that("wjp_waterfall returns a buildable ggplot", {
   data <- data.frame(
     category = c("Start", "Gain", "Loss"),
@@ -163,6 +170,7 @@ Actualizar `_pkgdown.yml`:
 Ejecutar:
 
 ``` r
+
 testthat::test_dir("tests/testthat")
 pkgdown::build_site()
 ```

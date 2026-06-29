@@ -7,7 +7,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/worldjusticeproject-org/WJPr/blob/HEAD/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/worldjusticeproject-org/WJPr/blob/main/DESCRIPTION)
 
 Toruno Paniagua C (2026). *WJPr: World Justice Project Data and
 Visualization Tools*. R package version 1.0.1,

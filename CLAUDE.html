@@ -66,7 +66,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>CLAUDE.md</h1>
-      <small class="dont-index">Source: <a href="https://github.com/worldjusticeproject-org/WJPr/blob/HEAD/CLAUDE.md" class="external-link"><code>CLAUDE.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/worldjusticeproject-org/WJPr/blob/main/CLAUDE.md" class="external-link"><code>CLAUDE.md</code></a></small>
     </div>
 
 <div id="claudemd" class="section level1">
@@ -81,7 +81,7 @@
 <div class="section level3">
 <h3 id="package-installation">Package Installation<a class="anchor" aria-label="anchor" href="#package-installation"></a></h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/install-deprecated.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"worldjusticeproject-org/WJPr"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"worldjusticeproject-org/WJPr"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="environment-setup-renv">Environment Setup (renv)<a class="anchor" aria-label="anchor" href="#environment-setup-renv"></a></h3>
@@ -93,15 +93,15 @@
 <div class="section level3">
 <h3 id="building-and-checking">Building and Checking<a class="anchor" aria-label="anchor" href="#building-and-checking"></a></h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">document</a></span><span class="op">(</span><span class="op">)</span>    <span class="co"># Generate documentation from Roxygen2 comments</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/build.html" class="external-link">build</a></span><span class="op">(</span><span class="op">)</span>       <span class="co"># Build the package</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/check.html" class="external-link">check</a></span><span class="op">(</span><span class="op">)</span>       <span class="co"># Run R CMD check</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">load_all</a></span><span class="op">(</span><span class="op">)</span>    <span class="co"># Load package for testing during development</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">document</span><span class="op">(</span><span class="op">)</span>    <span class="co"># Generate documentation from Roxygen2 comments</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">build</span><span class="op">(</span><span class="op">)</span>       <span class="co"># Build the package</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">check</span><span class="op">(</span><span class="op">)</span>       <span class="co"># Run R CMD check</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">load_all</span><span class="op">(</span><span class="op">)</span>    <span class="co"># Load package for testing during development</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="running-tests">Running Tests<a class="anchor" aria-label="anchor" href="#running-tests"></a></h3>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/test.html" class="external-link">test</a></span><span class="op">(</span><span class="op">)</span>                    <span class="co"># Run all tests</span></span>
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">test</span><span class="op">(</span><span class="op">)</span>                    <span class="co"># Run all tests</span></span>
 <span><span class="fu">testthat</span><span class="fu">::</span><span class="fu"><a href="https://testthat.r-lib.org/reference/test_file.html" class="external-link">test_file</a></span><span class="op">(</span><span class="st">"tests/testthat/test-example.R"</span><span class="op">)</span>  <span class="co"># Run single test file</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -133,46 +133,46 @@
 </ul></div>
 <div class="section level3">
 <h3 id="chart-functions-13-total">Chart Functions (13 total)<a class="anchor" aria-label="anchor" href="#chart-functions-13-total"></a></h3>
-<table class="table"><colgroup><col width="34%"><col width="20%"><col width="44%"></colgroup><thead><tr class="header"><th>Function</th>
+<table class="table"><colgroup><col width="34%"><col width="20%"><col width="44%"></colgroup><thead><tr><th>Function</th>
 <th>File</th>
 <th>Description</th>
-</tr></thead><tbody><tr class="odd"><td><code><a href="reference/wjp_bars.html">wjp_bars()</a></code></td>
+</tr></thead><tbody><tr><td><code><a href="reference/wjp_bars.html">wjp_bars()</a></code></td>
 <td>barsChart.R</td>
 <td>Vertical/horizontal bar charts</td>
-</tr><tr class="even"><td><code><a href="reference/wjp_divbars.html">wjp_divbars()</a></code></td>
+</tr><tr><td><code><a href="reference/wjp_divbars.html">wjp_divbars()</a></code></td>
 <td>divbarsChart.R</td>
 <td>Diverging bar charts</td>
-</tr><tr class="odd"><td><code><a href="reference/wjp_dots.html">wjp_dots()</a></code></td>
+</tr><tr><td><code><a href="reference/wjp_dots.html">wjp_dots()</a></code></td>
 <td>dotsChart.R</td>
 <td>Dot plots</td>
-</tr><tr class="even"><td><code><a href="reference/wjp_lines.html">wjp_lines()</a></code></td>
+</tr><tr><td><code><a href="reference/wjp_lines.html">wjp_lines()</a></code></td>
 <td>lineChart.R</td>
 <td>Line charts with points</td>
-</tr><tr class="odd"><td><code><a href="reference/wjp_slope.html">wjp_slope()</a></code></td>
+</tr><tr><td><code><a href="reference/wjp_slope.html">wjp_slope()</a></code></td>
 <td>slopeChart.R</td>
 <td>Slope charts for comparisons</td>
-</tr><tr class="even"><td><code><a href="reference/wjp_dumbbells.html">wjp_dumbbells()</a></code></td>
+</tr><tr><td><code><a href="reference/wjp_dumbbells.html">wjp_dumbbells()</a></code></td>
 <td>dumbellsChart.R</td>
 <td>Dumbbell plots</td>
-</tr><tr class="odd"><td><code><a href="reference/wjp_radar.html">wjp_radar()</a></code></td>
+</tr><tr><td><code><a href="reference/wjp_radar.html">wjp_radar()</a></code></td>
 <td>radarChart.R</td>
 <td>Radar/spider charts</td>
-</tr><tr class="even"><td><code><a href="reference/wjp_rose.html">wjp_rose()</a></code></td>
+</tr><tr><td><code><a href="reference/wjp_rose.html">wjp_rose()</a></code></td>
 <td>roseChart.R</td>
 <td>Rose/polar bar charts</td>
-</tr><tr class="odd"><td><code><a href="reference/wjp_gauge.html">wjp_gauge()</a></code></td>
+</tr><tr><td><code><a href="reference/wjp_gauge.html">wjp_gauge()</a></code></td>
 <td>gaugeChart.R</td>
 <td>Gauge/speedometer charts</td>
-</tr><tr class="even"><td><code><a href="reference/wjp_lollipops.html">wjp_lollipops()</a></code></td>
+</tr><tr><td><code><a href="reference/wjp_lollipops.html">wjp_lollipops()</a></code></td>
 <td>lollipopChart.R</td>
 <td>Lollipop charts</td>
-</tr><tr class="odd"><td><code><a href="reference/wjp_edgebars.html">wjp_edgebars()</a></code></td>
+</tr><tr><td><code><a href="reference/wjp_edgebars.html">wjp_edgebars()</a></code></td>
 <td>edgebarsChart.R</td>
 <td>Edge-aligned horizontal bars</td>
-</tr><tr class="even"><td><code><a href="reference/wjp_groupbars.html">wjp_groupbars()</a></code></td>
+</tr><tr><td><code><a href="reference/wjp_groupbars.html">wjp_groupbars()</a></code></td>
 <td>groupbarsChart.R</td>
 <td>Faceted stacked bars by demographic groups</td>
-</tr><tr class="odd"><td><code>wjp_diffmeans()</code></td>
+</tr><tr><td><code>wjp_diffmeans()</code></td>
 <td>diffmeans.R</td>
 <td>Difference in means analysis</td>
 </tr></tbody></table></div>
@@ -239,20 +239,11 @@
 </div>
 <div class="section level3">
 <h3 id="checklist-before-pr">Checklist Before PR<a class="anchor" aria-label="anchor" href="#checklist-before-pr"></a></h3>
-<ul class="task-list"><li>
-<input type="checkbox">Roxygen2 docs with <code>@export</code>, <code>@param</code>, <code>@return</code>, <code>@examples</code>
-</li>
-<li>
-<input type="checkbox">Include <code>lifecycle::badge("experimental")</code>
-</li>
-<li>
-<input type="checkbox">Add to <code>data-raw/generate-examples.R</code>
-</li>
-<li>
-<input type="checkbox">Update this CLAUDE.md file</li>
-<li>
-<input type="checkbox">Run <code><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">devtools::document()</a></code> and <code><a href="https://devtools.r-lib.org/reference/check.html" class="external-link">devtools::check()</a></code>
-</li>
+<ul class="task-list"><li><label><input type="checkbox">Roxygen2 docs with <code>@export</code>, <code>@param</code>, <code>@return</code>, <code>@examples</code></label></li>
+<li><label><input type="checkbox">Include <code>lifecycle::badge("experimental")</code></label></li>
+<li><label><input type="checkbox">Add to <code>data-raw/generate-examples.R</code></label></li>
+<li><label><input type="checkbox">Update this CLAUDE.md file</label></li>
+<li><label><input type="checkbox">Run <code>devtools::document()</code> and <code>devtools::check()</code></label></li>
 </ul></div>
 <div class="section level3">
 <h3 id="documentation-files">Documentation Files<a class="anchor" aria-label="anchor" href="#documentation-files"></a></h3>

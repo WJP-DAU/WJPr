@@ -109,7 +109,7 @@
 <p>WJPr is hosted on GitHub. To install the package, ensure you have the <code>devtools</code> package installed and use the following commands:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Install WJPr from GitHub</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/install-deprecated.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"worldjusticeproject-org/WJPr"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"worldjusticeproject-org/WJPr"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
@@ -179,62 +179,62 @@
 <col width="33%">
 </colgroup>
 <tbody>
-<tr class="odd">
+<tr>
 <td align="center"><strong>Bar Chart</strong></td>
 <td align="center"><strong>Dots Chart</strong></td>
 <td align="center"><strong>Line Chart</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="center"><img src="reference/figures/example-bars.png" width="200" alt="Example vertical bar chart"></td>
 <td align="center"><img src="reference/figures/example-dots.png" width="200" alt="Example dot chart"></td>
 <td align="center"><img src="reference/figures/example-lines.png" width="200" alt="Example line chart"></td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="center"><code><a href="reference/wjp_bars.html">wjp_bars()</a></code></td>
 <td align="center"><code><a href="reference/wjp_dots.html">wjp_dots()</a></code></td>
 <td align="center"><code><a href="reference/wjp_lines.html">wjp_lines()</a></code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="center"><strong>Diverging Bars</strong></td>
 <td align="center"><strong>Dumbbells</strong></td>
 <td align="center"><strong>Slope Chart</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="center"><img src="reference/figures/example-divbars.png" width="200" alt="Example diverging bar chart"></td>
 <td align="center"><img src="reference/figures/example-dumbbells.png" width="200" alt="Example dumbbell chart"></td>
 <td align="center"><img src="reference/figures/example-slope.png" width="200" alt="Example slope chart"></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="center"><code><a href="reference/wjp_divbars.html">wjp_divbars()</a></code></td>
 <td align="center"><code><a href="reference/wjp_dumbbells.html">wjp_dumbbells()</a></code></td>
 <td align="center"><code><a href="reference/wjp_slope.html">wjp_slope()</a></code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="center"><strong>Radar Chart</strong></td>
 <td align="center"><strong>Rose Chart</strong></td>
 <td align="center"><strong>Gauge Chart</strong></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="center"><img src="reference/figures/example-radar.png" width="200" alt="Example radar chart"></td>
 <td align="center"><img src="reference/figures/example-rose.png" width="200" alt="Example rose chart"></td>
 <td align="center"><img src="reference/figures/example-gauge.png" width="200" alt="Example gauge chart"></td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="center"><code><a href="reference/wjp_radar.html">wjp_radar()</a></code></td>
 <td align="center"><code><a href="reference/wjp_rose.html">wjp_rose()</a></code></td>
 <td align="center"><code><a href="reference/wjp_gauge.html">wjp_gauge()</a></code></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="center"><strong>Lollipop Chart</strong></td>
 <td align="center"><strong>Edgebars</strong></td>
 <td align="center"><strong>Grouped Bars</strong></td>
 </tr>
-<tr class="odd">
+<tr>
 <td align="center"><img src="reference/figures/example-lollipops.png" width="200" alt="Example lollipop chart"></td>
 <td align="center"><img src="reference/figures/example-edgebars.png" width="200" alt="Example edge bar chart"></td>
 <td align="center"><img src="reference/figures/example-groupbars.png" width="200" alt="Example grouped bar chart"></td>
 </tr>
-<tr class="even">
+<tr>
 <td align="center"><code><a href="reference/wjp_lollipops.html">wjp_lollipops()</a></code></td>
 <td align="center"><code><a href="reference/wjp_edgebars.html">wjp_edgebars()</a></code></td>
 <td align="center"><code><a href="reference/wjp_groupbars.html">wjp_groupbars()</a></code></td>
@@ -255,33 +255,33 @@
 | Category B   | 38.5   | Group 2  | "39%"             |</code></pre>
 <p><strong>Key parameters used across all functions:</strong></p>
 <table class="table">
-<thead><tr class="header">
+<thead><tr>
 <th>Parameter</th>
 <th>Description</th>
 <th>Type</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code>target</code></td>
 <td>Values to plot (Y-axis)</td>
 <td>Numeric column</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>grouping</code></td>
 <td>Categories (X-axis or rows)</td>
 <td>Character/Factor</td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>colors</code></td>
 <td>Variable for color grouping</td>
 <td>Character/Factor</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>cvec</code></td>
 <td>Named vector mapping values to colors</td>
 <td><code>c("A" = "#HEX")</code></td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>labels</code></td>
 <td>Text labels to display</td>
 <td>Character column</td>

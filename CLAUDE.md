@@ -15,12 +15,14 @@ Law Index data and analysis tools.
 ### Package Installation
 
 ``` r
+
 devtools::install_github("worldjusticeproject-org/WJPr")
 ```
 
 ### Environment Setup (renv)
 
 ``` r
+
 renv::restore()         # Install exact package versions from renv.lock
 renv::status()          # Check if environment matches lockfile
 renv::snapshot()        # Update lockfile after installing packages
@@ -29,6 +31,7 @@ renv::snapshot()        # Update lockfile after installing packages
 ### Building and Checking
 
 ``` r
+
 devtools::document()    # Generate documentation from Roxygen2 comments
 devtools::build()       # Build the package
 devtools::check()       # Run R CMD check
@@ -38,6 +41,7 @@ devtools::load_all()    # Load package for testing during development
 ### Running Tests
 
 ``` r
+
 devtools::test()                    # Run all tests
 testthat::test_file("tests/testthat/test-example.R")  # Run single test file
 ```
@@ -45,6 +49,7 @@ testthat::test_file("tests/testthat/test-example.R")  # Run single test file
 ### Documentation
 
 ``` r
+
 pkgdown::build_site()   # Build the documentation website locally
 ```
 
@@ -80,21 +85,21 @@ for further customization - Use common parameters: `target`, `grouping`,
 
 ### Chart Functions (13 total)
 
-| Function                                                                                       | File             | Description                                |
-|------------------------------------------------------------------------------------------------|------------------|--------------------------------------------|
-| [`wjp_bars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_bars.md)           | barsChart.R      | Vertical/horizontal bar charts             |
-| [`wjp_divbars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_divbars.md)     | divbarsChart.R   | Diverging bar charts                       |
-| [`wjp_dots()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dots.md)           | dotsChart.R      | Dot plots                                  |
-| [`wjp_lines()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lines.md)         | lineChart.R      | Line charts with points                    |
-| [`wjp_slope()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_slope.md)         | slopeChart.R     | Slope charts for comparisons               |
-| [`wjp_dumbbells()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dumbbells.md) | dumbellsChart.R  | Dumbbell plots                             |
-| [`wjp_radar()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_radar.md)         | radarChart.R     | Radar/spider charts                        |
-| [`wjp_rose()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_rose.md)           | roseChart.R      | Rose/polar bar charts                      |
-| [`wjp_gauge()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_gauge.md)         | gaugeChart.R     | Gauge/speedometer charts                   |
-| [`wjp_lollipops()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lollipops.md) | lollipopChart.R  | Lollipop charts                            |
-| [`wjp_edgebars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_edgebars.md)   | edgebarsChart.R  | Edge-aligned horizontal bars               |
+| Function | File | Description |
+|----|----|----|
+| [`wjp_bars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_bars.md) | barsChart.R | Vertical/horizontal bar charts |
+| [`wjp_divbars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_divbars.md) | divbarsChart.R | Diverging bar charts |
+| [`wjp_dots()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dots.md) | dotsChart.R | Dot plots |
+| [`wjp_lines()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lines.md) | lineChart.R | Line charts with points |
+| [`wjp_slope()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_slope.md) | slopeChart.R | Slope charts for comparisons |
+| [`wjp_dumbbells()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dumbbells.md) | dumbellsChart.R | Dumbbell plots |
+| [`wjp_radar()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_radar.md) | radarChart.R | Radar/spider charts |
+| [`wjp_rose()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_rose.md) | roseChart.R | Rose/polar bar charts |
+| [`wjp_gauge()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_gauge.md) | gaugeChart.R | Gauge/speedometer charts |
+| [`wjp_lollipops()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lollipops.md) | lollipopChart.R | Lollipop charts |
+| [`wjp_edgebars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_edgebars.md) | edgebarsChart.R | Edge-aligned horizontal bars |
 | [`wjp_groupbars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_groupbars.md) | groupbarsChart.R | Faceted stacked bars by demographic groups |
-| `wjp_diffmeans()`                                                                              | diffmeans.R      | Difference in means analysis               |
+| `wjp_diffmeans()` | diffmeans.R | Difference in means analysis |
 
 ### Styling Conventions
 
@@ -165,14 +170,15 @@ wjp_newchart <- function(data, target, grouping, colors = NULL, cvec = NULL, pth
 
 ### Checklist Before PR
 
-- Roxygen2 docs with `@export`, `@param`, `@return`, `@examples`
-- Include `lifecycle::badge("experimental")`
-- Add to `data-raw/generate-examples.R`
-- Update this CLAUDE.md file
-- Run
-  [`devtools::document()`](https://devtools.r-lib.org/reference/document.html)
-  and
-  [`devtools::check()`](https://devtools.r-lib.org/reference/check.html)
+Roxygen2 docs with `@export`, `@param`, `@return`, `@examples`
+
+Include `lifecycle::badge("experimental")`
+
+Add to `data-raw/generate-examples.R`
+
+Update this CLAUDE.md file
+
+Run `devtools::document()` and `devtools::check()`
 
 ### Documentation Files
 

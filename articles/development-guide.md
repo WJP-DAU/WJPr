@@ -8,6 +8,7 @@ funciones de visualización al paquete WJPr.
 ### Dependencias de Desarrollo
 
 ``` r
+
 install.packages(c(
 "devtools",
 "roxygen2",
@@ -33,6 +34,7 @@ Crear un nuevo archivo en `R/` siguiendo la convención:
 - **Utilidades**: `{nombre}.R` (ej: `validation.R`)
 
 ``` r
+
 # Crear archivo
 file.create("R/waterfallChart.R")
 ```
@@ -42,6 +44,7 @@ file.create("R/waterfallChart.R")
 ### Template Completo
 
 ``` r
+
 #' Plot a Waterfall Chart following WJP style guidelines
 #'
 #' @description
@@ -243,6 +246,7 @@ El patrón más importante es manejar correctamente cuando un parámetro es
 NULL o cuando dos parámetros apuntan a la misma columna:
 
 ``` r
+
 # INCORRECTO - Causa error si colors == grouping
 data <- data %>%
   rename(
@@ -266,6 +270,7 @@ if (is.null(colors)) {
 ### Vector de Colores Nombrado
 
 ``` r
+
 # Los nombres deben coincidir EXACTAMENTE con valores de la variable colors
 cvec <- c(
   "Trust"    = "#4F518C",
@@ -284,6 +289,7 @@ if (!is.null(cvec)) {
 Para gráficos tipo radar, rose o gauge:
 
 ``` r
+
 plt <- plt +
   coord_polar(
     theta = "y",      # Variable para el ángulo
@@ -299,6 +305,7 @@ plt <- plt +
 Para controlar el rango visual sin afectar los datos:
 
 ``` r
+
 # Agregar segmento de relleno transparente
 padding_data <- data.frame(
   category = "___padding___",
@@ -327,6 +334,7 @@ cvec <- c(cvec, "___padding___" = "transparent")
 Siempre incluir el estado de la función:
 
 ``` r
+
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
@@ -343,6 +351,7 @@ estable - `"deprecated"` - No usar, será eliminada
 Agregar sección en `data-raw/generate-examples.R`:
 
 ``` r
+
 # =============================================================================
 # XX. WATERFALL CHART
 # =============================================================================
@@ -370,6 +379,7 @@ save_example(plot_waterfall, "waterfall")
 ### Generar Imagen
 
 ``` r
+
 source("data-raw/generate-examples.R")
 ```
 
@@ -389,6 +399,7 @@ Agregar la nueva función a la sección de funciones:
 ### Checklist Pre-PR
 
 ``` r
+
 # 1. Regenerar documentación
 devtools::document()
 
@@ -408,12 +419,12 @@ source("data-raw/generate-examples.R")
 
 ### Errores Comunes
 
-| Error                  | Causa                  | Solución                                                                                      |
-|------------------------|------------------------|-----------------------------------------------------------------------------------------------|
-| `object 'x' not found` | Variable no renombrada | Verificar rename                                                                              |
-| `Column doesn't exist` | Doble rename           | Usar if/else para evitar                                                                      |
-| `NULL` result          | Falta return()         | Agregar `return(plt)`                                                                         |
-| Font not found         | Fonts no cargados      | Llamar [`wjp_fonts()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_fonts.md) |
+| Error | Causa | Solución |
+|----|----|----|
+| `object 'x' not found` | Variable no renombrada | Verificar rename |
+| `Column doesn't exist` | Doble rename | Usar if/else para evitar |
+| `NULL` result | Falta return() | Agregar `return(plt)` |
+| Font not found | Fonts no cargados | Llamar [`wjp_fonts()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_fonts.md) |
 
 ## Paso 8: Pull Request
 

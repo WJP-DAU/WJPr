@@ -89,6 +89,8 @@ gpp_data <- WJPr::gpp
 data4radar <- gpp_data %>%
 select(gend, starts_with("q49")) %>%
   mutate(
+    gend = as.double(unclass(gend)),
+    across(starts_with("q49"), \(x) as.double(unclass(x))),
     gender = case_when(
       gend == 1 ~ "Male",
       gend == 2 ~ "Female"
@@ -105,7 +107,7 @@ select(gend, starts_with("q49")) %>%
   summarise(
     across(
       starts_with("q49"),
-      \(x) mean(x, na.rm = T)*100
+      \(x) mean(x, na.rm = TRUE)*100
     )
   ) %>%
   pivot_longer(

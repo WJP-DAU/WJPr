@@ -123,6 +123,7 @@ gpp_data <- WJPr::gpp
 data4dots <- gpp_data %>%
   select(country, q1a, q1b, q1c, q1d) %>%
   mutate(
+    across(!country, \(x) as.double(unclass(x))),
     across(
       !country,
       \(x) case_when(
@@ -135,7 +136,7 @@ data4dots <- gpp_data %>%
   summarise(
     across(
       everything(),
-      \(x) mean(x, na.rm = T)*100
+      \(x) mean(x, na.rm = TRUE)*100
     ),
     .groups = "keep"
   ) %>%

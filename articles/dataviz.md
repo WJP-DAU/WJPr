@@ -18,6 +18,7 @@ types:
 10. Gauge
 
 ``` r
+
 library(ggplot2)
 library(dplyr)
 library(tidyr)
@@ -29,6 +30,7 @@ library(WJPr)
 ```
 
 ``` r
+
 # Always load the WJP fonts if not passing a custom theme to function
 wjp_fonts()
 
@@ -49,6 +51,7 @@ of people who answered 1 or 2 to question Q1A. The first step is to
 wrangle the data accordingly:
 
 ``` r
+
 data4bars <- gpp_data %>%
   select(country, year, q1a) %>%
   group_by(country, year) %>%
@@ -89,6 +92,7 @@ the values to be plotted on the Y-axis (`target`) and the categories to
 be displayed on the X-axis (`grouping`).
 
 ``` r
+
 wjp_bars(
     data4bars,              
     target    = "trust",        
@@ -108,6 +112,7 @@ color, we can use the “year” column for `colors` and map the year “2002”
 to the color code “#8789C0”.
 
 ``` r
+
 wjp_bars(
     data4bars,              
     target    = "trust",        
@@ -125,6 +130,7 @@ the “country” column. In the example below, we create a new column
 called “color_variable” with the same values as the “country” column:
 
 ``` r
+
 data4bars <- data4bars %>%
   mutate(
     color_variable = country
@@ -154,6 +160,7 @@ we create two new columns, `value_label` and `label_position`, placing
 the labels 5 percentage points above the tops of the bars:
 
 ``` r
+
 data4bars <- data4bars %>%
   mutate(
     value_label = paste0(
@@ -188,6 +195,7 @@ horizontal bars is as simple as setting the `direction` parameter to
 “horizontal”.
 
 ``` r
+
 wjp_bars(
     data4bars,              
     target    = "trust",        
@@ -215,6 +223,7 @@ distribution for all possible responses in each country. First, we
 modify the data to reflect this new design:
 
 ``` r
+
 data4stackedbars <- gpp_data %>%
   filter(
     year == 2022
@@ -276,6 +285,7 @@ Once the data is ready, we can use the
 function again, this time setting the `stacked` parameter to “TRUE”:
 
 ``` r
+
 stacked_bar <- wjp_bars(
     data4stackedbars,              
     target    = "percentage",        
@@ -305,6 +315,7 @@ one side, and the percentage of respondents who answered “Little” and
 slightly differently:
 
 ``` r
+
 data4divbars <- gpp_data %>%
   filter(
     year == 2022
@@ -401,6 +412,7 @@ function allows for clear and effective visualization of contrasting
 groups within the data.
 
 ``` r
+
 wjp_divbars(
     data4divbars,             
     target      = "percentage",       
@@ -424,6 +436,7 @@ the axis texts are expected to be long. Use the wjp_edgebars()\`
 function to plot these bars in a similar way than previous examples.
 
 ``` r
+
 wjp_edgebars(
     data4bars,              
     target    = "trust",        
@@ -446,6 +459,7 @@ trust in Institution A in Atlantis over time. To begin, we need to
 wrangle the data to match this design:
 
 ``` r
+
 data4lines <- gpp_data %>%
   filter(
     country == "Atlantis"
@@ -544,6 +558,7 @@ Here’s how to set it:
     below, set ngroups = 1.
 
 ``` r
+
 wjp_lines(
     data4lines %>% filter(institution == "Institution A"),                    
     target         = "percentage",             
@@ -563,6 +578,7 @@ wjp_lines(
     the ggrepel package must be loaded for this feature to work.
 
 ``` r
+
 library(ggrepel)
 wjp_lines(
     data4lines,                    
@@ -593,6 +609,7 @@ Ensure the named vector uses the same values as the color vector
 (`cvec`) to align opacities with the corresponding lines.
 
 ``` r
+
 wjp_lines(
     data4lines,                    
     target         = "percentage",             
@@ -626,6 +643,7 @@ Institution A between 2017 and 2022 across three countries. We begin by
 preparing the data to fit this design:
 
 ``` r
+
 data4slopes <- gpp_data %>%
   select(year, gend, q1a) %>%
   filter(
@@ -694,6 +712,7 @@ highlights changes between two points in time while maintaining clarity
 and visual appeal.
 
 ``` r
+
 wjp_slope(
     data4slopes,                    
     target    = "trust",             
@@ -724,6 +743,7 @@ countries: Atlantis, Narnia, and Neverland. To start, we need to prepare
 our data for this minimal example as follows:
 
 ``` r
+
 data4dots <- gpp_data %>%
   select(country, q1a, q1b, q1c, q1d) %>%
   mutate(
@@ -788,6 +808,7 @@ function are consistent with those explained in earlier sections:
   color codes.
 
 ``` r
+
 wjp_dots(
     data4dots,             
     target      = "percentage",
@@ -816,6 +837,7 @@ parameters. To check the symbol codes used in ggplot, you can read the
 documentation](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html#sec:shape-spec).
 
 ``` r
+
 wjp_dots(
     data4dots,             
     target      = "percentage",
@@ -852,6 +874,7 @@ also require the standard deviation and the sample size for each group
 and variable.
 
 ``` r
+
 data4dots_errorbars <- gpp_data %>%
   select(gend, q1a, q1b, q1c, q1d) %>%
   mutate(
@@ -928,6 +951,7 @@ parameters, which are the column names that contain the standard
 deviation and the sample size for each variable and group.
 
 ``` r
+
 wjp_dots(
     data4dots_errorbars,             
     target      = "mean",
@@ -955,6 +979,7 @@ function as usual with the parameters that we have reviewed in previous
 sections:
 
 ``` r
+
 data4dumbbells <- data4lines %>% 
   filter(year %in% c("2017", "2022")) 
 
@@ -976,6 +1001,7 @@ column names that have the value label (`labels`) and the label position
 (`labpos`) to the plotting function.
 
 ``` r
+
 data4dumbbells <- data4dumbbells %>% 
   mutate(
     lab_position = if_else(year == "2022", percentage-5, percentage+5)
@@ -1010,6 +1036,7 @@ system and we want to see disaggregated results per gender. We begin by
 wrangling the data accordingly:
 
 ``` r
+
 data4radar <- gpp_data %>%
   select(gend, starts_with("q49")) %>%
   mutate(
@@ -1085,6 +1112,7 @@ functions:
   display.
 
 ``` r
+
 wjp_radar(
     data4radar,             
     axis_var    = "category",         
@@ -1108,6 +1136,7 @@ for both lines we can do this by creating a new column called
 the value labels displayed using some HTML and CSS styles:
 
 ``` r
+
 data4radar_md <- data4radar %>%
   group_by(category) %>%
   mutate(
@@ -1178,6 +1207,7 @@ We can recreate the use of this plotting function using the same data
 used to exemplify the radar chart.
 
 ``` r
+
 data4rose = data4radar %>% 
   filter(gender == "Female")
 
@@ -1206,6 +1236,7 @@ Atlantis (2), and Narnia (3). For this, we begin by setting the
 specific order of the elements:
 
 ``` r
+
 data4divbars <- data4divbars %>%
   mutate(
     order_no = case_when(
@@ -1234,6 +1265,7 @@ wjp_divbars(
 Same can be done when working with dot charts:
 
 ``` r
+
 data4dots <- data4dots %>%
   mutate(
     order_no = case_when(
@@ -1271,6 +1303,7 @@ subtitle to it. We can do it by using the
 functions from the ggplot2 package as shown bellow:
 
 ``` r
+
 stacked_bar +
   labs(
     title    = "Trust in Institution A",

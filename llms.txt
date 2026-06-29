@@ -22,6 +22,7 @@ WJPr is hosted on GitHub. To install the package, ensure you have the
 `devtools` package installed and use the following commands:
 
 ``` r
+
 # Install WJPr from GitHub
 devtools::install_github("worldjusticeproject-org/WJPr")
 ```
@@ -31,6 +32,7 @@ devtools::install_github("worldjusticeproject-org/WJPr")
 Load the package into your R session:
 
 ``` r
+
 library(WJPr)
 ```
 
@@ -39,6 +41,7 @@ library(WJPr)
 The package provides built-in datasets for analysis:
 
 ``` r
+
 # View the first few rows of the dataset
 head(WJPr::roli)
 ```
@@ -48,6 +51,7 @@ head(WJPr::roli)
 Here is an example of how to use WJPr to create a bar chart:
 
 ``` r
+
 # Always load the WJP fonts if not passing a custom theme to function
 wjp_fonts()
 
@@ -91,20 +95,20 @@ wjp_bars(
 WJPr provides 12 chart types for creating publication-ready
 visualizations:
 
-|                                                                                                |                                                                                                |                                                                                                |
-|:----------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------:|
-|                                         **Bar Chart**                                          |                                         **Dots Chart**                                         |                                         **Line Chart**                                         |
-|               ![Example vertical bar chart](reference/figures/example-bars.png)                |                    ![Example dot chart](reference/figures/example-dots.png)                    |                   ![Example line chart](reference/figures/example-lines.png)                   |
-|      [`wjp_bars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_bars.md)      |      [`wjp_dots()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dots.md)      |     [`wjp_lines()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lines.md)     |
-|                                       **Diverging Bars**                                       |                                         **Dumbbells**                                          |                                        **Slope Chart**                                         |
-|             ![Example diverging bar chart](reference/figures/example-divbars.png)              |               ![Example dumbbell chart](reference/figures/example-dumbbells.png)               |                  ![Example slope chart](reference/figures/example-slope.png)                   |
-|   [`wjp_divbars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_divbars.md)   | [`wjp_dumbbells()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dumbbells.md) |     [`wjp_slope()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_slope.md)     |
-|                                        **Radar Chart**                                         |                                         **Rose Chart**                                         |                                        **Gauge Chart**                                         |
-|                  ![Example radar chart](reference/figures/example-radar.png)                   |                   ![Example rose chart](reference/figures/example-rose.png)                    |                  ![Example gauge chart](reference/figures/example-gauge.png)                   |
-|     [`wjp_radar()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_radar.md)     |      [`wjp_rose()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_rose.md)      |     [`wjp_gauge()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_gauge.md)     |
-|                                       **Lollipop Chart**                                       |                                          **Edgebars**                                          |                                        **Grouped Bars**                                        |
-|               ![Example lollipop chart](reference/figures/example-lollipops.png)               |               ![Example edge bar chart](reference/figures/example-edgebars.png)                |             ![Example grouped bar chart](reference/figures/example-groupbars.png)              |
-| [`wjp_lollipops()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lollipops.md) |  [`wjp_edgebars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_edgebars.md)  | [`wjp_groupbars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_groupbars.md) |
+|  |  |  |
+|:--:|:--:|:--:|
+| **Bar Chart** | **Dots Chart** | **Line Chart** |
+| ![Example vertical bar chart](reference/figures/example-bars.png) | ![Example dot chart](reference/figures/example-dots.png) | ![Example line chart](reference/figures/example-lines.png) |
+| [`wjp_bars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_bars.md) | [`wjp_dots()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dots.md) | [`wjp_lines()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lines.md) |
+| **Diverging Bars** | **Dumbbells** | **Slope Chart** |
+| ![Example diverging bar chart](reference/figures/example-divbars.png) | ![Example dumbbell chart](reference/figures/example-dumbbells.png) | ![Example slope chart](reference/figures/example-slope.png) |
+| [`wjp_divbars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_divbars.md) | [`wjp_dumbbells()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dumbbells.md) | [`wjp_slope()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_slope.md) |
+| **Radar Chart** | **Rose Chart** | **Gauge Chart** |
+| ![Example radar chart](reference/figures/example-radar.png) | ![Example rose chart](reference/figures/example-rose.png) | ![Example gauge chart](reference/figures/example-gauge.png) |
+| [`wjp_radar()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_radar.md) | [`wjp_rose()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_rose.md) | [`wjp_gauge()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_gauge.md) |
+| **Lollipop Chart** | **Edgebars** | **Grouped Bars** |
+| ![Example lollipop chart](reference/figures/example-lollipops.png) | ![Example edge bar chart](reference/figures/example-edgebars.png) | ![Example grouped bar chart](reference/figures/example-groupbars.png) |
+| [`wjp_lollipops()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lollipops.md) | [`wjp_edgebars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_edgebars.md) | [`wjp_groupbars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_groupbars.md) |
 
 For a complete interactive gallery with code examples, see the [Chart
 Gallery
@@ -138,6 +142,7 @@ Use
 to verify your data structure before plotting:
 
 ``` r
+
 wjp_check_data(
   data     = my_data,
   type     = "bars",
@@ -157,6 +162,7 @@ Comprehensive documentation is available for all functions and datasets.
 Use the R help system to access it:
 
 ``` r
+
 ?WJPr::wjp_lines
 ```
 
@@ -178,6 +184,7 @@ guidelines:
 All visualization functions must follow the WJPr patterns:
 
 ``` r
+
 wjp_newchart <- function(
     data,
     target,

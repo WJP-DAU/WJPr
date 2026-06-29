@@ -4,6 +4,7 @@ This gallery showcases all chart types available in the WJPr package.
 Click on any chart name to jump to its detailed documentation.
 
 ``` r
+
 library(ggplot2)
 library(dplyr)
 library(tidyr)
@@ -26,6 +27,7 @@ gpp_data <- WJPr::gpp
 Standard vertical bar chart for comparing values across categories.
 
 ``` r
+
 data_bars <- gpp_data %>%
   filter(year == 2022) %>%
   mutate(
@@ -54,6 +56,7 @@ wjp_bars(
 Set `direction = "horizontal"` for horizontal orientation.
 
 ``` r
+
 wjp_bars(
   data_bars,
   target    = "trust",
@@ -76,6 +79,7 @@ wjp_bars(
 Show positive and negative values extending from a center point.
 
 ``` r
+
 data_divbars <- gpp_data %>%
   filter(year == 2022) %>%
   mutate(
@@ -113,6 +117,7 @@ wjp_divbars(
 Compare multiple variables across groups with dot markers.
 
 ``` r
+
 data_dots <- gpp_data %>%
   select(country, q1a, q1b, q1c, q1d) %>%
   mutate(
@@ -150,6 +155,7 @@ wjp_dots(
 Display trends over time with connected points.
 
 ``` r
+
 library(ggrepel)
 
 data_lines <- gpp_data %>%
@@ -194,6 +200,7 @@ wjp_lines(
 Compare values between exactly two time points.
 
 ``` r
+
 data_slope <- gpp_data %>%
   filter(year %in% c(2017, 2019)) %>%
   mutate(
@@ -228,6 +235,7 @@ wjp_slope(
 Show change between two points with connected markers.
 
 ``` r
+
 data_dumbbells <- data_lines %>%
   filter(year %in% c("2017", "2022"))
 
@@ -251,6 +259,7 @@ wjp_dumbbells(
 Minimalist bar alternative with stems and dots.
 
 ``` r
+
 wjp_lollipops(
   data_bars,
   target      = "trust",
@@ -270,6 +279,7 @@ wjp_lollipops(
 Horizontal bars with labels at the edge, ideal for narrow spaces.
 
 ``` r
+
 wjp_edgebars(
   data_bars,
   target   = "trust",
@@ -289,6 +299,7 @@ wjp_edgebars(
 Compare multiple dimensions on a circular grid.
 
 ``` r
+
 data_radar <- gpp_data %>%
   select(gend, starts_with("q49")) %>%
   mutate(
@@ -334,6 +345,7 @@ wjp_radar(
 Circular bar chart for single-unit multi-dimensional data.
 
 ``` r
+
 data_rose <- data_radar %>%
   filter(gender == "Male")
 
@@ -357,6 +369,7 @@ wjp_rose(
 Semicircular chart for showing composition or progress.
 
 ``` r
+
 data_gauge <- data.frame(
   category = c("Factor 1", "Factor 2", "Factor 3", "Factor 4"),
   value    = c(25, 35, 25, 15),
@@ -380,17 +393,17 @@ wjp_gauge(
 
 ## Quick Reference
 
-| Chart           | Function                                                                                       | Best For                            |
-|-----------------|------------------------------------------------------------------------------------------------|-------------------------------------|
-| Vertical Bars   | [`wjp_bars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_bars.md)           | Comparing values across categories  |
-| Horizontal Bars | `wjp_bars(direction = "horizontal")`                                                           | Long category names                 |
-| Diverging Bars  | [`wjp_divbars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_divbars.md)     | Positive/negative comparisons       |
-| Dots            | [`wjp_dots()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dots.md)           | Multiple groups, multiple variables |
-| Lines           | [`wjp_lines()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lines.md)         | Trends over time                    |
-| Slope           | [`wjp_slope()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_slope.md)         | Change between two time points      |
-| Dumbbells       | [`wjp_dumbbells()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dumbbells.md) | Before/after comparisons            |
-| Lollipops       | [`wjp_lollipops()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lollipops.md) | Minimalist bar alternative          |
-| Edgebars        | [`wjp_edgebars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_edgebars.md)   | Narrow spaces, long labels          |
-| Radar           | [`wjp_radar()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_radar.md)         | Multi-dimensional group comparison  |
-| Rose            | [`wjp_rose()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_rose.md)           | Multi-dimensional single unit       |
-| Gauge           | [`wjp_gauge()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_gauge.md)         | Composition, progress               |
+| Chart | Function | Best For |
+|----|----|----|
+| Vertical Bars | [`wjp_bars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_bars.md) | Comparing values across categories |
+| Horizontal Bars | `wjp_bars(direction = "horizontal")` | Long category names |
+| Diverging Bars | [`wjp_divbars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_divbars.md) | Positive/negative comparisons |
+| Dots | [`wjp_dots()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dots.md) | Multiple groups, multiple variables |
+| Lines | [`wjp_lines()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lines.md) | Trends over time |
+| Slope | [`wjp_slope()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_slope.md) | Change between two time points |
+| Dumbbells | [`wjp_dumbbells()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_dumbbells.md) | Before/after comparisons |
+| Lollipops | [`wjp_lollipops()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lollipops.md) | Minimalist bar alternative |
+| Edgebars | [`wjp_edgebars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_edgebars.md) | Narrow spaces, long labels |
+| Radar | [`wjp_radar()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_radar.md) | Multi-dimensional group comparison |
+| Rose | [`wjp_rose()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_rose.md) | Multi-dimensional single unit |
+| Gauge | [`wjp_gauge()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_gauge.md) | Composition, progress |

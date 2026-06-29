@@ -66,7 +66,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Checklist de Revisión para PRs</h1>
-      <small class="dont-index">Source: <a href="https://github.com/worldjusticeproject-org/WJPr/blob/HEAD/.github/REVIEW_CHECKLIST.md" class="external-link"><code>.github/REVIEW_CHECKLIST.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/worldjusticeproject-org/WJPr/blob/main/.github/REVIEW_CHECKLIST.md" class="external-link"><code>.github/REVIEW_CHECKLIST.md</code></a></small>
     </div>
 
 <div id="checklist-de-revisión-para-prs" class="section level1">
@@ -76,35 +76,21 @@
 <h2 id="estructura-del-código">Estructura del Código<a class="anchor" aria-label="anchor" href="#estructura-del-c%C3%B3digo"></a></h2>
 <div class="section level3">
 <h3 id="nomenclatura">Nomenclatura<a class="anchor" aria-label="anchor" href="#nomenclatura"></a></h3>
-<ul class="task-list"><li>
-<input type="checkbox">Archivo nombrado <code>{tipo}Chart.R</code>
-</li>
-<li>
-<input type="checkbox">Función nombrada <code>wjp_{tipo}()</code>
-</li>
-<li>
-<input type="checkbox">Variables internas con sufijo <code>_var</code> (ej: <code>target_var</code>, <code>colors_var</code>)</li>
+<ul class="task-list"><li><label><input type="checkbox">Archivo nombrado <code>{tipo}Chart.R</code></label></li>
+<li><label><input type="checkbox">Función nombrada <code>wjp_{tipo}()</code></label></li>
+<li><label><input type="checkbox">Variables internas con sufijo <code>_var</code> (ej: <code>target_var</code>, <code>colors_var</code>)</label></li>
 </ul></div>
 <div class="section level3">
 <h3 id="parámetros">Parámetros<a class="anchor" aria-label="anchor" href="#par%C3%A1metros"></a></h3>
-<ul class="task-list"><li>
-<input type="checkbox">Usa parámetros estándar: <code>data</code>, <code>target</code>, <code>grouping</code>
-</li>
-<li>
-<input type="checkbox">Parámetros opcionales tienen defaults: <code>colors = NULL</code>, <code>cvec = NULL</code>
-</li>
-<li>
-<input type="checkbox">Incluye <code>ptheme = WJP_theme()</code> como último parámetro</li>
+<ul class="task-list"><li><label><input type="checkbox">Usa parámetros estándar: <code>data</code>, <code>target</code>, <code>grouping</code></label></li>
+<li><label><input type="checkbox">Parámetros opcionales tienen defaults: <code>colors = NULL</code>, <code>cvec = NULL</code></label></li>
+<li><label><input type="checkbox">Incluye <code>ptheme = WJP_theme()</code> como último parámetro</label></li>
 </ul></div>
 <div class="section level3">
 <h3 id="manejo-de-columnas">Manejo de Columnas<a class="anchor" aria-label="anchor" href="#manejo-de-columnas"></a></h3>
-<ul class="task-list"><li>
-<input type="checkbox">Usa <code>all_of()</code> para renombrar columnas</li>
-<li>
-<input type="checkbox">Verifica <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null()</a></code> antes de renombrar parámetros opcionales</li>
-<li>
-<input type="checkbox">Evita doble rename cuando <code>colors == grouping</code> o <code>labels == grouping</code>
-</li>
+<ul class="task-list"><li><label><input type="checkbox">Usa <code>all_of()</code> para renombrar columnas</label></li>
+<li><label><input type="checkbox">Verifica <code><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null()</a></code> antes de renombrar parámetros opcionales</label></li>
+<li><label><input type="checkbox">Evita doble rename cuando <code>colors == grouping</code> o <code>labels == grouping</code></label></li>
 </ul><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Patrón correcto</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">colors</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -117,94 +103,65 @@
 </div>
 <div class="section level3">
 <h3 id="colores">Colores<a class="anchor" aria-label="anchor" href="#colores"></a></h3>
-<ul class="task-list"><li>
-<input type="checkbox">Aplica <code>scale_*_manual(values = cvec)</code> solo si <code>!is.null(cvec)</code>
-</li>
-<li>
-<input type="checkbox">No asume colores por defecto para datos del usuario</li>
+<ul class="task-list"><li><label><input type="checkbox">Aplica <code>scale_*_manual(values = cvec)</code> solo si <code>!is.null(cvec)</code></label></li>
+<li><label><input type="checkbox">No asume colores por defecto para datos del usuario</label></li>
 </ul></div>
 <div class="section level3">
 <h3 id="tema">Tema<a class="anchor" aria-label="anchor" href="#tema"></a></h3>
-<ul class="task-list"><li>
-<input type="checkbox">Aplica <code>ptheme</code> antes de ajustes específicos</li>
-<li>
-<input type="checkbox">Usa <code>theme()</code> para sobrescribir elementos específicos</li>
+<ul class="task-list"><li><label><input type="checkbox">Aplica <code>ptheme</code> antes de ajustes específicos</label></li>
+<li><label><input type="checkbox">Usa <code>theme()</code> para sobrescribir elementos específicos</label></li>
 </ul></div>
 <div class="section level3">
 <h3 id="retorno">Retorno<a class="anchor" aria-label="anchor" href="#retorno"></a></h3>
-<ul class="task-list"><li>
-<input type="checkbox">Función retorna objeto ggplot con <code>return(plt)</code>
-</li>
+<ul class="task-list"><li><label><input type="checkbox">Función retorna objeto ggplot con <code>return(plt)</code></label></li>
 </ul><hr></div>
 </div>
 <div class="section level2">
 <h2 id="documentación-roxygen2">Documentación Roxygen2<a class="anchor" aria-label="anchor" href="#documentaci%C3%B3n-roxygen2"></a></h2>
 <div class="section level3">
 <h3 id="tags-obligatorios">Tags Obligatorios<a class="anchor" aria-label="anchor" href="#tags-obligatorios"></a></h3>
-<ul class="task-list"><li>
-<input type="checkbox"><code>#' @description</code> con <code>lifecycle::badge("experimental")</code>
-</li>
-<li>
-<input type="checkbox"><code>#' @param</code> para TODOS los parámetros</li>
-<li>
-<input type="checkbox"><code>#' @return</code> describiendo el valor de retorno</li>
-<li>
-<input type="checkbox"><code>#' @export</code>
-</li>
-<li>
-<input type="checkbox"><code>#' @examples</code> con código reproducible</li>
+<ul class="task-list"><li><label><input type="checkbox"><code>#' @description</code> con <code>lifecycle::badge("experimental")</code></label></li>
+<li><label><input type="checkbox"><code>#' @param</code> para TODOS los parámetros</label></li>
+<li><label><input type="checkbox"><code>#' @return</code> describiendo el valor de retorno</label></li>
+<li><label><input type="checkbox"><code>#' @export</code></label></li>
+<li><label><input type="checkbox"><code>#' @examples</code> con código reproducible</label></li>
 </ul></div>
 <div class="section level3">
 <h3 id="formato-de-param">Formato de @param<a class="anchor" aria-label="anchor" href="#formato-de-param"></a></h3>
-<ul class="task-list"><li>
-<input type="checkbox">Incluye tipo de dato: <code>@param target String. Column name...</code>
-</li>
-<li>
-<input type="checkbox">Describe valor por defecto si existe: <code>Default is NULL.</code>
-</li>
+<ul class="task-list"><li><label><input type="checkbox">Incluye tipo de dato: <code>@param target String. Column name...</code></label></li>
+<li><label><input type="checkbox">Describe valor por defecto si existe: <code>Default is NULL.</code></label></li>
 </ul></div>
 <div class="section level3">
 <h3 id="ejemplo">Ejemplo<a class="anchor" aria-label="anchor" href="#ejemplo"></a></h3>
-<ul class="task-list"><li>
-<input type="checkbox">Carga librerías necesarias (<code><a href="https://dplyr.tidyverse.org" class="external-link">library(dplyr)</a></code>, etc.)</li>
-<li>
-<input type="checkbox">Usa datos de ejemplo simples o <code><a href="reference/gpp.html">WJPr::gpp</a></code>/<code><a href="reference/roli.html">WJPr::roli</a></code>
-</li>
-<li>
-<input type="checkbox">Ejemplo ejecuta sin errores</li>
+<ul class="task-list"><li><label><input type="checkbox">Carga librerías necesarias (<code><a href="https://dplyr.tidyverse.org" class="external-link">library(dplyr)</a></code>, etc.)</label></li>
+<li><label><input type="checkbox">Usa datos de ejemplo simples o <code><a href="reference/gpp.html">WJPr::gpp</a></code>/<code><a href="reference/roli.html">WJPr::roli</a></code></label></li>
+<li><label><input type="checkbox">Ejemplo ejecuta sin errores</label></li>
 </ul><hr></div>
 </div>
 <div class="section level2">
 <h2 id="archivos-actualizados">Archivos Actualizados<a class="anchor" aria-label="anchor" href="#archivos-actualizados"></a></h2>
-<ul class="task-list"><li>
-<input type="checkbox"><code>data-raw/generate-examples.R</code> - Nueva sección para generar imagen</li>
-<li>
-<input type="checkbox"><code>man/figures/example-{tipo}.png</code> - Imagen generada</li>
-<li>
-<input type="checkbox"><code>CLAUDE.md</code> - Nueva función documentada</li>
-<li>
-<input type="checkbox"><code>NAMESPACE</code> - Función exportada (generado por <code><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">devtools::document()</a></code>)</li>
+<ul class="task-list"><li><label><input type="checkbox"><code>data-raw/generate-examples.R</code> - Nueva sección para generar imagen</label></li>
+<li><label><input type="checkbox"><code>man/figures/example-{tipo}.png</code> - Imagen generada</label></li>
+<li><label><input type="checkbox"><code>CLAUDE.md</code> - Nueva función documentada</label></li>
+<li><label><input type="checkbox"><code>NAMESPACE</code> - Función exportada (generado por <code>devtools::document()</code>)</label></li>
 </ul><hr></div>
 <div class="section level2">
 <h2 id="verificación-final">Verificación Final<a class="anchor" aria-label="anchor" href="#verificaci%C3%B3n-final"></a></h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Ejecutar estos comandos antes de aprobar:</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">document</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/check.html" class="external-link">check</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">document</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">check</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Probar la función</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/load_all.html" class="external-link">load_all</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">load_all</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/wjp_fonts.html">wjp_fonts</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co"># ... ejecutar ejemplo de la función</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="resultado-de-devtoolscheck">Resultado de <code>devtools::check()</code>
 <a class="anchor" aria-label="anchor" href="#resultado-de-devtoolscheck"></a></h3>
-<ul class="task-list"><li>
-<input type="checkbox">0 errors</li>
-<li>
-<input type="checkbox">0 warnings</li>
-<li>
-<input type="checkbox">Notes aceptables (no relacionadas con la nueva función)</li>
+<ul class="task-list"><li><label><input type="checkbox">0 errors</label></li>
+<li><label><input type="checkbox">0 warnings</label></li>
+<li><label><input type="checkbox">Notes aceptables (no relacionadas con la nueva función)</label></li>
 </ul><hr></div>
 </div>
 <div class="section level2">

@@ -49,6 +49,7 @@ Usamos **renv** para garantizar un entorno de desarrollo reproducible.
 ### Primera vez (clonar repositorio)
 
 ``` r
+
 # 1. Clonar el repositorio
 # git clone https://github.com/worldjusticeproject-org/WJPr.git
 
@@ -65,6 +66,7 @@ wjp_check_deps()
 ### Agregar nuevas dependencias
 
 ``` r
+
 # 1. Instalar el paquete
 renv::install("nuevo_paquete")
 
@@ -77,6 +79,7 @@ renv::snapshot()
 ### Actualizar dependencias existentes
 
 ``` r
+
 # Actualizar todos los paquetes
 renv::update()
 
@@ -98,11 +101,11 @@ renv::snapshot()
 
 ### Funciones
 
-| Tipo       | Prefijo | Ejemplo                                                                                                                                                                                  |
-|------------|---------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Gráficos   | `wjp_`  | [`wjp_bars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_bars.md), [`wjp_radar()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_radar.md)             |
-| Utilidades | `wjp_`  | [`wjp_fonts()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_fonts.md), [`wjp_check_data()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_check_data.md) |
-| Tema       | `WJP_`  | [`WJP_theme()`](https://worldjusticeproject-org.github.io/WJPr/reference/WJP_theme.md)                                                                                                   |
+| Tipo | Prefijo | Ejemplo |
+|----|----|----|
+| Gráficos | `wjp_` | [`wjp_bars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_bars.md), [`wjp_radar()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_radar.md) |
+| Utilidades | `wjp_` | [`wjp_fonts()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_fonts.md), [`wjp_check_data()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_check_data.md) |
+| Tema | `WJP_` | [`WJP_theme()`](https://worldjusticeproject-org.github.io/WJPr/reference/WJP_theme.md) |
 
 ### Parámetros Estándar
 
@@ -126,6 +129,7 @@ cuando aplique:
 Toda función de gráfico debe seguir esta estructura:
 
 ``` r
+
 #' Título corto descriptivo
 #'
 #' @description
@@ -217,6 +221,7 @@ wjp_nuevafuncion <- function(
 Toda función exportada DEBE incluir:
 
 ``` r
+
 #' @description
 #' `r lifecycle::badge("experimental")`
 #'
@@ -235,6 +240,7 @@ Toda función exportada DEBE incluir:
 ### Ejemplo Completo de Documentación
 
 ``` r
+
 #' Plot a Bar Chart following WJP style guidelines
 #'
 #' @description
@@ -302,6 +308,7 @@ country    Police    Courts
 El parámetro `cvec` SIEMPRE debe ser un vector nombrado:
 
 ``` r
+
 cvec <- c(
   "Category A" = "#2a2a94",
   "Category B" = "#4a4a94",
@@ -316,6 +323,7 @@ Los nombres deben coincidir con los valores de la variable `colors`.
 Siempre proporcionar valores por defecto sensatos:
 
 ``` r
+
 # Si colors es NULL, usar grouping como color
 if (is.null(colors)) {
   data <- data %>%
@@ -337,6 +345,7 @@ Usar SOLO las fuentes del paquete:
 - `"IBM Plex Sans"` - Alternativa
 
 ``` r
+
 geom_text(
   family   = "Lato Full",
   fontface = "bold"
@@ -348,6 +357,7 @@ geom_text(
 Colores WJP estándar para referencia:
 
 ``` r
+
 # Primarios
 "#2a2a94"  # Azul WJP
 "#a90099"  # Magenta WJP
@@ -365,6 +375,7 @@ Colores WJP estándar para referencia:
 Cuando múltiples parámetros pueden tener el mismo valor:
 
 ``` r
+
 # Si grouping == colors, no hacer doble rename
 if (grouping == colors) {
   data <- data %>%
@@ -383,39 +394,52 @@ Antes de enviar un PR, verifica:
 
 ### Código
 
-- Función sigue la estructura estándar
-- Parámetros usan nombres estándar (`target`, `grouping`, `colors`,
-  etc.)
-- Manejo correcto de parámetros NULL
-- No hay duplicados en rename cuando parámetros coinciden
-- Usa `all_of()` para selección de columnas
-- Colores aplicados solo si `cvec` no es NULL
-- Tema aplicado con `ptheme` parameter
-- Retorna objeto ggplot
+Función sigue la estructura estándar
+
+Parámetros usan nombres estándar (`target`, `grouping`, `colors`, etc.)
+
+Manejo correcto de parámetros NULL
+
+No hay duplicados en rename cuando parámetros coinciden
+
+Usa `all_of()` para selección de columnas
+
+Colores aplicados solo si `cvec` no es NULL
+
+Tema aplicado con `ptheme` parameter
+
+Retorna objeto ggplot
 
 ### Documentación
 
-- Roxygen2 completo con todos los tags obligatorios
-- `@export` tag presente
-- [`lifecycle::badge()`](https://lifecycle.r-lib.org/reference/badge.html)
-  en descripción
-- Ejemplo reproducible y funcional
-- Parámetros documentados con tipo y descripción
+Roxygen2 completo con todos los tags obligatorios
+
+`@export` tag presente
+
+[`lifecycle::badge()`](https://lifecycle.r-lib.org/reference/badge.html)
+en descripción
+
+Ejemplo reproducible y funcional
+
+Parámetros documentados con tipo y descripción
 
 ### Testing
 
-- Ejemplo en documentación ejecuta sin errores
-- [`devtools::check()`](https://devtools.r-lib.org/reference/check.html)
-  pasa sin errores
-- [`devtools::document()`](https://devtools.r-lib.org/reference/document.html)
-  actualiza NAMESPACE
+Ejemplo en documentación ejecuta sin errores
+
+`devtools::check()` pasa sin errores
+
+`devtools::document()` actualiza NAMESPACE
 
 ### Archivos
 
-- Archivo nombrado como `{tipo}Chart.R`
-- Agregada imagen de ejemplo en `man/figures/`
-- Actualizado `data-raw/generate-examples.R`
-- Actualizado `CLAUDE.md` con nueva función
+Archivo nombrado como `{tipo}Chart.R`
+
+Agregada imagen de ejemplo en `man/figures/`
+
+Actualizado `data-raw/generate-examples.R`
+
+Actualizado `CLAUDE.md` con nueva función
 
 ------------------------------------------------------------------------
 
@@ -424,6 +448,7 @@ Antes de enviar un PR, verifica:
 ### 1. Preparar el Entorno
 
 ``` r
+
 # Instalar dependencias de desarrollo
 install.packages(c("devtools", "roxygen2", "testthat"))
 
@@ -447,6 +472,7 @@ git checkout -b feature/nueva-funcion
 ### 4. Verificar
 
 ``` r
+
 # Regenerar documentación
 devtools::document()
 
@@ -461,6 +487,7 @@ devtools::load_all()
 ### 5. Generar Imagen de Ejemplo
 
 ``` r
+
 source("data-raw/generate-examples.R")
 ```
 
@@ -488,6 +515,7 @@ git push origin feature/nueva-funcion
 Convierte a tipos nativos de R antes de procesar:
 
 ``` r
+
 data <- data %>%
   mutate(across(where(haven::is.labelled), ~ as.numeric(.x)))
 ```
@@ -503,6 +531,7 @@ Consulta primero. Preferimos minimizar dependencias. Si es necesario:
 ### ¿Cómo pruebo sin instalar el paquete?
 
 ``` r
+
 devtools::load_all()  # Carga funciones sin instalar
 ```
 
