@@ -564,14 +564,19 @@ per `grouping`).
 
 ``` r
 
-# Value by country, plus the same value broken down by gender
+# Value by country, plus the same value broken down by gender.
+# Keep the standard deviation (sd) and sample size (n) per category so we can
+# draw a confidence interval on each bar.
 country_level <- gpp_data %>%
   filter(year == 2022) %>%
   mutate(q1a = as.double(unclass(q1a)),
          trust = case_when(q1a <= 2 ~ 1, q1a <= 4 ~ 0)) %>%
   filter(!is.na(trust)) %>%
   group_by(country) %>%
-  summarise(value = mean(trust, na.rm = TRUE), .groups = "drop") %>%
+  summarise(value = mean(trust, na.rm = TRUE),
+            sd    = sd(trust, na.rm = TRUE),
+            n     = n(),
+            .groups = "drop") %>%
   mutate(group = "Country") %>%
   rename(category = country)
 
@@ -583,7 +588,10 @@ gender_level <- gpp_data %>%
          gender = case_when(gend == 1 ~ "Male", gend == 2 ~ "Female")) %>%
   filter(!is.na(trust), !is.na(gender)) %>%
   group_by(gender) %>%
-  summarise(value = mean(trust, na.rm = TRUE), .groups = "drop") %>%
+  summarise(value = mean(trust, na.rm = TRUE),
+            sd    = sd(trust, na.rm = TRUE),
+            n     = n(),
+            .groups = "drop") %>%
   mutate(group = "Gender") %>%
   rename(category = gender)
 
@@ -595,25 +603,30 @@ wjp_groupbars(
   grouping    = "group",
   levels      = "category",
   colors      = c("#482d8b", "#2894aa"),
-  group_order = c("Country", "Gender")
+  group_order = c("Country", "Gender"),
+  draw_ci     = TRUE,
+  sd          = "sd",
+  sample_size = "n"
 )
 ```
 
 ![](gallery_files/figure-html/groupbars-1.png)
 
 **Expected input structure** — one row per `levels` category, tagged
-with the `grouping` (facet) it belongs to and its `target` value.
+with the `grouping` (facet) it belongs to and its `target` value. To
+draw a confidence interval on each bar, set `draw_ci = TRUE` and supply
+per-category `sd` (standard deviation) and `sample_size` columns.
 
-| category  |     value | group   |
-|:----------|----------:|:--------|
-| Atlantis  | 0.4909091 | Country |
-| Narnia    | 0.4565217 | Country |
-| Neverland | 0.6363636 | Country |
-| Female    | 0.5000000 | Gender  |
-| Male      | 0.5675676 | Gender  |
+| category  |     value |        sd |   n | group   |
+|:----------|----------:|----------:|----:|:--------|
+| Atlantis  | 0.4909091 | 0.5045250 |  55 | Country |
+| Narnia    | 0.4565217 | 0.5036102 |  46 | Country |
+| Neverland | 0.6363636 | 0.4854794 |  55 | Country |
+| Female    | 0.5000000 | 0.5030770 |  82 | Gender  |
+| Male      | 0.5675676 | 0.4987953 |  74 | Gender  |
 
 Input data for wjp_groupbars(): target = value, grouping = group, levels
-= category {.table}
+= category, sd/n for the confidence interval {.table}
 
 ------------------------------------------------------------------------
 

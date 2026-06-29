@@ -21,6 +21,10 @@ wjp_groupbars(
   level_order = NULL,
   show_national = FALSE,
   national_value = NULL,
+  draw_ci = FALSE,
+  sd = NULL,
+  sample_size = NULL,
+  ci_level = 0.95,
   ptheme = WJP_theme()
 )
 ```
@@ -77,6 +81,26 @@ wjp_groupbars(
   Numeric. The national average value to display when show_national is
   TRUE.
 
+- draw_ci:
+
+  Logical. If TRUE, draws a per-category confidence interval on each
+  primary bar using a normal approximation built from `sd` and
+  `sample_size`. Default is FALSE.
+
+- sd:
+
+  String. Column name with the standard deviation used to build the
+  confidence interval. Required when `draw_ci = TRUE`. Default is NULL.
+
+- sample_size:
+
+  String. Column name with the number of observations used to build the
+  confidence interval. Required when `draw_ci = TRUE`. Default is NULL.
+
+- ci_level:
+
+  Numeric. Confidence level for the interval. Default is 0.95.
+
 - ptheme:
 
   A ggplot2 theme. Default is WJP_theme().
@@ -118,6 +142,26 @@ wjp_groupbars(
   levels      = "category",
   colors      = c("#2a2a94", "#d0d1d3"),
   group_order = c("Gender", "Age")
+)
+
+
+# With a per-category confidence interval (requires sd + sample_size columns)
+data_ci <- data.frame(
+  group    = c("Gender", "Gender", "Age", "Age", "Age"),
+  category = c("Male", "Female", "18-29", "30-49", "50+"),
+  value    = c(0.45, 0.52, 0.38, 0.48, 0.55),
+  se       = c(0.50, 0.50, 0.49, 0.50, 0.50),
+  n        = c(420, 460, 180, 510, 240)
+)
+
+wjp_groupbars(
+  data_ci,
+  target      = "value",
+  grouping    = "group",
+  levels      = "category",
+  draw_ci     = TRUE,
+  sd          = "se",
+  sample_size = "n"
 )
 
 ```
