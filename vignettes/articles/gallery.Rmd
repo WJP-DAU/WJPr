@@ -99,6 +99,12 @@ wjp_bars(
 )
 ```
 
+**Expected input structure** — one row per category, with the value column (`target`) and the category column (`grouping`); `labels`/`lab_pos` are optional helpers for the data labels.
+
+```{r bars-structure, echo=FALSE}
+knitr::kable(head(data_bars, 3), caption = "Input data for wjp_bars(): target = trust, grouping = country")
+```
+
 ### Horizontal Bars
 Set `direction = "horizontal"` for horizontal orientation.
 
@@ -114,6 +120,8 @@ wjp_bars(
   direction = "horizontal"
 )
 ```
+
+Uses the same `data_bars` structure shown above — only `direction = "horizontal"` changes.
 
 ***
 
@@ -148,6 +156,12 @@ wjp_divbars(
 )
 ```
 
+**Expected input structure** — one row per `grouping` × `diverging` combination. Negative values point left, positive values point right (`percent` here is signed).
+
+```{r divbars-structure, echo=FALSE}
+knitr::kable(head(data_divbars, 4), caption = "Input data for wjp_divbars(): target = percent, grouping = country, diverging = response")
+```
+
 ***
 
 ## Dots Chart
@@ -179,6 +193,12 @@ wjp_dots(
   colors   = "country",
   cvec     = c("Atlantis" = "#181878", "Narnia" = "#BF02AF", "Neverland" = "#226640")
 )
+```
+
+**Expected input structure** — long format: one row per `grouping` (variable) × `colors` (group) combination, each with its `target` value.
+
+```{r dots-structure, echo=FALSE}
+knitr::kable(head(data_dots, 4), caption = "Input data for wjp_dots(): target = trust, grouping = institution, colors = country")
 ```
 
 ***
@@ -221,6 +241,12 @@ wjp_lines(
 )
 ```
 
+**Expected input structure** — long format: one row per `grouping` (time point) × series. Pass the series vector through `ngroups`.
+
+```{r lines-structure, echo=FALSE}
+knitr::kable(head(data_lines, 4), caption = "Input data for wjp_lines(): target = trust, grouping = year, ngroups = institution")
+```
+
 ***
 
 ## Slope Chart
@@ -251,6 +277,12 @@ wjp_slope(
 )
 ```
 
+**Expected input structure** — exactly two `grouping` values (the two time points) per series. Pass the series vector through `ngroups`.
+
+```{r slope-structure, echo=FALSE}
+knitr::kable(head(data_slope, 4), caption = "Input data for wjp_slope(): target = trust, grouping = year, ngroups = gender")
+```
+
 ***
 
 ## Dumbbell Chart
@@ -270,6 +302,12 @@ wjp_dumbbells(
 )
 ```
 
+**Expected input structure** — one row per `grouping` × `color` (the two endpoints). `cgroups` lists the two endpoint values.
+
+```{r dumbbells-structure, echo=FALSE}
+knitr::kable(head(data_dumbbells, 4), caption = "Input data for wjp_dumbbells(): target = trust, grouping = institution, color = year")
+```
+
 ***
 
 ## Lollipop Chart
@@ -285,6 +323,8 @@ wjp_lollipops(
 )
 ```
 
+Uses the same `data_bars` structure (one row per category with a `target` value) shown under **Bar Charts**.
+
 ***
 
 ## Edgebars Chart
@@ -299,6 +339,8 @@ wjp_edgebars(
   cvec     = "#2894aa"
 )
 ```
+
+Uses the same `data_bars` structure shown under **Bar Charts**; `labels` supplies the text drawn at the edge of each bar.
 
 ***
 
@@ -341,6 +383,12 @@ wjp_radar(
 )
 ```
 
+**Expected input structure** — long format: one row per `axis_var` (dimension) × `colors` (group). `labels` gives the human-readable axis name.
+
+```{r radar-structure, echo=FALSE}
+knitr::kable(head(data_radar, 4), caption = "Input data for wjp_radar(): target = score, axis_var = category, colors = gender")
+```
+
 ***
 
 ## Rose Chart
@@ -358,6 +406,12 @@ wjp_rose(
   cvec     = c("#CCCCFF", "#AEAEFF", "#8F8FFF", "#7373E5", "#5E5ECC",
                "#181878", "#3366FF", "#00A8A5", "#226640")
 )
+```
+
+**Expected input structure** — a single unit: one row per `grouping` (dimension) with its `target` value and a display `label`.
+
+```{r rose-structure, echo=FALSE}
+knitr::kable(head(data_rose, 4), caption = "Input data for wjp_rose(): target = score, grouping = category")
 ```
 
 ***
@@ -383,6 +437,59 @@ wjp_gauge(
 )
 ```
 
+**Expected input structure** — one row per slice: a `colors` category, its `target` value, and a display `label`. `factor_order` controls the drawing order.
+
+```{r gauge-structure, echo=FALSE}
+knitr::kable(head(data_gauge, 4), caption = "Input data for wjp_gauge(): target = value, colors = category")
+```
+
+***
+
+## Grouped Bars
+`wjp_groupbars()` - Faceted bars that compare a value across demographic groups (one facet per `grouping`).
+
+```{r groupbars, fig.height=5, warning=FALSE}
+# Value by country, plus the same value broken down by gender
+country_level <- gpp_data %>%
+  filter(year == 2022) %>%
+  mutate(q1a = as.double(unclass(q1a)),
+         trust = case_when(q1a <= 2 ~ 1, q1a <= 4 ~ 0)) %>%
+  filter(!is.na(trust)) %>%
+  group_by(country) %>%
+  summarise(value = mean(trust, na.rm = TRUE), .groups = "drop") %>%
+  mutate(group = "Country") %>%
+  rename(category = country)
+
+gender_level <- gpp_data %>%
+  filter(year == 2022) %>%
+  mutate(q1a  = as.double(unclass(q1a)),
+         gend = as.double(unclass(gend)),
+         trust  = case_when(q1a <= 2 ~ 1, q1a <= 4 ~ 0),
+         gender = case_when(gend == 1 ~ "Male", gend == 2 ~ "Female")) %>%
+  filter(!is.na(trust), !is.na(gender)) %>%
+  group_by(gender) %>%
+  summarise(value = mean(trust, na.rm = TRUE), .groups = "drop") %>%
+  mutate(group = "Gender") %>%
+  rename(category = gender)
+
+data_groupbars <- bind_rows(country_level, gender_level)
+
+wjp_groupbars(
+  data_groupbars,
+  target      = "value",
+  grouping    = "group",
+  levels      = "category",
+  colors      = c("#482d8b", "#2894aa"),
+  group_order = c("Country", "Gender")
+)
+```
+
+**Expected input structure** — one row per `levels` category, tagged with the `grouping` (facet) it belongs to and its `target` value.
+
+```{r groupbars-structure, echo=FALSE}
+knitr::kable(head(data_groupbars, 5), caption = "Input data for wjp_groupbars(): target = value, grouping = group, levels = category")
+```
+
 ***
 
 ## Quick Reference
@@ -401,3 +508,4 @@ wjp_gauge(
 | Radar | `wjp_radar()` | Multi-dimensional group comparison |
 | Rose | `wjp_rose()` | Multi-dimensional single unit |
 | Gauge | `wjp_gauge()` | Composition, progress |
+| Grouped Bars | `wjp_groupbars()` | Compare a value across demographic groups |
