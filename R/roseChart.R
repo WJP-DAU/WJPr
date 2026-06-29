@@ -13,7 +13,8 @@
 #' @param cvec A vector of colors to apply to lines.
 #' @param order_var A string specifying the variable in the data frame that contains the display order of categories. Default is NULL.
 #'
-#' @return A ggplot object representing the radar plot.
+#' @return A ggplot object representing the rose chart.
+#' @export
 #'
 #' @examples
 #' library(dplyr)
@@ -119,14 +120,28 @@ wjp_rose <- function(
                  y        = target_var,
                  fill     = grouping_var),
              position     = "dodge2",
-             show.legend  = F) +
-    geom_richtext(aes(y       = 1.3,
-                      label   = alabels_var),
-                  family      = "Lato Full",
-                  fontface    = "plain",
-                  color       = "#000000",
-                  fill        = NA, 
-                  label.color = NA) +
+             show.legend  = F)
+
+  # Add labels - use ggtext if available for rich formatting
+  if (requireNamespace("ggtext", quietly = TRUE)) {
+    plt <- plt +
+      ggtext::geom_richtext(aes(y       = 1.3,
+                        label   = alabels_var),
+                    family      = "Lato Full",
+                    fontface    = "plain",
+                    color       = "#000000",
+                    fill        = NA,
+                    label.color = NA)
+  } else {
+    plt <- plt +
+      geom_text(aes(y     = 1.3,
+                    label = alabels_var),
+                family   = "Lato Full",
+                fontface = "plain",
+                color    = "#000000")
+  }
+
+  plt <- plt +
     coord_polar(clip = "off") +
     scale_y_continuous(
       limits = c(-0.1, 1.35),

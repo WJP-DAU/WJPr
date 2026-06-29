@@ -33,7 +33,7 @@ wjp_dots(
 
 \item{cvec}{Named vector with the colors to apply to the dots. Default is NULL.}
 
-\item{order}{String. Column name of the variable that contains the custom order for the labels.}
+\item{order}{String. Column name of the variable that contains the desired order for the labels.}
 
 \item{diffOpac}{Boolean. If TRUE, the plot will expect different levels of opacities for the dots. Default is FALSE.}
 

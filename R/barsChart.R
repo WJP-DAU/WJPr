@@ -98,38 +98,45 @@ wjp_bars <- function(
 ){
   
   # Renaming variables in the data frame to match the function naming
+  # Always rename target and grouping
+  data <- data %>%
+    dplyr::rename(target_var   = all_of(target),
+                  grouping_var = all_of(grouping))
+
+  # Handle labels
   if (is.null(labels)) {
     data <- data %>%
-      dplyr::mutate(labels_var    = "") %>%
-      dplyr::rename(target_var    = all_of(target),
-                    grouping_var  = all_of(grouping),
-                    colors_var    = all_of(colors),
-                    order_var     = all_of(order))
+      dplyr::mutate(labels_var = "")
   } else {
     data <- data %>%
-      dplyr::rename(target_var    = all_of(target),
-                    grouping_var  = all_of(grouping),
-                    labels_var    = all_of(labels),
-                    colors_var    = all_of(colors),
-                    order_var     = all_of(order))
+      dplyr::rename(labels_var = all_of(labels))
   }
-  
-  if (is.null(lab_pos)){
+
+  # Handle lab_pos
+  if (is.null(lab_pos)) {
     data <- data %>%
       dplyr::mutate(lab_pos = target_var)
   } else {
     data <- data %>%
       dplyr::rename(lab_pos = all_of(lab_pos))
   }
-  
+
+  # Handle colors
   if (is.null(colors)) {
     data <- data %>%
       dplyr::mutate(colors_var = grouping_var)
+  } else if (grouping == colors) {
+    data <- data %>%
+      dplyr::mutate(colors_var = grouping_var)
   } else {
-    if (grouping == colors){
-      data <- data %>%
-        dplyr::mutate(colors_var = grouping_var)
-    }
+    data <- data %>%
+      dplyr::rename(colors_var = all_of(colors))
+  }
+
+  # Handle order
+  if (!is.null(order)) {
+    data <- data %>%
+      dplyr::rename(order_var = all_of(order))
   }
   
   # Creating plot

@@ -143,17 +143,22 @@ wjp_slope <- function(
                 show.legend = F)
     
   } else {
-    
+
     # Applying ggrepel for a better visualization of plots
+    # Check if ggrepel is available
+    if (!requireNamespace("ggrepel", quietly = TRUE)) {
+      stop("Package 'ggrepel' is required for repel=TRUE. Install with: install.packages('ggrepel')")
+    }
+
     plt <- plt +
-      geom_text_repel(mapping = aes(y     = target_var,
+      ggrepel::geom_text_repel(mapping = aes(y     = target_var,
                                     x     = labpos,
                                     label = labels_var),
                       family      = "Lato Full",
                       fontface    = "bold",
                       size        = 3.514598,
                       show.legend = F,
-                      
+
                       # Additional options from ggrepel package:
                       min.segment.length = 1000,
                       seed               = 42,
@@ -161,7 +166,7 @@ wjp_slope <- function(
                       direction          = "y",
                       force              = 5,
                       force_pull         = 1)
-    
+
   }
   
   plt <- plt +

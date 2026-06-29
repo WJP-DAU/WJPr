@@ -10,11 +10,17 @@
 A data frame with 1,341 rows and 57 columns:
 \describe{
 \item{country}{Country name}
-\item{year}{Year}
-\item{roli}{Rule of Law Index Score}
-\item{f1, f2, f3, f4, f5, f6, f7, f8}{Factor scores}
-\item{sfxx}{Subfactor scores}
-...
+\item{year}{Year of measurement (2012-2024)}
+\item{roli}{Overall Rule of Law Index Score (0-1)}
+\item{f1}{Factor 1: Constraints on Government Powers}
+\item{f2}{Factor 2: Absence of Corruption}
+\item{f3}{Factor 3: Open Government}
+\item{f4}{Factor 4: Fundamental Rights}
+\item{f5}{Factor 5: Order and Security}
+\item{f6}{Factor 6: Regulatory Enforcement}
+\item{f7}{Factor 7: Civil Justice}
+\item{f8}{Factor 8: Criminal Justice}
+\item{sf11, sf12, ...}{Subfactor scores (e.g., sf11 = Subfactor 1.1)}
 }
 }
 }
@@ -25,7 +31,8 @@ A data frame with 1,341 rows and 57 columns:
 roli
 }
 \description{
-Index scores, at country-year level, for all factors and subfactors
-from 2012 to 2024.
+Index scores at country-year level for all factors and subfactors
+from 2012 to 2024. Scores range from 0 to 1, where higher values indicate
+stronger adherence to the rule of law.
 }
 \keyword{datasets}

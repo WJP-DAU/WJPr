@@ -22,13 +22,13 @@ wjp_gauge(
 
 \item{colors}{A string specifying the variable in the data frame that represents the color groupings for the segments.}
 
-\item{cvec}{A vector of colors to apply to the segments.}
+\item{cvec}{A named vector of colors to apply to the segments. Names should match the values in the colors column.}
 
-\item{factor_order}{A vector specifying the order in which the segments should be plotted.}
+\item{factor_order}{A vector specifying the order in which the segments should be plotted. Default is NULL.}
 
 \item{labels}{A string specifying the variable in the data frame that contains the labels to be displayed. Default is NULL.}
 
-\item{crop}{A numeric vector specifying the amount of space to crop from the Top, Right, Bottom, and Right margins, respectively. Default is c(-10,0,0,-8).}
+\item{crop}{A numeric vector specifying the amount of space to crop from the Top, Right, Bottom, and Left margins, respectively. Default is c(-10,0,0,-8).}
 
 \item{ptheme}{A ggplot2 theme object to be applied to the plot. Default is WJP_theme().}
 }
@@ -36,19 +36,41 @@ wjp_gauge(
 A ggplot object representing the gauge chart.
 }
 \description{
-This function creates a gauge chart using ggplot2 based on the provided data frame.
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
+\code{wjp_gauge()} creates a gauge (speedometer) chart using ggplot2 based on the provided data frame.
+The chart displays segments in a semicircle, useful for showing composition or progress.
 }
 \examples{
-\dontrun{
-data <- data.frame(
-  target = c(10, 20, 30, 40),
-  colors = c("red", "blue", "green", "yellow"),
-  labels = c("A", "B", "C", "D")
+library(dplyr)
+library(ggplot2)
+
+# Always load the WJP fonts (optional)
+wjp_fonts()
+
+# Create sample data for gauge chart
+data4gauge <- data.frame(
+  category = c("Category A", "Category B", "Category C", "Category D"),
+  value = c(25, 35, 20, 20),
+  label = c("25\%", "35\%", "20\%", "20\%")
 )
-cvec <- c("red", "blue", "green", "yellow")
 
-wjp_gauge(data, "target", "colors", cvec, labels = "labels")
-}
+# Define colors for each segment
+gauge_colors <- c(
+  "Category A" = "#2a2a94",
+  "Category B" = "#4a4a94",
+  "Category C" = "#7a7ab4",
+  "Category D" = "#9a9ad4"
+)
 
+# Plotting chart
+wjp_gauge(
+  data4gauge,
+  target       = "value",
+  colors       = "category",
+  cvec         = gauge_colors,
+  factor_order = c("Category A", "Category B", "Category C", "Category D"),
+  labels       = "label"
+)
 
 }

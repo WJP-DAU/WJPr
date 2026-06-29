@@ -1,3 +1,58 @@
+#' Difference of Means Analysis
+#'
+#' @description
+#' `diffmeans()` performs statistical hypothesis testing for differences in means between
+#' two groups across multiple target variables and grouping variables. It supports both
+#' categorical (proportion test) and continuous (t-test) variables.
+#'
+#' @param data A data frame containing the data to be analyzed.
+#' @param target_vars A character vector specifying the column names of the target variables to analyze.
+#' @param group_vars A character vector specifying the column names of the binary grouping variables (must contain values 0 and 1).
+#' @param geo_var A string specifying the column name of the geographic or stratification variable used to group results.
+#' @param type A string specifying the type of test to perform. Options are:
+#'   \itemize{
+#'     \item \code{"categorical"}: Uses \code{prop.test()} for proportion comparisons (default)
+#'     \item \code{"continuous"}: Uses \code{t.test()} for mean comparisons
+#'   }
+#' @param t A numeric value specifying the significance threshold for determining statistical significance. Default is 0.1.
+#' @param collapse A logical value. If TRUE (default), results are collapsed into a single data frame. If FALSE, returns a nested list.
+#' @param verbose A logical value. If TRUE, prints progress messages during execution. Default is FALSE.
+#'
+#' @return A list of data frames (one per grouping variable) containing:
+#'   \itemize{
+#'     \item \code{geovar}: The geographic/stratification variable values
+#'     \item \code{variable}: The target variable name (if collapse = TRUE)
+#'     \item \code{mean_A}: Mean for group A (grouping == 1)
+#'     \item \code{mean_B}: Mean for group B (grouping == 0)
+#'     \item \code{diff}: Difference between means (mean_A - mean_B)
+#'     \item \code{stat}: Test statistic (chi-squared for prop.test, t for t.test)
+#'     \item \code{p_value}: P-value from the statistical test
+#'     \item \code{stat_sig}: Logical indicating if p_value <= t
+#'   }
+#'
+#' @export
+#'
+#' @examples
+#' library(dplyr)
+#'
+#' # Preparing data
+#' gpp_data <- WJPr::gpp %>%
+#'   mutate(
+#'     trust_a = case_when(q1a <= 2 ~ 1, q1a <= 4 ~ 0),
+#'     trust_b = case_when(q1b <= 2 ~ 1, q1b <= 4 ~ 0),
+#'     female = case_when(gend == 2 ~ 1, gend == 1 ~ 0)
+#'   )
+#'
+#' # Test differences in trust by gender across countries
+#' results <- diffmeans(
+#'   data        = gpp_data,
+#'   target_vars = c("trust_a", "trust_b"),
+#'   group_vars  = c("female"),
+#'   geo_var     = "country",
+#'   type        = "categorical",
+#'   t           = 0.05
+#' )
+#'
 diffmeans <- function(data, target_vars, group_vars, geo_var, type = "categorical", t = 0.1, collapse = TRUE, verbose = FALSE){
   
   # Looping through grouping alternatives

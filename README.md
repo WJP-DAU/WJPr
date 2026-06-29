@@ -79,6 +79,67 @@ wjp_bars(
 )
 ```
 
+## Chart Gallery
+
+WJPr provides 12 chart types for creating publication-ready visualizations:
+
+| | | |
+|:---:|:---:|:---:|
+| **Bar Chart** | **Dots Chart** | **Line Chart** |
+| <img src="man/figures/example-bars.png" width="200"/> | <img src="man/figures/example-dots.png" width="200"/> | <img src="man/figures/example-lines.png" width="200"/> |
+| `wjp_bars()` | `wjp_dots()` | `wjp_lines()` |
+| **Diverging Bars** | **Dumbbells** | **Slope Chart** |
+| <img src="man/figures/example-divbars.png" width="200"/> | <img src="man/figures/example-dumbbells.png" width="200"/> | <img src="man/figures/example-slope.png" width="200"/> |
+| `wjp_divbars()` | `wjp_dumbbells()` | `wjp_slope()` |
+| **Radar Chart** | **Rose Chart** | **Gauge Chart** |
+| <img src="man/figures/example-radar.png" width="200"/> | <img src="man/figures/example-rose.png" width="200"/> | <img src="man/figures/example-gauge.png" width="200"/> |
+| `wjp_radar()` | `wjp_rose()` | `wjp_gauge()` |
+| **Lollipop Chart** | **Edgebars** | **Grouped Bars** |
+| <img src="man/figures/example-lollipops.png" width="200"/> | <img src="man/figures/example-edgebars.png" width="200"/> | <img src="man/figures/example-groupbars.png" width="200"/> |
+| `wjp_lollipops()` | `wjp_edgebars()` | `wjp_groupbars()` |
+
+For a complete interactive gallery with code examples, see the [Chart Gallery vignette](https://ctoruno.github.io/WJPr/articles/gallery.html).
+
+## Data Structure
+
+All WJPr visualization functions expect data in **long (tidy) format**:
+
+```
+| grouping     | target | colors   | labels (optional) |
+|--------------|--------|----------|-------------------|
+| Category A   | 45.2   | Group 1  | "45%"             |
+| Category B   | 32.1   | Group 1  | "32%"             |
+| Category A   | 51.0   | Group 2  | "51%"             |
+| Category B   | 38.5   | Group 2  | "39%"             |
+```
+
+**Key parameters used across all functions:**
+
+| Parameter  | Description                          | Type            |
+|------------|--------------------------------------|-----------------|
+| `target`   | Values to plot (Y-axis)              | Numeric column  |
+| `grouping` | Categories (X-axis or rows)          | Character/Factor|
+| `colors`   | Variable for color grouping          | Character/Factor|
+| `cvec`     | Named vector mapping values to colors| `c("A" = "#HEX")`|
+| `labels`   | Text labels to display               | Character column|
+
+### Validate Your Data
+
+Use `wjp_check_data()` to verify your data structure before plotting:
+
+```R
+wjp_check_data(
+  data     = my_data,
+  type     = "bars",
+  target   = "value",
+  grouping = "category",
+  colors   = "group",
+  cvec     = c("Group 1" = "#2E4057", "Group 2" = "#F4D35E")
+)
+```
+
+For detailed guidance, see the [Data Preparation vignette](https://ctoruno.github.io/WJPr/articles/data-preparation.html).
+
 ## Documentation
 
 Comprehensive documentation is available for all functions and datasets. Use the R help system to access it:
@@ -89,7 +150,50 @@ Comprehensive documentation is available for all functions and datasets. Use the
 
 ## Contributing
 
-Contributions are welcome! If you have suggestions, bug reports, or new feature ideas, please open an issue or submit a pull request on GitHub.
+Contributions are welcome! Before contributing, please read our guidelines:
+
+### Quick Start
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/new-chart`
+3. Follow the coding conventions in [CONTRIBUTING.md](CONTRIBUTING.md)
+4. Submit a pull request
+
+### Adding New Functions
+
+All visualization functions must follow the WJPr patterns:
+
+```r
+wjp_newchart <- function(
+    data,
+    target,
+    grouping,
+    colors    = NULL,
+    cvec      = NULL,
+    labels    = NULL,
+    ptheme    = WJP_theme()
+) {
+  # 1. Rename columns using all_of()
+  # 2. Handle NULL parameters
+  # 3. Create ggplot
+  # 4. Apply colors if cvec provided
+  # 5. Apply theme
+  return(plt)
+}
+```
+
+### Documentation Requirements
+
+- Roxygen2 with `@export`, `@param`, `@return`, `@examples`
+- Include `lifecycle::badge("experimental")` in description
+- Add example to `data-raw/generate-examples.R`
+- Update `CLAUDE.md`
+
+### Resources
+
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Complete contribution guidelines
+- **[Development Guide](https://ctoruno.github.io/WJPr/articles/development-guide.html)** - Step-by-step tutorial
+- **[Issues](https://github.com/ctoruno/WJPr/issues)** - Report bugs or request features
 
 ## License
 

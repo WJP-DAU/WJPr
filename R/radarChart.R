@@ -17,6 +17,7 @@
 #' @param source A string which can take two values (GPP or QRQ). 
 #'
 #' @return A ggplot object representing the radar plot.
+#' @export
 #'
 #' @examples
 #' library(dplyr)
@@ -164,7 +165,7 @@ wjp_radar <- function(
     )
   ) %>%
     bind_cols(
-      map_df(
+      purrr::map_df(
         seq(0, 1, 0.2) + central_distance, 
         text_coords
       ) %>% 
@@ -212,7 +213,7 @@ wjp_radar <- function(
     
     # We set up the ggplot
     ggplot(
-      data = map_df(seq(0, 1, 0.20) + central_distance, circle_coords),
+      data = purrr::map_df(seq(0, 1, 0.20) + central_distance, circle_coords),
       aes(x = x, 
           y = y)
     ) +
@@ -234,7 +235,7 @@ wjp_radar <- function(
     
     # We draw the ZERO ring
     geom_polygon(
-      data = map_df(seq(0, 1, 0.20) + central_distance, circle_coords) %>%
+      data = purrr::map_df(seq(0, 1, 0.20) + central_distance, circle_coords) %>%
         filter(r == 0.2),
       fill      = NA,
       linetype  = "solid",
@@ -262,25 +263,38 @@ wjp_radar <- function(
       )) +
     
     # Then, we add the axis labels
-    geom_richtext(
-      data  = text_coords() %>%
-        mutate(
-          n = row_number()
-        ),
-      aes(x = x, 
-          y = y), 
-      label = data %>% 
-        arrange(order_var) %>% 
-        filter(color_var == data %>% 
-                 ungroup() %>% 
-                 distinct(color_var) %>% 
-                 slice_head(n=1)) %>% 
-        pull(label_var),
-      family      = "Lato Full",
-      fontface    = "plain",
-      fill        = NA, 
-      label.color = NA
-    ) +
+    {
+      label_data <- text_coords() %>%
+        mutate(n = row_number())
+
+      axis_labels <- data %>%
+        arrange(order_var) %>%
+        filter(color_var == data %>%
+                 ungroup() %>%
+                 distinct(color_var) %>%
+                 slice_head(n=1)) %>%
+        pull(label_var)
+
+      if (requireNamespace("ggtext", quietly = TRUE)) {
+        ggtext::geom_richtext(
+          data  = label_data,
+          aes(x = x, y = y),
+          label = axis_labels,
+          family      = "Lato Full",
+          fontface    = "plain",
+          fill        = NA,
+          label.color = NA
+        )
+      } else {
+        geom_text(
+          data  = label_data,
+          aes(x = x, y = y),
+          label = axis_labels,
+          family   = "Lato Full",
+          fontface = "plain"
+        )
+      }
+    } +
     
     # We add the data points along with its lines
     geom_point(

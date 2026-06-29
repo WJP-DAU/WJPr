@@ -1,32 +1,55 @@
 #' Plot a Gauge Chart following WJP style guidelines
 #'
-#' This function creates a gauge chart using ggplot2 based on the provided data frame.
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' `wjp_gauge()` creates a gauge (speedometer) chart using ggplot2 based on the provided data frame.
+#' The chart displays segments in a semicircle, useful for showing composition or progress.
 #'
 #' @param data A data frame containing the data to be plotted.
 #' @param target A string specifying the variable in the data frame that contains the values to be plotted.
 #' @param colors A string specifying the variable in the data frame that represents the color groupings for the segments.
-#' @param cvec A vector of colors to apply to the segments.
-#' @param factor_order A vector specifying the order in which the segments should be plotted.
+#' @param cvec A named vector of colors to apply to the segments. Names should match the values in the colors column.
+#' @param factor_order A vector specifying the order in which the segments should be plotted. Default is NULL.
 #' @param labels A string specifying the variable in the data frame that contains the labels to be displayed. Default is NULL.
-#' @param crop A numeric vector specifying the amount of space to crop from the Top, Right, Bottom, and Right margins, respectively. Default is c(-10,0,0,-8).
+#' @param crop A numeric vector specifying the amount of space to crop from the Top, Right, Bottom, and Left margins, respectively. Default is c(-10,0,0,-8).
 #' @param ptheme A ggplot2 theme object to be applied to the plot. Default is WJP_theme().
 #'
 #' @return A ggplot object representing the gauge chart.
+#' @export
 #'
 #' @examples
-#' \dontrun{
-#' data <- data.frame(
-#'   target = c(10, 20, 30, 40),
-#'   colors = c("red", "blue", "green", "yellow"),
-#'   labels = c("A", "B", "C", "D")
+#' library(dplyr)
+#' library(ggplot2)
+#'
+#' # Always load the WJP fonts (optional)
+#' wjp_fonts()
+#'
+#' # Create sample data for gauge chart
+#' data4gauge <- data.frame(
+#'   category = c("Category A", "Category B", "Category C", "Category D"),
+#'   value = c(25, 35, 20, 20),
+#'   label = c("25%", "35%", "20%", "20%")
 #' )
-#' cvec <- c("red", "blue", "green", "yellow")
-#' 
-#' wjp_gauge(data, "target", "colors", cvec, labels = "labels")
-#' }
 #'
+#' # Define colors for each segment
+#' gauge_colors <- c(
+#'   "Category A" = "#2a2a94",
+#'   "Category B" = "#4a4a94",
+#'   "Category C" = "#7a7ab4",
+#'   "Category D" = "#9a9ad4"
+#' )
 #'
-#' @export
+#' # Plotting chart
+#' wjp_gauge(
+#'   data4gauge,
+#'   target       = "value",
+#'   colors       = "category",
+#'   cvec         = gauge_colors,
+#'   factor_order = c("Category A", "Category B", "Category C", "Category D"),
+#'   labels       = "label"
+#' )
+#'
 
 wjp_gauge <- function(
     data,                    
@@ -83,51 +106,77 @@ wjp_gauge <- function(
                            "")
     )
   
+  # Calculate total for scaling
+
+  total_value <- sum(data$target_var)
+
+  # Scale values to span 180 degrees (half circle)
+  # We'll use 0-100 for the data and add padding to make it a semicircle
+  data <- data %>%
+    mutate(
+      # Scale to half circle (values span 0 to 50, padding spans 50 to 100)
+      scaled_val = (target_var / total_value) * 50,
+      ymax       = cumsum(scaled_val),
+      ymin       = ymax - scaled_val,
+      labpos     = ymin + ((ymax - ymin) / 2)
+    )
+
+  # Add invisible padding segment to complete the circle
+  padding_data <- data.frame(
+    colors_var = "___padding___",
+    target_var = 0,
+    labels_var = "",
+    scaled_val = 50,
+    ymin       = 50,
+    ymax       = 100,
+    labpos     = 75
+  )
+
+  data <- dplyr::bind_rows(data, padding_data)
+
+  # Add padding color (transparent)
+  if (!is.null(cvec)) {
+    cvec <- c(cvec, "___padding___" = "transparent")
+  } else {
+    cvec <- c("___padding___" = "transparent")
+  }
+
   # Drawing chart
   plt <- ggplot(
-    data, 
-    aes(fill = colors_var, 
-        ymax = ymax, 
-        ymin = ymin, 
-        xmax = 2, 
+    data,
+    aes(fill = colors_var,
+        ymax = ymax,
+        ymin = ymin,
+        xmax = 2,
         xmin = 1)
-  ) + 
-    geom_rect() + 
+  ) +
+    geom_rect(show.legend = FALSE) +
     geom_text(
+      data = data %>% dplyr::filter(colors_var != "___padding___"),
       aes(label = labels_var,
           y     = labpos,
           x     = 1.5),
       color     = "white",
-      size      = 1.866058*.pt,
+      size      = 1.866058 * .pt,
       family    = "Lato Full",
       fontface  = "bold"
     ) +
-    scale_x_continuous(limits = c(0,2)) +
-    scale_y_continuous(limits = c(0,200)) +
-    scale_fill_manual(values  = cvec) +
-    coord_polar(theta = "y",
-                start = -pi/2) +
+    scale_x_continuous(limits = c(0, 2)) +
+    scale_y_continuous(limits = c(0, 100)) +
+    scale_fill_manual(values = cvec) +
+    coord_polar(theta = "y", start = pi) +
     ptheme +
-    labs(y = "",
-         x = "") +
+    labs(y = "", x = "") +
     theme(
-      legend.position  = "none",
-      plot.margin      = grid::unit(crop, "mm"),
-      panel.grid.major = element_blank(),
-      panel.background = element_blank(),
-      axis.title.x     = element_blank(),
-      axis.text.x      = element_blank(),
-      axis.text.y      = element_blank()
+      legend.position    = "none",
+      plot.margin        = grid::unit(crop, "mm"),
+      panel.grid.major   = element_blank(),
+      panel.background   = element_blank(),
+      axis.title.x       = element_blank(),
+      axis.text.x        = element_blank(),
+      axis.text.y        = element_blank(),
+      aspect.ratio       = 0.5
     )
-  
-  with_ggtrace(
-    x = plt + theme(aspect.ratio = .52),
-    method = Layout$render,
-    trace_steps = 5L,
-    trace_expr = quote({
-      panels <- lapply(panels, editGrob, vp = viewport(yscale = c(0.49, 1)))
-    }),
-    out = "g"
-  )
-  
+
+  return(plt)
 }

@@ -20,7 +20,7 @@ wjp_rose(data, target, grouping, labels, cvec = NULL, order_var = NULL)
 \item{order_var}{A string specifying the variable in the data frame that contains the display order of categories. Default is NULL.}
 }
 \value{
-A ggplot object representing the radar plot.
+A ggplot object representing the rose chart.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}

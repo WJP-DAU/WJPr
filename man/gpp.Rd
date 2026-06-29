@@ -3,19 +3,29 @@
 \docType{data}
 \name{gpp}
 \alias{gpp}
-\title{GPP sample data}
+\title{GPP Sample Data}
 \format{
 \subsection{\code{gpp}}{
 
 A data frame with 750 rows and 19 columns:
 \describe{
-\item{country}{Country name}
-\item{year}{Year}
-\item{gend}{Gender}
-\item{age}{Age}
-\item{q1x}{Trust in X institution}
-\item{q49x}{Justice System evaluation}
-...
+\item{country}{Country name (Atlantis, Narnia, or Neverland)}
+\item{year}{Survey year (2017, 2019, 2022)}
+\item{gend}{Gender (1 = Male, 2 = Female)}
+\item{age}{Age of respondent}
+\item{q1a}{Trust in Institution A (1-4 scale, 99 = Don't know)}
+\item{q1b}{Trust in Institution B (1-4 scale, 99 = Don't know)}
+\item{q1c}{Trust in Institution C (1-4 scale, 99 = Don't know)}
+\item{q1d}{Trust in Institution D (1-4 scale, 99 = Don't know)}
+\item{q49a}{Justice System evaluation A (1-4 scale, 99 = Don't know)}
+\item{q49b}{Justice System evaluation B (1-4 scale, 99 = Don't know)}
+\item{q49c}{Justice System evaluation C (1-4 scale, 99 = Don't know)}
+\item{q49d}{Justice System evaluation D (1-4 scale, 99 = Don't know)}
+\item{q49e}{Justice System evaluation E (1-4 scale, 99 = Don't know)}
+\item{q49f}{Justice System evaluation F (1-4 scale, 99 = Don't know)}
+\item{q49g}{Justice System evaluation G (1-4 scale, 99 = Don't know)}
+\item{q49h}{Justice System evaluation H (1-4 scale, 99 = Don't know)}
+\item{q49i}{Justice System evaluation I (1-4 scale, 99 = Don't know)}
 }
 }
 }
@@ -27,7 +37,7 @@ gpp
 }
 \description{
 A subset of data from the original General Population Poll Data.
-Countries and years have been renamed and group into three fictional
-countries and years.
+Countries and years have been renamed and grouped into three fictional
+countries (Atlantis, Narnia, Neverland) and multiple years.
 }
 \keyword{datasets}

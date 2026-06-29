@@ -1,0 +1,24 @@
+# CODEOWNERS - Define who reviews pull requests
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for everything in the repo
+*                           @ctoruno
+
+# R code and functions
+/R/                         @ctoruno
+
+# Documentation
+/vignettes/                 @ctoruno
+/man/                       @ctoruno
+*.md                        @ctoruno
+
+# Package configuration
+DESCRIPTION                 @ctoruno
+NAMESPACE                   @ctoruno
+
+# Data files
+/data/                      @ctoruno
+/data-raw/                  @ctoruno
+
+# CI/CD and GitHub config
+/.github/                   @ctoruno

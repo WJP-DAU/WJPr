@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation
+    url: https://ctoruno.github.io/WJPr/
+    about: Check the documentation before opening an issue
+  - name: Contributing Guide
+    url: https://github.com/ctoruno/WJPr/blob/main/CONTRIBUTING.md
+    about: Read our contribution guidelines
+  - name: Data Preparation Guide
+    url: https://ctoruno.github.io/WJPr/articles/data-preparation.html
+    about: Learn how to prepare data for WJPr functions

@@ -4,7 +4,7 @@
 \name{WJPr-package}
 \alias{WJPr}
 \alias{WJPr-package}
-\title{WJPr: World Justice Project data and visualizations tools}
+\title{WJPr: World Justice Project Data and Visualization Tools}
 \description{
 The WJPr package contains the most important data and visualization tools used by Data Analytics Unit at The World Justice Project. Version 1.0.0 comes with a wide range of visualization functions for replicating the image charts from the Country Reports. Additionally, you can find the Rule of Law Index scores data for all factors and subfactors as complementary data.
 }
@@ -19,6 +19,11 @@ Useful links:
 }
 \author{
 \strong{Maintainer}: Carlos A. Toruno Paniagua \email{ctoruno@worldjusticeproject.org}
+
+Authors:
+\itemize{
+  \item Carlos A. Toruno Paniagua \email{ctoruno@worldjusticeproject.org}
+}
 
 }
 \keyword{internal}

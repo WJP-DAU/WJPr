@@ -1,5 +1,11 @@
+^renv$
+^renv\.lock$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.Rprofile$
+^\.claude$
+^\.Rcheck$
+^\.\.Rcheck$
 ^data-raw$
 ^_pkgdown\.yml$
 ^docs$

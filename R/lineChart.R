@@ -190,16 +190,21 @@ wjp_lines <- function(
   } else {
     
     # Applying ggrepel for a better visualization of plots
+    # Check if ggrepel is available
+    if (!requireNamespace("ggrepel", quietly = TRUE)) {
+      stop("Package 'ggrepel' is required for repel=TRUE. Install with: install.packages('ggrepel')")
+    }
+
     if (transparency == F) {
       plt <- plt +
-        geom_text_repel(mapping = aes(y     = target_var,
+        ggrepel::geom_text_repel(mapping = aes(y     = target_var,
                                       x     = grouping_var,
                                       label = labels_var),
                         family      = "Lato Full",
                         fontface    = "bold",
                         size        = 3.514598,
                         show.legend = F,
-                        
+
                         # Additional options from ggrepel package:
                         min.segment.length = 1000,
                         seed               = 42,
@@ -209,7 +214,7 @@ wjp_lines <- function(
                         force_pull         = 1)
     } else {
       plt <- plt +
-        geom_text_repel(mapping = aes(y     = target_var,
+        ggrepel::geom_text_repel(mapping = aes(y     = target_var,
                                       x     = grouping_var,
                                       label = labels_var,
                                       alpha = colors_var),
@@ -217,7 +222,7 @@ wjp_lines <- function(
                         fontface    = "bold",
                         size        = 3.514598,
                         show.legend = F,
-                        
+
                         # Additional options from ggrepel package:
                         min.segment.length = 1000,
                         seed               = 42,

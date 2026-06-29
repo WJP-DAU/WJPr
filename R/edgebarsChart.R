@@ -19,6 +19,7 @@
 #' @param ptheme A ggplot aesthetic theme to be applied to the chart. Default is the WJP_theme initilized with the package.
 #'
 #' @return A ggplot object representing the edge bars plot.
+#' @export
 #'
 #' @examples
 #' library(dplyr)
@@ -110,13 +111,22 @@ wjp_edgebars <- function(
       )
   } 
   
+  # Rename columns, handling case where grouping == labels
   data <- data %>%
     rename(
       y_value   = all_of(target),
       x_var     = all_of(grouping),
-      label_var = all_of(labels),
       x_lab_pos = all_of(x_lab_pos)
     )
+
+  # Handle label_var separately to avoid duplicate rename when grouping == labels
+  if (grouping == labels) {
+    data <- data %>%
+      mutate(label_var = x_var)
+  } else {
+    data <- data %>%
+      rename(label_var = all_of(labels))
+  }
   
   # Creating plot
   plt <- ggplot(
@@ -128,26 +138,46 @@ wjp_edgebars <- function(
     )
   ) +
     geom_bar(
-      position = "dodge", 
+      position = "dodge",
       stat     = "identity",
-      width    = bar_width, 
+      width    = bar_width,
       show.legend = F
-    ) +
-    geom_richtext(
-      aes(
-        x        = reorder(x_var,x_lab_pos), 
-        y        = y_lab_pos,
-        label    = label_var, 
-        family   = "Lato Full", 
-        fontface = "plain"
-      ),
-      fill  = NA, 
-      hjust = 0, 
-      vjust = 0, 
-      size  = 3.514598,
-      label.color = NA,
-      label.padding = unit(c(0, 0, nudge_lab, 0), "mm"),
-    ) +
+    )
+
+  # Add rich text labels if ggtext is available
+  if (requireNamespace("ggtext", quietly = TRUE)) {
+    plt <- plt +
+      ggtext::geom_richtext(
+        aes(
+          x        = reorder(x_var,x_lab_pos),
+          y        = y_lab_pos,
+          label    = label_var,
+          family   = "Lato Full",
+          fontface = "plain"
+        ),
+        fill  = NA,
+        hjust = 0,
+        vjust = 0,
+        size  = 3.514598,
+        label.color = NA,
+        label.padding = unit(c(0, 0, nudge_lab, 0), "mm")
+      )
+  } else {
+    plt <- plt +
+      geom_text(
+        aes(
+          x     = reorder(x_var, x_lab_pos),
+          y     = y_lab_pos,
+          label = label_var
+        ),
+        family   = "Lato Full",
+        hjust    = 0,
+        vjust    = 0,
+        size     = 3.514598
+      )
+  }
+
+  plt <- plt +
     geom_text(
       aes(
         x = reorder(x_var, x_lab_pos),
