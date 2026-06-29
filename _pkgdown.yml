@@ -1,12 +1,38 @@
 url: https://worldjusticeproject-org.github.io/WJPr/
+
 template:
   bootstrap: 5
-  bootswatch: flatly
-  # light-switch: true
+  bslib:
+    primary: "#482d8b"
+    secondary: "#2894aa"
+    success: "#0f9581"
+    info: "#2894aa"
+    warning: "#f26b21"
+    danger: "#89191c"
+    light: "#fdf8f3"
+    dark: "#2e1c5c"
+    navbar-bg: "#482d8b"
+    navbar-light-color: "rgba(255,255,255,0.9)"
+    navbar-light-active-color: "#ffffff"
+    navbar-light-hover-color: "#ffffff"
+    link-color: "#482d8b"
+    code-color: "#2e1c5c"
+    base_font:
+      google: "Lato"
+    heading_font:
+      google: "Lato"
+    code_font:
+      google: "Fira Code"
+  includes:
+    in_header: |
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
 home:
-  title: WJPr
-  description: World Justice Project data and visualization tools.
+  title: WJPr - World Justice Project R Package
+  description: >
+    Herramientas de visualizacion y datos del Rule of Law Index del World Justice Project.
+    Funciones para crear graficos siguiendo las guias de estilo WJP.
 
 navbar:
   structure:
