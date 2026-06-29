@@ -21,6 +21,14 @@
 #'   specifying the order of levels within each group. Default is NULL (uses data order).
 #' @param show_national Logical. If TRUE, adds a "National Average" row at the top. Default is FALSE.
 #' @param national_value Numeric. The national average value to display when show_national is TRUE.
+#' @param draw_ci Logical. If TRUE, draws a per-category confidence interval on each
+#'   primary bar using a normal approximation built from \code{sd} and \code{sample_size}.
+#'   Default is FALSE.
+#' @param sd String. Column name with the standard deviation used to build the
+#'   confidence interval. Required when \code{draw_ci = TRUE}. Default is NULL.
+#' @param sample_size String. Column name with the number of observations used to
+#'   build the confidence interval. Required when \code{draw_ci = TRUE}. Default is NULL.
+#' @param ci_level Numeric. Confidence level for the interval. Default is 0.95.
 #' @param ptheme A ggplot2 theme. Default is WJP_theme().
 #'
 #' @return A ggplot object representing the grouped stacked bar chart.
@@ -58,6 +66,25 @@
 #'   group_order = c("Gender", "Age")
 #' )
 #'
+#' # With a per-category confidence interval (requires sd + sample_size columns)
+#' data_ci <- data.frame(
+#'   group    = c("Gender", "Gender", "Age", "Age", "Age"),
+#'   category = c("Male", "Female", "18-29", "30-49", "50+"),
+#'   value    = c(0.45, 0.52, 0.38, 0.48, 0.55),
+#'   se       = c(0.50, 0.50, 0.49, 0.50, 0.50),
+#'   n        = c(420, 460, 180, 510, 240)
+#' )
+#'
+#' wjp_groupbars(
+#'   data_ci,
+#'   target      = "value",
+#'   grouping    = "group",
+#'   levels      = "category",
+#'   draw_ci     = TRUE,
+#'   sd          = "se",
+#'   sample_size = "n"
+#' )
+#'
 
 wjp_groupbars <- function(
     data,
@@ -70,6 +97,10 @@ wjp_groupbars <- function(
     level_order    = NULL,
     show_national  = FALSE,
     national_value = NULL,
+    draw_ci        = FALSE,
+    sd             = NULL,
+    sample_size    = NULL,
+    ci_level       = 0.95,
     ptheme         = WJP_theme()
 ) {
 
@@ -111,6 +142,24 @@ if (is.null(labels)) {
       labels_var   = NA_character_
     )
     data <- dplyr::bind_rows(national_row, data)
+  }
+
+  # Build per-category confidence interval (normal approximation)
+  if (draw_ci) {
+    if (is.null(sd) || is.null(sample_size)) {
+      stop("`sd` and `sample_size` must be provided when draw_ci = TRUE.", call. = FALSE)
+    }
+    z <- stats::qnorm(1 - (1 - ci_level) / 2)
+    data <- data %>%
+      dplyr::rename(
+        sd_var          = dplyr::all_of(sd),
+        sample_size_var = dplyr::all_of(sample_size)
+      ) %>%
+      dplyr::mutate(
+        se    = sd_var / sqrt(sample_size_var),
+        lower = pmax(0, target_var - z * se),
+        upper = pmin(1, target_var + z * se)
+      )
   }
 
   # Create stacked data (primary + secondary = 100%)
@@ -249,6 +298,21 @@ if (is.null(labels)) {
     ) +
     ggplot2::coord_cartesian(clip = "off") +
     ggplot2::labs(x = "", y = "")
+
+  # Overlay the confidence interval on each primary bar
+  if (draw_ci) {
+    plt <- plt +
+      ggplot2::geom_errorbar(
+        data = dplyr::filter(data2plot, color_type == "primary"),
+        ggplot2::aes(y = y_id, xmin = lower * 100, xmax = upper * 100),
+        orientation = "y",
+        inherit.aes = FALSE,
+        width       = 0.25,
+        linewidth   = 0.6,
+        color       = "#4a4a4a",
+        na.rm       = TRUE
+      )
+  }
 
   # ===========================================================================
   # 6. APPLY THEME

@@ -449,14 +449,19 @@ knitr::kable(head(data_gauge, 4), caption = "Input data for wjp_gauge(): target 
 `wjp_groupbars()` - Faceted bars that compare a value across demographic groups (one facet per `grouping`).
 
 ```{r groupbars, fig.height=5, warning=FALSE}
-# Value by country, plus the same value broken down by gender
+# Value by country, plus the same value broken down by gender.
+# Keep the standard deviation (sd) and sample size (n) per category so we can
+# draw a confidence interval on each bar.
 country_level <- gpp_data %>%
   filter(year == 2022) %>%
   mutate(q1a = as.double(unclass(q1a)),
          trust = case_when(q1a <= 2 ~ 1, q1a <= 4 ~ 0)) %>%
   filter(!is.na(trust)) %>%
   group_by(country) %>%
-  summarise(value = mean(trust, na.rm = TRUE), .groups = "drop") %>%
+  summarise(value = mean(trust, na.rm = TRUE),
+            sd    = sd(trust, na.rm = TRUE),
+            n     = n(),
+            .groups = "drop") %>%
   mutate(group = "Country") %>%
   rename(category = country)
 
@@ -468,7 +473,10 @@ gender_level <- gpp_data %>%
          gender = case_when(gend == 1 ~ "Male", gend == 2 ~ "Female")) %>%
   filter(!is.na(trust), !is.na(gender)) %>%
   group_by(gender) %>%
-  summarise(value = mean(trust, na.rm = TRUE), .groups = "drop") %>%
+  summarise(value = mean(trust, na.rm = TRUE),
+            sd    = sd(trust, na.rm = TRUE),
+            n     = n(),
+            .groups = "drop") %>%
   mutate(group = "Gender") %>%
   rename(category = gender)
 
@@ -480,14 +488,17 @@ wjp_groupbars(
   grouping    = "group",
   levels      = "category",
   colors      = c("#482d8b", "#2894aa"),
-  group_order = c("Country", "Gender")
+  group_order = c("Country", "Gender"),
+  draw_ci     = TRUE,
+  sd          = "sd",
+  sample_size = "n"
 )
 ```
 
-**Expected input structure** — one row per `levels` category, tagged with the `grouping` (facet) it belongs to and its `target` value.
+**Expected input structure** — one row per `levels` category, tagged with the `grouping` (facet) it belongs to and its `target` value. To draw a confidence interval on each bar, set `draw_ci = TRUE` and supply per-category `sd` (standard deviation) and `sample_size` columns.
 
 ```{r groupbars-structure, echo=FALSE}
-knitr::kable(head(data_groupbars, 5), caption = "Input data for wjp_groupbars(): target = value, grouping = group, levels = category")
+knitr::kable(head(data_groupbars, 5), caption = "Input data for wjp_groupbars(): target = value, grouping = group, levels = category, sd/n for the confidence interval")
 ```
 
 ***

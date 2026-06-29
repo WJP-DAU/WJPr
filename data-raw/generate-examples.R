@@ -481,10 +481,12 @@ data_groupbars <- gpp_data %>%
     )
   ) %>%
   filter(!is.na(gender), !is.na(trust)) %>%
-  # Calculate by country
+  # Calculate by country (keep sd + n for the confidence interval)
   group_by(country) %>%
   summarise(
     value = mean(trust, na.rm = TRUE),
+    sd    = sd(trust, na.rm = TRUE),
+    n     = n(),
     .groups = "drop"
   ) %>%
   mutate(group = "Country") %>%
@@ -510,6 +512,8 @@ data_groupbars <- gpp_data %>%
       group_by(gender) %>%
       summarise(
         value = mean(trust, na.rm = TRUE),
+        sd    = sd(trust, na.rm = TRUE),
+        n     = n(),
         .groups = "drop"
       ) %>%
       mutate(group = "Gender") %>%
@@ -522,7 +526,10 @@ plot_groupbars <- wjp_groupbars(
   grouping    = "group",
   levels      = "category",
   colors      = c("#482d8b", "#2894aa"),
-  group_order = c("Country", "Gender")
+  group_order = c("Country", "Gender"),
+  draw_ci     = TRUE,
+  sd          = "sd",
+  sample_size = "n"
 )
 
 save_example(plot_groupbars, "groupbars", width = 6, height = 5)

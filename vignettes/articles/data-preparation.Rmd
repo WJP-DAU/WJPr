@@ -378,3 +378,4 @@ data <- raw_data %>%
 | `wjp_gauge()` | target, colors | labels, factor_order |
 | `wjp_lollipops()` | target, grouping | order |
 | `wjp_edgebars()` | target, grouping, labels | x_lab_pos |
+| `wjp_groupbars()` | target, grouping, levels | labels, group_order, sd + sample_size (for CI) |
