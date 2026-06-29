@@ -1,0 +1,458 @@
+# Guía de Desarrollo: Cómo Agregar Funciones a WJPr
+
+Esta guía técnica detalla el proceso completo para agregar nuevas
+funciones de visualización al paquete WJPr.
+
+## Requisitos Previos
+
+### Dependencias de Desarrollo
+
+``` r
+install.packages(c(
+"devtools",
+"roxygen2",
+"testthat",
+"usethis"
+))
+```
+
+### Clonar el Repositorio
+
+``` bash
+git clone https://github.com/worldjusticeproject-org/WJPr.git
+cd WJPr
+```
+
+## Paso 1: Crear el Archivo de la Función
+
+### Ubicación y Nomenclatura
+
+Crear un nuevo archivo en `R/` siguiendo la convención:
+
+- **Gráficos**: `{tipo}Chart.R` (ej: `waterfallChart.R`)
+- **Utilidades**: `{nombre}.R` (ej: `validation.R`)
+
+``` r
+# Crear archivo
+file.create("R/waterfallChart.R")
+```
+
+## Paso 2: Estructura de la Función
+
+### Template Completo
+
+``` r
+#' Plot a Waterfall Chart following WJP style guidelines
+#'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' `wjp_waterfall()` creates a waterfall chart showing cumulative effects
+#' of sequential positive and negative values.
+#'
+#' @param data A data frame containing the data to be plotted.
+#' @param target String. Column name with numeric values to plot.
+#' @param grouping String. Column name with category labels.
+#' @param colors String. Column name for color grouping. Default is NULL.
+#' @param cvec Named character vector of colors. Default is NULL.
+#' @param labels String. Column name with value labels. Default is NULL.
+#' @param direction String. "horizontal" or "vertical". Default is "vertical".
+#' @param ptheme A ggplot2 theme. Default is WJP_theme().
+#'
+#' @return A ggplot object representing the waterfall chart.
+#' @export
+#'
+#' @examples
+#' library(dplyr)
+#' library(ggplot2)
+#'
+#' # Load fonts
+#' wjp_fonts()
+#'
+#' # Prepare data
+#' data_waterfall <- data.frame(
+#'   category = c("Start", "Gain A", "Loss B", "Gain C", "End"),
+#'   value = c(100, 30, -20, 15, 125),
+#'   type = c("total", "positive", "negative", "positive", "total")
+#' )
+#'
+#' # Create chart
+#' wjp_waterfall(
+#'   data_waterfall,
+#'   target   = "value",
+#'   grouping = "category",
+#'   colors   = "type",
+#'   cvec     = c("total" = "#2a2a94",
+#'                "positive" = "#08605F",
+#'                "negative" = "#9E6240")
+#' )
+
+wjp_waterfall <- function(
+    data,
+    target,
+    grouping,
+    colors    = NULL,
+    cvec      = NULL,
+    labels    = NULL,
+    direction = "vertical",
+    ptheme    = WJP_theme()
+) {
+
+# ===========================================================================
+# SECCIÓN 1: VALIDACIÓN DE DATOS (Opcional pero recomendado)
+# ===========================================================================
+
+if (!is.data.frame(data)) {
+  stop("'data' must be a data frame")
+}
+
+if (!target %in% names(data)) {
+  stop(paste0("Column '", target, "' not found in data"))
+}
+
+# ===========================================================================
+# SECCIÓN 2: RENOMBRAR VARIABLES
+# ===========================================================================
+
+# Renombrar columnas obligatorias
+data <- data %>%
+  dplyr::rename(
+    target_var   = dplyr::all_of(target),
+    grouping_var = dplyr::all_of(grouping)
+  )
+
+# Manejar columna de colores
+if (is.null(colors)) {
+  # Si no se especifica, usar grouping como color
+  data <- data %>%
+    dplyr::mutate(colors_var = grouping_var)
+} else if (colors == grouping) {
+  # Evitar doble rename si son la misma columna
+  data <- data %>%
+    dplyr::mutate(colors_var = grouping_var)
+} else {
+  data <- data %>%
+    dplyr::rename(colors_var = dplyr::all_of(colors))
+}
+
+# Manejar labels
+if (is.null(labels)) {
+  data <- data %>%
+    dplyr::mutate(labels_var = "")
+} else if (labels == grouping) {
+  data <- data %>%
+    dplyr::mutate(labels_var = grouping_var)
+} else if (labels == colors && !is.null(colors)) {
+  data <- data %>%
+    dplyr::mutate(labels_var = colors_var)
+} else {
+  data <- data %>%
+    dplyr::rename(labels_var = dplyr::all_of(labels))
+}
+
+# ===========================================================================
+# SECCIÓN 3: TRANSFORMACIONES DE DATOS
+# ===========================================================================
+
+# Calcular posiciones para waterfall
+data <- data %>%
+  dplyr::mutate(
+    end   = cumsum(target_var),
+    start = dplyr::lag(end, default = 0),
+    # Ajustar para valores negativos
+    ymin = pmin(start, end),
+    ymax = pmax(start, end)
+  )
+
+# ===========================================================================
+# SECCIÓN 4: CREAR GRÁFICO BASE
+# ===========================================================================
+
+plt <- ggplot2::ggplot(
+  data,
+  ggplot2::aes(
+    x    = grouping_var,
+    fill = colors_var
+  )
+) +
+  ggplot2::geom_rect(
+    ggplot2::aes(
+      xmin = as.numeric(factor(grouping_var)) - 0.4,
+      xmax = as.numeric(factor(grouping_var)) + 0.4,
+      ymin = ymin,
+      ymax = ymax
+    ),
+    show.legend = FALSE
+  )
+
+# Agregar labels si existen
+if (!all(data$labels_var == "")) {
+  plt <- plt +
+    ggplot2::geom_text(
+      ggplot2::aes(
+        x     = grouping_var,
+        y     = ymax,
+        label = labels_var
+      ),
+      vjust    = -0.5,
+      family   = "Lato Full",
+      fontface = "bold",
+      color    = "#4a4a49"
+    )
+}
+
+# ===========================================================================
+# SECCIÓN 5: APLICAR COLORES
+# ===========================================================================
+
+if (!is.null(cvec)) {
+  plt <- plt +
+    ggplot2::scale_fill_manual(values = cvec)
+}
+
+# ===========================================================================
+# SECCIÓN 6: APLICAR DIRECCIÓN
+# ===========================================================================
+
+if (direction == "horizontal") {
+  plt <- plt +
+    ggplot2::coord_flip()
+}
+
+# ===========================================================================
+# SECCIÓN 7: APLICAR TEMA Y AJUSTES FINALES
+# ===========================================================================
+
+plt <- plt +
+  ptheme +
+  ggplot2::labs(x = "", y = "") +
+  ggplot2::theme(
+    panel.grid.major.x = ggplot2::element_blank(),
+    legend.position    = "none"
+  )
+
+return(plt)
+}
+```
+
+## Paso 3: Patrones Importantes
+
+### Manejo de Parámetros Opcionales
+
+El patrón más importante es manejar correctamente cuando un parámetro es
+NULL o cuando dos parámetros apuntan a la misma columna:
+
+``` r
+# INCORRECTO - Causa error si colors == grouping
+data <- data %>%
+  rename(
+    grouping_var = all_of(grouping),
+    colors_var   = all_of(colors)  # ERROR: columna ya renombrada
+  )
+
+# CORRECTO - Verificar antes de renombrar
+if (is.null(colors)) {
+  data <- data %>%
+    mutate(colors_var = grouping_var)
+} else if (colors == grouping) {
+  data <- data %>%
+    mutate(colors_var = grouping_var)
+} else {
+  data <- data %>%
+    rename(colors_var = all_of(colors))
+}
+```
+
+### Vector de Colores Nombrado
+
+``` r
+# Los nombres deben coincidir EXACTAMENTE con valores de la variable colors
+cvec <- c(
+  "Trust"    = "#4F518C",
+  "No Trust" = "#2C2A4A"
+)
+
+# En la función, aplicar solo si no es NULL
+if (!is.null(cvec)) {
+  plt <- plt +
+    scale_fill_manual(values = cvec)
+}
+```
+
+### Coordenadas Polares (Gráficos Circulares)
+
+Para gráficos tipo radar, rose o gauge:
+
+``` r
+plt <- plt +
+  coord_polar(
+    theta = "y",      # Variable para el ángulo
+    start = pi        # Punto de inicio (pi = abajo)
+  ) +
+  theme(
+    aspect.ratio = 1  # Mantener proporción 1:1 para círculo
+  )
+```
+
+### Agregar Segmentos Invisibles
+
+Para controlar el rango visual sin afectar los datos:
+
+``` r
+# Agregar segmento de relleno transparente
+padding_data <- data.frame(
+  category = "___padding___",
+  value    = 50,
+  color    = "transparent"
+)
+
+data <- dplyr::bind_rows(data, padding_data)
+cvec <- c(cvec, "___padding___" = "transparent")
+```
+
+## Paso 4: Documentación Roxygen2
+
+### Tags Obligatorios
+
+| Tag            | Descripción           | Ejemplo                       |
+|----------------|-----------------------|-------------------------------|
+| `@description` | Descripción detallada | Incluir lifecycle badge       |
+| `@param`       | Cada parámetro        | `@param data A data frame...` |
+| `@return`      | Valor de retorno      | `@return A ggplot object`     |
+| `@export`      | Exportar función      | Siempre incluir               |
+| `@examples`    | Ejemplo reproducible  | Código ejecutable             |
+
+### Lifecycle Badge
+
+Siempre incluir el estado de la función:
+
+``` r
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
+#' Descripción de la función...
+```
+
+Opciones: - `"experimental"` - Nueva, puede cambiar - `"stable"` - API
+estable - `"deprecated"` - No usar, será eliminada
+
+## Paso 5: Agregar Ejemplo Visual
+
+### Actualizar generate-examples.R
+
+Agregar sección en `data-raw/generate-examples.R`:
+
+``` r
+# =============================================================================
+# XX. WATERFALL CHART
+# =============================================================================
+message("XX. Generating waterfall chart example...")
+
+data_waterfall <- data.frame(
+category = c("Start", "Revenue", "Costs", "Taxes", "End"),
+value = c(100, 50, -30, -10, 110),
+type = c("total", "gain", "loss", "loss", "total")
+)
+
+plot_waterfall <- wjp_waterfall(
+  data_waterfall,
+  target = "value",
+  grouping = "category",
+  colors = "type",
+  cvec = c("total" = "#2a2a94",
+           "gain"  = "#08605F",
+           "loss"  = "#9E6240")
+)
+
+save_example(plot_waterfall, "waterfall")
+```
+
+### Generar Imagen
+
+``` r
+source("data-raw/generate-examples.R")
+```
+
+## Paso 6: Actualizar CLAUDE.md
+
+Agregar la nueva función a la sección de funciones:
+
+``` markdown
+### wjp_waterfall()
+- **Archivo**: `R/waterfallChart.R`
+- **Propósito**: Gráfico waterfall para mostrar cambios acumulativos
+- **Parámetros clave**: target, grouping, colors, direction
+```
+
+## Paso 7: Verificación
+
+### Checklist Pre-PR
+
+``` r
+# 1. Regenerar documentación
+devtools::document()
+
+# 2. Verificar paquete
+devtools::check()
+
+# 3. Cargar y probar
+devtools::load_all()
+
+# 4. Ejecutar ejemplo manualmente
+wjp_fonts()
+# ... código del ejemplo
+
+# 5. Generar imagen
+source("data-raw/generate-examples.R")
+```
+
+### Errores Comunes
+
+| Error                  | Causa                  | Solución                                                                                      |
+|------------------------|------------------------|-----------------------------------------------------------------------------------------------|
+| `object 'x' not found` | Variable no renombrada | Verificar rename                                                                              |
+| `Column doesn't exist` | Doble rename           | Usar if/else para evitar                                                                      |
+| `NULL` result          | Falta return()         | Agregar `return(plt)`                                                                         |
+| Font not found         | Fonts no cargados      | Llamar [`wjp_fonts()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_fonts.md) |
+
+## Paso 8: Pull Request
+
+### Crear Rama
+
+``` bash
+git checkout -b feature/waterfall-chart
+```
+
+### Commit
+
+``` bash
+git add R/waterfallChart.R
+git add man/wjp_waterfall.Rd
+git add man/figures/example-waterfall.png
+git add data-raw/generate-examples.R
+git add CLAUDE.md
+
+git commit -m "Add wjp_waterfall() chart function
+
+- New waterfall chart for cumulative changes
+- Supports horizontal/vertical direction
+- Full Roxygen2 documentation
+- Example image generated"
+```
+
+### Push y PR
+
+``` bash
+git push origin feature/waterfall-chart
+```
+
+Crear PR en GitHub con: - Descripción de la función - Screenshot del
+gráfico - Checklist completado
+
+## Recursos Adicionales
+
+- [R Packages (2e)](https://r-pkgs.org/) - Guía completa de desarrollo
+- [ggplot2 extensions](https://exts.ggplot2.tidyverse.org/) -
+  Inspiración
+- [Roxygen2 documentation](https://roxygen2.r-lib.org/) - Tags
+  disponibles
