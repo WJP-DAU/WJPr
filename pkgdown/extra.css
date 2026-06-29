@@ -228,6 +228,16 @@ figcaption {
   margin-bottom: 2rem;
 }
 
+/* Leave the banner title blank on every page (keeps the gradient + orange rule) */
+.page-header h1 {
+  color: transparent;
+}
+
+.page-header h1 a,
+.page-header small {
+  color: rgba(255, 255, 255, 0.85);
+}
+
 /* Quick reference table on gallery */
 .table {
   border-radius: 8px;

@@ -115,9 +115,9 @@ plot_bars <- wjp_bars(
   colors   = "country",
   labels   = "label",
   lab_pos  = "label_pos",
-  cvec     = c("Atlantis"  = "#2E4057",
-               "Narnia"    = "#083D77",
-               "Neverland" = "#F4D35E")
+  cvec     = c("Atlantis"  = "#482d8b",
+               "Narnia"    = "#2894aa",
+               "Neverland" = "#f26b21")
 )
 
 save_example(plot_bars, "bars")
@@ -134,9 +134,9 @@ plot_bars_h <- wjp_bars(
   colors    = "country",
   labels    = "label",
   lab_pos   = "label_pos",
-  cvec      = c("Atlantis"  = "#2E4057",
-                "Narnia"    = "#083D77",
-                "Neverland" = "#F4D35E"),
+  cvec      = c("Atlantis"  = "#482d8b",
+                "Narnia"    = "#2894aa",
+                "Neverland" = "#f26b21"),
   direction = "horizontal"
 )
 
@@ -174,7 +174,7 @@ plot_divbars <- wjp_divbars(
   diverging = "response",
   negative  = "negative",
   labels    = "label",
-  cvec      = c("Trust" = "#4F518C", "No Trust" = "#2C2A4A")
+  cvec      = c("Trust" = "#482d8b", "No Trust" = "#f26b21")
 )
 
 save_example(plot_divbars, "divbars")
@@ -216,9 +216,9 @@ plot_dots <- wjp_dots(
   target   = "trust",
   grouping = "institution",
   colors   = "country",
-  cvec     = c("Atlantis"  = "#08605F",
-               "Narnia"    = "#9E6240",
-               "Neverland" = "#2E0E02")
+  cvec     = c("Atlantis"  = "#482d8b",
+               "Narnia"    = "#2894aa",
+               "Neverland" = "#f26b21")
 )
 
 save_example(plot_dots, "dots")
@@ -265,9 +265,9 @@ plot_lines <- wjp_lines(
   colors   = "institution",
   labels   = "label",
   repel    = TRUE,
-  cvec     = c("Police"     = "#08605F",
-               "Courts"     = "#9E6240",
-               "Parliament" = "#2E0E02")
+  cvec     = c("Police"     = "#482d8b",
+               "Courts"     = "#2894aa",
+               "Parliament" = "#f26b21")
 )
 
 save_example(plot_lines, "lines")
@@ -298,7 +298,7 @@ plot_slope <- wjp_slope(
   ngroups  = data_slope$gender,
   colors   = "gender",
   labels   = "label",
-  cvec     = c("Male" = "#08605F", "Female" = "#9E6240"),
+  cvec     = c("Male" = "#482d8b", "Female" = "#f26b21"),
   repel    = TRUE
 )
 
@@ -318,7 +318,7 @@ plot_dumbbells <- wjp_dumbbells(
   grouping = "institution",
   color    = "year",
   cgroups  = c("2017", "2022"),
-  cvec     = c("2017" = "#08605F", "2022" = "#9E6240")
+  cvec     = c("2017" = "#2894aa", "2022" = "#482d8b")
 )
 
 save_example(plot_dumbbells, "dumbbells")
@@ -368,7 +368,7 @@ plot_radar <- wjp_radar(
   labels   = "label",
   colors   = "gender",
   maincat  = "Male",
-  cvec     = c("Male" = "#1D4E89", "Female" = "#F79256")
+  cvec     = c("Male" = "#482d8b", "Female" = "#f26b21")
 )
 
 save_example(plot_radar, "radar", width = 6, height = 5)
@@ -386,9 +386,9 @@ plot_rose <- wjp_rose(
   target   = "score",
   grouping = "category",
   labels   = "label",
-  cvec     = c("#FDF1E7", "#FBE2CF", "#F7C59F",
-               "#E7C1A3", "#759EB8", "#7498B8",
-               "#7392B7", "#4F6281", "#2A324B")
+  cvec     = c("#eae4f2", "#d2c6e6", "#baa8da",
+               "#a28ace", "#8a6cc2", "#6f52a8",
+               "#56407f", "#3d2e5c", "#2e1c5c")
 )
 
 save_example(plot_rose, "rose", width = 6, height = 5)
@@ -405,7 +405,7 @@ plot_lollipop <- wjp_lollipops(
   target      = "trust",
   grouping    = "country",
   line_color  = "#c4c4c4",
-  point_color = "#2a2a94"
+  point_color = "#482d8b"
 )
 
 save_example(plot_lollipop, "lollipops")
@@ -420,7 +420,7 @@ plot_edgebars <- wjp_edgebars(
   target   = "trust",
   grouping = "country",
   labels   = "country",
-  cvec     = "#F6D8AE"
+  cvec     = "#f26b21"
 )
 
 save_example(plot_edgebars, "edgebars")
@@ -438,10 +438,10 @@ tryCatch({
   )
 
   gauge_colors <- c(
-    "Factor 1" = "#2E4057",
-    "Factor 2" = "#048A81",
-    "Factor 3" = "#54C6EB",
-    "Factor 4" = "#8EE3EF"
+    "Factor 1" = "#482d8b",
+    "Factor 2" = "#2894aa",
+    "Factor 3" = "#f26b21",
+    "Factor 4" = "#f7944f"
   )
 
   plot_gauge <- wjp_gauge(
@@ -521,7 +521,7 @@ plot_groupbars <- wjp_groupbars(
   target      = "value",
   grouping    = "group",
   levels      = "category",
-  colors      = c("#2a2a94", "#e5e8e8"),
+  colors      = c("#482d8b", "#2894aa"),
   group_order = c("Country", "Gender")
 )
 
