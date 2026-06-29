@@ -31,6 +31,7 @@
 #' data4rose <- gpp_data %>%
 #' select(starts_with("q49")) %>%
 #'   mutate(
+#'     across(starts_with("q49"), \(x) as.double(unclass(x))),
 #'     across(
 #'       starts_with("q49"),
 #'       \(x) case_when(
@@ -42,7 +43,7 @@
 #'   summarise(
 #'     across(
 #'       starts_with("q49"),
-#'       \(x) mean(x, na.rm = T)*100
+#'       \(x) mean(x, na.rm = TRUE)*100
 #'     )
 #'   ) %>%
 #'   pivot_longer(
@@ -123,7 +124,7 @@ wjp_rose <- function(
                  y        = target_var,
                  fill     = grouping_var),
              position     = "dodge2",
-             show.legend  = F)
+             show.legend  = FALSE)
 
   # Add labels - use ggtext if available for rich formatting
   if (requireNamespace("ggtext", quietly = TRUE)) {

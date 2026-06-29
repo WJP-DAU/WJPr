@@ -40,7 +40,7 @@
 #'   mutate(
 #'     across(
 #'       !year,
-#'       \(x) as.double(x)
+#'       \(x) as.double(unclass(x))
 #'     ),
 #'     across(
 #'       !year,
@@ -120,8 +120,8 @@ wjp_dumbbells <- function(
   data_wider <- data %>%
     pivot_wider(
       id_cols     = all_of(grouping),
-      names_from  = color,
-      values_from = target
+      names_from  = all_of(color),
+      values_from = all_of(target)
     ) %>%
     rename(
       group = all_of(grouping),
@@ -135,8 +135,8 @@ wjp_dumbbells <- function(
         data %>%
           pivot_wider(
             id_cols     = all_of(grouping),
-            names_from  = color,
-            values_from = labels
+            names_from  = all_of(color),
+            values_from = all_of(labels)
           ) %>%
           rename(
             group = all_of(grouping),
@@ -151,8 +151,8 @@ wjp_dumbbells <- function(
         data %>%
           pivot_wider(
             id_cols     = all_of(grouping),
-            names_from  = color,
-            values_from = labpos
+            names_from  = all_of(color),
+            values_from = all_of(labpos)
           ) %>%
           rename(
             group = all_of(grouping),
@@ -263,10 +263,9 @@ wjp_dumbbells <- function(
           axis.title.y       = element_blank(),
           panel.grid.major.y = element_blank(),
           panel.background   = element_blank(), 
-          panel.ontop = T,
+          panel.ontop = TRUE,
           axis.text.y = element_text(color = "#222221",
                                      hjust = 0))
   
   return(plt)
 }
-

@@ -45,7 +45,7 @@
 #'   mutate(
 #'     across(
 #'       !year,
-#'       \(x) as.double(x)
+#'       \(x) as.double(unclass(x))
 #'     ),
 #'     across(
 #'       !year,
@@ -111,8 +111,8 @@ wjp_lines <- function(
     colors,
     cvec           = NULL,
     labels         = NULL,
-    repel          = F, 
-    transparency   = F,        
+    repel          = FALSE,
+    transparency   = FALSE,
     transparencies = NULL,   
     custom.axis    = FALSE,
     x.breaks       = NULL,    
@@ -147,18 +147,18 @@ wjp_lines <- function(
   if (transparency == FALSE) {
     plt <- plt +
       geom_point(size = 2,
-                 show.legend = F) +
+                 show.legend = FALSE) +
       geom_line(linewidth    = 1,
-                show.legend  = F)
+                show.legend  = FALSE)
       
   } else {
     plt <- plt +
       geom_point(size = 2,
                  aes(alpha   = colors_var),
-                 show.legend = F) +
+                 show.legend = FALSE) +
       geom_line(linewidth    = 1,
                 aes(alpha    = colors_var),
-                show.legend  = F)
+                show.legend  = FALSE)
   }
   
   if (repel == FALSE) {
@@ -173,7 +173,7 @@ wjp_lines <- function(
                   family      = "Lato Full",
                   fontface    = "bold",
                   size        = 3.514598,
-                  show.legend = F)
+                  show.legend = FALSE)
     } else {
       plt <- plt +
         geom_text(aes(y       = target_var + 7.5,
@@ -183,7 +183,7 @@ wjp_lines <- function(
                   family      = "Lato Full",
                   fontface    = "bold",
                   size        = 3.514598,
-                  show.legend = F)
+                  show.legend = FALSE)
     }
     
     
@@ -203,7 +203,7 @@ wjp_lines <- function(
                         family      = "Lato Full",
                         fontface    = "bold",
                         size        = 3.514598,
-                        show.legend = F,
+                        show.legend = FALSE,
 
                         # Additional options from ggrepel package:
                         min.segment.length = 1000,
@@ -221,7 +221,7 @@ wjp_lines <- function(
                         family      = "Lato Full",
                         fontface    = "bold",
                         size        = 3.514598,
-                        show.legend = F,
+                        show.legend = FALSE,
 
                         # Additional options from ggrepel package:
                         min.segment.length = 1000,

@@ -37,6 +37,7 @@
 #' ) %>%
 #'   select(country, q1a) %>%
 #'   mutate(
+#'     q1a = as.double(unclass(q1a)),
 #'     q1a  = case_when(
 #'       q1a <= 2  ~ "Trust",
 #'       q1a <= 4  ~ "No Trust"
@@ -95,7 +96,7 @@ wjp_divbars <- function(
     cvec = NULL,
     labels = NULL,  
     label_color = "#ffffff",
-    custom_order = F, 
+    custom_order = FALSE,
     order = NULL,  
     ptheme = WJP_theme()
 ){
@@ -129,7 +130,7 @@ wjp_divbars <- function(
   }
   
   # Creating ggplot
-  if (custom_order == F) {
+  if (custom_order == FALSE) {
     chart <- ggplot(data, aes(x     = rows_var,
                               y     = target_var,
                               fill  = grouping_var,
@@ -148,7 +149,7 @@ wjp_divbars <- function(
   chart <- chart +
     geom_bar(stat         = "identity",
              position     = "stack",
-             show.legend  = F,
+             show.legend  = FALSE,
              width        = 0.85) +
     geom_hline(yintercept = 0,
                linetype   = "solid",

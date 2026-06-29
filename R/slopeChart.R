@@ -38,7 +38,8 @@
 #'     year %in% c(2017, 2019)
 #'   ) %>%
 #'   mutate(
-#'     q1a = as.double(q1a),
+#'     gend = as.double(unclass(gend)),
+#'     q1a = as.double(unclass(q1a)),
 #'     trust = case_when(
 #'       q1a <= 2  ~ 1,
 #'       q1a <= 4  ~ 0
@@ -50,7 +51,7 @@
 #'   ) %>%
 #'   group_by(year, gender) %>%
 #'   summarise(
-#'     trust = mean(trust, na.rm = T)*100,
+#'     trust = mean(trust, na.rm = TRUE)*100,
 #'     .groups = "keep"
 #'   ) %>%
 #'   mutate(
@@ -126,11 +127,11 @@ wjp_slope <- function(
                     label = labels_var,
                     group = ngroups)) +
     geom_point(size = 2,
-               show.legend = F) +
+               show.legend = FALSE) +
     geom_line(linewidth    = 1,
-              show.legend  = F)
+              show.legend  = FALSE)
   
-  if (repel == F) {
+  if (repel == FALSE) {
     
     # Applying regular geom_text
     plt <- plt +
@@ -140,7 +141,7 @@ wjp_slope <- function(
                 family      = "Lato Full",
                 fontface    = "bold",
                 size        = 3.514598,
-                show.legend = F)
+                show.legend = FALSE)
     
   } else {
 
@@ -157,7 +158,7 @@ wjp_slope <- function(
                       family      = "Lato Full",
                       fontface    = "bold",
                       size        = 3.514598,
-                      show.legend = F,
+                      show.legend = FALSE,
 
                       # Additional options from ggrepel package:
                       min.segment.length = 1000,

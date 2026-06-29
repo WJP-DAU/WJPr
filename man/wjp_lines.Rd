@@ -12,8 +12,8 @@ wjp_lines(
   colors,
   cvec = NULL,
   labels = NULL,
-  repel = F,
-  transparency = F,
+  repel = FALSE,
+  transparency = FALSE,
   transparencies = NULL,
   custom.axis = FALSE,
   x.breaks = NULL,
@@ -82,7 +82,7 @@ filter(
   mutate(
     across(
       !year,
-      \(x) as.double(x)
+      \(x) as.double(unclass(x))
     ),
     across(
       !year,

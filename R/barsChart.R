@@ -39,7 +39,7 @@
 #'   select(country, year, q1a) %>%
 #'   group_by(country, year) %>%
 #'   mutate(
-#'     q1a = as.double(q1a),
+#'     q1a = as.double(unclass(q1a)),
 #'     trust = case_when(
 #'       q1a <= 2  ~ 1,
 #'       q1a <= 4  ~ 0,
@@ -150,7 +150,7 @@ wjp_bars <- function(
   # Creating plot
   if(is.null(order)) {
     
-    if (stacked == F) {
+    if (stacked == FALSE) {
       plt <- ggplot2::ggplot(data, 
                              aes(x     = grouping_var,
                                  y     = target_var,
@@ -158,7 +158,7 @@ wjp_bars <- function(
                                  fill  = colors_var)) +
         ggplot2::geom_bar(stat  = "identity",
                           width = width,
-                          show.legend = F) +
+                          show.legend = FALSE) +
         ggplot2::geom_text(aes(y    = lab_pos),
                            color    = "#4a4a49",
                            family   = "Lato Full",
@@ -171,7 +171,7 @@ wjp_bars <- function(
                         fill  = colors_var)) +
         ggplot2::geom_bar(stat         = "identity",
                           position     = "stack", 
-                          show.legend  = F,  
+                          show.legend  = FALSE,
                           width        = width) +
         ggplot2::geom_text(aes(y       = lab_pos),
                            color       = "#ffffff",
@@ -181,14 +181,14 @@ wjp_bars <- function(
     
   } else {
     
-    if (stacked == F) {
+    if (stacked == FALSE) {
       plt <- ggplot2::ggplot(data, 
                              aes(x     = reorder(grouping_var, order_var),
                                  y     = target_var,
                                  label = labels_var,
                                  fill  = colors_var)) +
         ggplot2::geom_bar(stat = "identity",
-                          show.legend = F,  width = width) +
+                          show.legend = FALSE,  width = width) +
         ggplot2::geom_text(aes(y    = lab_pos),
                            color    = "#4a4a49",
                            family   = "Lato Full",
@@ -201,7 +201,7 @@ wjp_bars <- function(
                                  fill  = colors_var)) +
         ggplot2::geom_bar(stat         = "identity",
                           position     = "stack", 
-                          show.legend  = F,  width = width) +
+                          show.legend  = FALSE,  width = width) +
         ggplot2::geom_text(aes(y    = lab_pos),
                            color    = "#ffffff",
                            family   = "Lato Full",

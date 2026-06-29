@@ -60,6 +60,9 @@ library(dplyr)
 # Preparing data
 gpp_data <- WJPr::gpp \%>\%
   mutate(
+    q1a = as.double(unclass(q1a)),
+    q1b = as.double(unclass(q1b)),
+    gend = as.double(unclass(gend)),
     trust_a = case_when(q1a <= 2 ~ 1, q1a <= 4 ~ 0),
     trust_b = case_when(q1b <= 2 ~ 1, q1b <= 4 ~ 0),
     female = case_when(gend == 2 ~ 1, gend == 1 ~ 0)

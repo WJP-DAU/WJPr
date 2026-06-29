@@ -42,6 +42,7 @@
 #' data4dots <- gpp_data %>%
 #'   select(country, q1a, q1b, q1c, q1d) %>%
 #'   mutate(
+#'     across(!country, \(x) as.double(unclass(x))),
 #'     across(
 #'       !country,
 #'       \(x) case_when(
@@ -54,7 +55,7 @@
 #'   summarise(
 #'     across(
 #'       everything(),
-#'       \(x) mean(x, na.rm = T)*100
+#'       \(x) mean(x, na.rm = TRUE)*100
 #'     ),
 #'     .groups = "keep"
 #'   ) %>%
@@ -168,7 +169,7 @@ wjp_dots <- function(
                     ymax  = ymax,
                     group = xposition,
                     fill  = fill),
-                show.legend = F) +
+                show.legend = FALSE) +
     scale_fill_manual(values = c("grey"  = "#D6D6D6",
                                  "white" = bgcolor),
                       na.value = NA)
@@ -188,16 +189,16 @@ wjp_dots <- function(
       )
   }
   
-  if (diffShp == F) {
+  if (diffShp == FALSE) {
     
-    if (diffOpac == F) {
+    if (diffOpac == FALSE) {
       plt <- plt +
         geom_point(data      = data,
                    aes(x     = reorder(grouping_var, -order_var),
                        y     = target_var,
                        color = colors_var),
                    size = 4,
-                   show.legend = F)
+                   show.legend = FALSE)
     } else {
       plt <- plt +
         geom_point(data = data,
@@ -206,13 +207,13 @@ wjp_dots <- function(
                        color = colors_var,
                        alpha = colors_var),
                    size      = 4,
-                   show.legend   = F) +
+                   show.legend   = FALSE) +
         scale_alpha_manual(values = opacities)
     }
     
   } else {
     
-    if (diffOpac == F) {
+    if (diffOpac == FALSE) {
       plt <- plt +
         geom_point(data      = data,
                    aes(x     = reorder(grouping_var, -order_var),
@@ -222,7 +223,7 @@ wjp_dots <- function(
                    fill   = NA,
                    size   = 4,
                    stroke = 2,
-                   show.legend = F) +
+                   show.legend = FALSE) +
         scale_shape_manual(values = shapes)
       
     } else {
@@ -236,7 +237,7 @@ wjp_dots <- function(
                    fill   = NA,
                    size   = 4,
                    stroke = 2,
-                   show.legend    = F) +
+                   show.legend    = FALSE) +
         scale_shape_manual(values = shapes) +
         scale_alpha_manual(values = opacities)
     }
@@ -260,7 +261,7 @@ wjp_dots <- function(
           axis.title.y       = element_blank(),
           panel.grid.major.y = element_blank(),
           panel.background   = element_blank(), 
-          panel.ontop = T,
+          panel.ontop = TRUE,
           axis.text.y = element_text(color = "#222221",
                                      hjust = 0))
     

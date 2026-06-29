@@ -38,6 +38,9 @@
 #' # Preparing data
 #' gpp_data <- WJPr::gpp %>%
 #'   mutate(
+#'     q1a = as.double(unclass(q1a)),
+#'     q1b = as.double(unclass(q1b)),
+#'     gend = as.double(unclass(gend)),
 #'     trust_a = case_when(q1a <= 2 ~ 1, q1a <= 4 ~ 0),
 #'     trust_b = case_when(q1b <= 2 ~ 1, q1b <= 4 ~ 0),
 #'     female = case_when(gend == 2 ~ 1, gend == 1 ~ 0)
@@ -88,8 +91,8 @@ diffmeans <- function(data, target_vars, group_vars, geo_var, type = "categorica
             stat_function <- function(df) {
               group_A <- df %>% filter(grouping == 1) %>% pull(target)
               group_B <- df %>% filter(grouping == 0) %>% pull(target)
-              mean_A  <- mean(group_A, na.rm = T)
-              mean_B  <- mean(group_B, na.rm = T)
+              mean_A  <- mean(group_A, na.rm = TRUE)
+              mean_B  <- mean(group_B, na.rm = TRUE)
               ttest_result <- t.test(group_A, group_B, paired = FALSE)
               
               data.frame(
@@ -105,8 +108,8 @@ diffmeans <- function(data, target_vars, group_vars, geo_var, type = "categorica
             stat_function <- function(df) {
               count_table      <- table(df$grouping, df$target)
               prop_test_result <- prop.test(count_table)
-              mean_A <- mean(df$target[df$grouping == 1], na.rm = T)
-              mean_B <- mean(df$target[df$grouping == 0], na.rm = T)
+              mean_A <- mean(df$target[df$grouping == 1], na.rm = TRUE)
+              mean_B <- mean(df$target[df$grouping == 0], na.rm = TRUE)
               
               data.frame(
                 mean_A  = mean_A,
@@ -156,5 +159,3 @@ diffmeans <- function(data, target_vars, group_vars, geo_var, type = "categorica
     }
   )
 }
-
-

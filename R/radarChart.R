@@ -37,6 +37,8 @@
 #' data4radar <- gpp_data %>%
 #' select(gend, starts_with("q49")) %>%
 #'   mutate(
+#'     gend = as.double(unclass(gend)),
+#'     across(starts_with("q49"), \(x) as.double(unclass(x))),
 #'     gender = case_when(
 #'       gend == 1 ~ "Male",
 #'       gend == 2 ~ "Female"
@@ -53,7 +55,7 @@
 #'   summarise(
 #'     across(
 #'       starts_with("q49"),
-#'       \(x) mean(x, na.rm = T)*100
+#'       \(x) mean(x, na.rm = TRUE)*100
 #'     )
 #'   ) %>%
 #'   pivot_longer(
@@ -178,7 +180,7 @@ wjp_radar <- function(
         seq(0, 1, 0.2) + central_distance, 
         text_coords
       ) %>% 
-        distinct(r, .keep_all = T) %>% 
+        distinct(r, .keep_all = TRUE) %>%
         select(-r)
     )
   
@@ -342,4 +344,3 @@ wjp_radar <- function(
   return(radar)
   
 }
-

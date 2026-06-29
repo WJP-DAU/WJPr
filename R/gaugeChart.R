@@ -88,7 +88,7 @@ wjp_gauge <- function(
         colors_var = factor(
           colors_var,
           levels  = factor_order,
-          ordered = T
+          ordered = TRUE
         )
       ) %>%
       arrange(colors_var)

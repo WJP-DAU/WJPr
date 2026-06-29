@@ -13,7 +13,7 @@ wjp_divbars(
   cvec = NULL,
   labels = NULL,
   label_color = "#ffffff",
-  custom_order = F,
+  custom_order = FALSE,
   order = NULL,
   ptheme = WJP_theme()
 )
@@ -66,6 +66,7 @@ filter(
 ) \%>\%
   select(country, q1a) \%>\%
   mutate(
+    q1a = as.double(unclass(q1a)),
     q1a  = case_when(
       q1a <= 2  ~ "Trust",
       q1a <= 4  ~ "No Trust"

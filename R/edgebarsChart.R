@@ -38,7 +38,7 @@
 #'   select(country, year, q1a) %>%
 #'   group_by(country, year) %>%
 #'   mutate(
-#'     q1a = as.double(q1a),
+#'     q1a = as.double(unclass(q1a)),
 #'     trust = case_when(
 #'       q1a <= 2  ~ 1,
 #'       q1a <= 4  ~ 0,
@@ -141,7 +141,7 @@ wjp_edgebars <- function(
       position = "dodge",
       stat     = "identity",
       width    = bar_width,
-      show.legend = F
+      show.legend = FALSE
     )
 
   # Add rich text labels if ggtext is available

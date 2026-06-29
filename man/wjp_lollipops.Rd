@@ -55,6 +55,7 @@ data4lollipops <- gpp_data \%>\%
   filter(year == 2022, country == "Atlantis") \%>\%
   select(q1a, q1b, q1c, q1d) \%>\%
   mutate(
+    across(everything(), \(x) as.double(unclass(x))),
     across(
       everything(),
       \(x) case_when(
