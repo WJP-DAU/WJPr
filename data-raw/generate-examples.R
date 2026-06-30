@@ -537,6 +537,7 @@ plot_groupbars <- wjp_groupbars(
   sample_size    = "n",
   show_national  = TRUE,
   national_value = national_groupbars,
+  national_style = "bar",
   national_label = "General"
 )
 

@@ -12,9 +12,11 @@
 #' \code{ci_upper} can be provided as proportions (0-1) or percentages (0-100).
 #' Internally they are plotted on a 0-100 percentage scale. Confidence intervals
 #' can be supplied directly with \code{ci_lower} and \code{ci_upper}, or computed
-#' from \code{sd} and \code{sample_size}. When \code{show_national = TRUE},
-#' \code{national_value} is drawn as a vertical reference line and labeled with
-#' rich text when \pkg{ggtext} is available.
+#' from \code{sd} and \code{sample_size}. When \code{show_national = TRUE}, use
+#' \code{national_style = "line"} to draw \code{national_value} as a vertical
+#' reference line, or \code{national_style = "bar"} to add it as a full bar row
+#' using the same geometry, confidence interval, and label logic as the other
+#' rows.
 #'
 #' @param data A data frame containing the data to be plotted.
 #' @param target String. Column name containing the numeric values to plot. Values
@@ -30,10 +32,21 @@
 #' @param level_order Named list where names are group values and values are character vectors
 #'   specifying the order of levels within each group. Default is NULL (uses data order).
 #' @param show_national Logical. If TRUE, adds a vertical national average line
-#'   and a rich text annotation. Default is FALSE.
+#'   and a rich text annotation by default, or a national average bar when
+#'   \code{national_style = "bar"}. Default is FALSE.
 #' @param national_value Numeric. The national average value to display when show_national is TRUE.
 #' @param national_label String. Optional single rich text label for the national
 #'   average annotation. If NULL, a label is generated from \code{national_value}.
+#' @param national_style String. How to display the national value when
+#'   \code{show_national = TRUE}: "line", "bar", or "none". Default is "line".
+#' @param national_position String. Position of the national bar when
+#'   \code{national_style = "bar"}: "top" or "bottom". Default is "top".
+#' @param national_ci_lower Numeric. Optional lower confidence interval bound for
+#'   the national bar. Uses the same 0-1 or 0-100 scale detection as \code{target}.
+#' @param national_ci_upper Numeric. Optional upper confidence interval bound for
+#'   the national bar. Uses the same 0-1 or 0-100 scale detection as \code{target}.
+#' @param national_group_label String. Facet label used for the national bar.
+#'   Default is " " to create a blank facet strip.
 #' @param draw_ci Logical. If TRUE, draws a per-category confidence interval on each
 #'   primary bar. Default is FALSE.
 #' @param ci_lower String. Optional column name with precomputed lower confidence
@@ -50,6 +63,8 @@
 #' @param ptheme A ggplot2 theme. Default is WJP_theme().
 #' @param label_position String. Position for value labels: "end", "inside", or
 #'   "none". Default is "end".
+#' @param label_after_ci Logical. If TRUE and confidence intervals are drawn,
+#'   places labels after the upper CI bound when available. Default is TRUE.
 #' @param facet_ncol Integer. Number of facet columns. Default is 1.
 #' @param bar_width Numeric. Width of bars. Default is 0.7.
 #'
@@ -129,6 +144,23 @@
 #'   national_label = "General"
 #' )
 #'
+#' # National average as its own bar with its own confidence interval
+#' wjp_groupbars(
+#'   data_pct,
+#'   target            = "value",
+#'   grouping          = "group",
+#'   levels            = "category",
+#'   draw_ci           = TRUE,
+#'   ci_lower          = "lower",
+#'   ci_upper          = "upper",
+#'   show_national     = TRUE,
+#'   national_value    = 72.3,
+#'   national_style    = "bar",
+#'   national_label    = "National Average",
+#'   national_ci_lower = 70.0,
+#'   national_ci_upper = 74.6
+#' )
+#'
 
 wjp_groupbars <- function(
     data,
@@ -149,7 +181,13 @@ wjp_groupbars <- function(
     ci_level       = 0.95,
     ptheme         = WJP_theme(),
     national_label = NULL,
+    national_style = "line",
+    national_position = "top",
+    national_ci_lower = NULL,
+    national_ci_upper = NULL,
+    national_group_label = " ",
     label_position = "end",
+    label_after_ci = TRUE,
     facet_ncol     = 1,
     bar_width      = 0.7
 ) {
@@ -231,9 +269,23 @@ wjp_groupbars <- function(
   if (length(ci_level) != 1 || !is.finite(ci_level) || ci_level <= 0 || ci_level >= 1) {
     stop("`ci_level` must be a single number between 0 and 1.", call. = FALSE)
   }
+  if (!national_style %in% c("line", "bar", "none")) {
+    stop('`national_style` must be one of "line", "bar", or "none".', call. = FALSE)
+  }
+  if (!national_position %in% c("top", "bottom")) {
+    stop('`national_position` must be one of "top" or "bottom".', call. = FALSE)
+  }
+  if (length(label_after_ci) != 1 || !is.logical(label_after_ci)) {
+    stop("`label_after_ci` must be TRUE or FALSE.", call. = FALSE)
+  }
+  if (length(national_group_label) != 1) {
+    stop("`national_group_label` must be a single string.", call. = FALSE)
+  }
 
   national_value_pct <- NULL
-  if (isTRUE(show_national)) {
+  national_ci_lower_pct <- NULL
+  national_ci_upper_pct <- NULL
+  if (isTRUE(show_national) && national_style != "none") {
     if (is.null(national_value)) {
       stop("`national_value` must be provided when show_national = TRUE.", call. = FALSE)
     }
@@ -244,6 +296,19 @@ wjp_groupbars <- function(
     national_value_pct <- if (national_value <= 1) national_value * 100 else national_value
     if (!is.null(national_label) && length(national_label) != 1) {
       stop("`national_label` must be a single string.", call. = FALSE)
+    }
+    if (!is.null(national_ci_lower) || !is.null(national_ci_upper)) {
+      if (is.null(national_ci_lower) || is.null(national_ci_upper)) {
+        stop("`national_ci_lower` and `national_ci_upper` must both be provided.", call. = FALSE)
+      }
+      if (length(national_ci_lower) != 1 || length(national_ci_upper) != 1) {
+        stop("`national_ci_lower` and `national_ci_upper` must be single numeric values.", call. = FALSE)
+      }
+      national_ci_lower_pct <- value_to_pct(national_ci_lower, "`national_ci_lower`")
+      national_ci_upper_pct <- value_to_pct(national_ci_upper, "`national_ci_upper`")
+      if (national_ci_lower_pct > national_ci_upper_pct) {
+        stop("`national_ci_lower` must be less than or equal to `national_ci_upper`.", call. = FALSE)
+      }
     }
   }
 
@@ -301,6 +366,34 @@ wjp_groupbars <- function(
     }
   }
 
+  national_is_bar <- isTRUE(show_national) && national_style == "bar"
+  national_is_line <- isTRUE(show_national) && national_style == "line"
+
+  if (national_is_bar) {
+    national_bar_label <- if (is.null(national_label)) {
+      "National Average"
+    } else {
+      as.character(national_label)
+    }
+
+    national_row <- data.frame(
+      target_var   = national_value,
+      grouping_var = national_group_label,
+      levels_var   = national_bar_label,
+      labels_var   = NA_character_,
+      target_pct   = national_value_pct,
+      lower        = if (!is.null(national_ci_lower_pct)) national_ci_lower_pct else NA_real_,
+      upper        = if (!is.null(national_ci_upper_pct)) national_ci_upper_pct else NA_real_,
+      stringsAsFactors = FALSE
+    )
+
+    data <- if (national_position == "top") {
+      dplyr::bind_rows(national_row, data)
+    } else {
+      dplyr::bind_rows(data, national_row)
+    }
+  }
+
   # Create stacked data (primary + secondary = 100%)
   data2plot <- data %>%
     dplyr::mutate(
@@ -336,12 +429,12 @@ wjp_groupbars <- function(
       )
     )
 
-  if (draw_ci && label_position == "end") {
+  if (draw_ci && label_position == "end" && isTRUE(label_after_ci)) {
     data2plot <- data2plot %>%
       dplyr::mutate(
         label_x = dplyr::if_else(
           color_type == "primary",
-          pmin(113, upper + 1),
+          pmin(113, dplyr::coalesce(upper, value) + 1),
           NA_real_
         )
       )
@@ -353,6 +446,13 @@ wjp_groupbars <- function(
 
   # Order groups (facets)
   if (!is.null(group_order)) {
+    if (national_is_bar) {
+      group_order <- if (national_position == "top") {
+        unique(c(national_group_label, group_order))
+      } else {
+        unique(c(group_order, national_group_label))
+      }
+    }
     missing_groups <- setdiff(unique(as.character(data2plot$grouping_var)), group_order)
     if (length(missing_groups) > 0) {
       stop("`group_order` must include all values from `grouping`.", call. = FALSE)
@@ -400,7 +500,7 @@ wjp_groupbars <- function(
   cvec <- c("primary" = colors[1], "secondary" = colors[2])
 
   national_label_data <- NULL
-  if (isTRUE(show_national)) {
+  if (national_is_line) {
     national_group <- if (!is.null(group_order)) {
       available_groups <- group_order[group_order %in% as.character(data2plot$grouping_var)]
       if (length(available_groups) > 0) {
@@ -509,7 +609,7 @@ wjp_groupbars <- function(
       )
   }
 
-  if (isTRUE(show_national)) {
+  if (national_is_line) {
     plt <- plt +
       ggplot2::geom_vline(
         xintercept = national_value_pct,
@@ -604,7 +704,7 @@ wjp_groupbars <- function(
       strip.switch.pad.grid = grid::unit(-25, "mm"),
       strip.clip            = "off",
       legend.position       = "none",
-      plot.margin           = ggplot2::margin(10, 30, 10, 10)
+      plot.margin           = ggplot2::margin(10, 30, 10, 40)
     )
 
   return(plt)

@@ -23,7 +23,13 @@ wjp_groupbars(
   ci_level = 0.95,
   ptheme = WJP_theme(),
   national_label = NULL,
+  national_style = "line",
+  national_position = "top",
+  national_ci_lower = NULL,
+  national_ci_upper = NULL,
+  national_group_label = " ",
   label_position = "end",
+  label_after_ci = TRUE,
   facet_ncol = 1,
   bar_width = 0.7
 )
@@ -51,12 +57,28 @@ Default is NULL (uses data order).}
 specifying the order of levels within each group. Default is NULL (uses data order).}
 
 \item{show_national}{Logical. If TRUE, adds a vertical national average line
-and a rich text annotation. Default is FALSE.}
+and a rich text annotation by default, or a national average bar when
+\code{national_style = "bar"}. Default is FALSE.}
 
 \item{national_value}{Numeric. The national average value to display when show_national is TRUE.}
 
 \item{national_label}{String. Optional single rich text label for the national
 average annotation. If NULL, a label is generated from \code{national_value}.}
+
+\item{national_style}{String. How to display the national value when
+\code{show_national = TRUE}: "line", "bar", or "none". Default is "line".}
+
+\item{national_position}{String. Position of the national bar when
+\code{national_style = "bar"}: "top" or "bottom". Default is "top".}
+
+\item{national_ci_lower}{Numeric. Optional lower confidence interval bound for
+the national bar. Uses the same 0-1 or 0-100 scale detection as \code{target}.}
+
+\item{national_ci_upper}{Numeric. Optional upper confidence interval bound for
+the national bar. Uses the same 0-1 or 0-100 scale detection as \code{target}.}
+
+\item{national_group_label}{String. Facet label used for the national bar.
+Default is " " to create a blank facet strip.}
 
 \item{draw_ci}{Logical. If TRUE, draws a per-category confidence interval on each
 primary bar. Default is FALSE.}
@@ -82,6 +104,9 @@ supplied. Default is NULL.}
 \item{label_position}{String. Position for value labels: "end", "inside", or
 "none". Default is "end".}
 
+\item{label_after_ci}{Logical. If TRUE and confidence intervals are drawn,
+places labels after the upper CI bound when available. Default is TRUE.}
+
 \item{facet_ncol}{Integer. Number of facet columns. Default is 1.}
 
 \item{bar_width}{Numeric. Width of bars. Default is 0.7.}
@@ -101,9 +126,11 @@ Values supplied to \code{target}, \code{national_value}, \code{ci_lower}, and
 \code{ci_upper} can be provided as proportions (0-1) or percentages (0-100).
 Internally they are plotted on a 0-100 percentage scale. Confidence intervals
 can be supplied directly with \code{ci_lower} and \code{ci_upper}, or computed
-from \code{sd} and \code{sample_size}. When \code{show_national = TRUE},
-\code{national_value} is drawn as a vertical reference line and labeled with
-rich text when \pkg{ggtext} is available.
+from \code{sd} and \code{sample_size}. When \code{show_national = TRUE}, use
+\code{national_style = "line"} to draw \code{national_value} as a vertical
+reference line, or \code{national_style = "bar"} to add it as a full bar row
+using the same geometry, confidence interval, and label logic as the other
+rows.
 }
 \examples{
 library(dplyr)
@@ -176,6 +203,23 @@ wjp_groupbars(
   show_national  = TRUE,
   national_value = 72.3,
   national_label = "General"
+)
+
+# National average as its own bar with its own confidence interval
+wjp_groupbars(
+  data_pct,
+  target            = "value",
+  grouping          = "group",
+  levels            = "category",
+  draw_ci           = TRUE,
+  ci_lower          = "lower",
+  ci_upper          = "upper",
+  show_national     = TRUE,
+  national_value    = 72.3,
+  national_style    = "bar",
+  national_label    = "National Average",
+  national_ci_lower = 70.0,
+  national_ci_upper = 74.6
 )
 
 }

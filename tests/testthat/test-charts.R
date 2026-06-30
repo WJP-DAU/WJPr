@@ -135,6 +135,19 @@ test_that("optional arguments validate invalid inputs clearly", {
     ),
     "`national_label`"
   )
+
+  expect_error(
+    wjp_groupbars(
+      groupbars,
+      "value",
+      "group",
+      "level",
+      show_national  = TRUE,
+      national_value = 0.5,
+      national_style = "point"
+    ),
+    "`national_style`"
+  )
 })
 
 test_that("wjp_groupbars draws national average as annotation, not as a data row", {
@@ -193,5 +206,44 @@ test_that("wjp_groupbars supports percentage inputs and precomputed confidence i
   }, logical(1))))
   expect_true(any(vapply(built$data, function(layer) {
     "label" %in% names(layer) && any(grepl("General", layer$label, fixed = TRUE))
+  }, logical(1))))
+})
+
+test_that("wjp_groupbars can draw national average as a bar", {
+  groupbars <- data.frame(
+    group = c("Gender", "Gender", "Age", "Age"),
+    level = c("Male", "Female", "Young", "Old"),
+    value = c(45, 55, 35, 62),
+    lower = c(40, 50, 30, 57),
+    upper = c(50, 60, 40, 67)
+  )
+
+  plot <- wjp_groupbars(
+    groupbars,
+    "value",
+    "group",
+    "level",
+    group_order       = c("Gender", "Age"),
+    draw_ci           = TRUE,
+    ci_lower          = "lower",
+    ci_upper          = "upper",
+    show_national     = TRUE,
+    national_value    = 50,
+    national_style    = "bar",
+    national_label    = "National Average",
+    national_ci_lower = 48,
+    national_ci_upper = 52
+  )
+
+  expect_no_error(built <- ggplot2::ggplot_build(plot))
+  expect_equal(nrow(built$data[[1]]), (nrow(groupbars) + 1) * 2)
+  expect_false(any(vapply(built$data, function(layer) {
+    "xintercept" %in% names(layer)
+  }, logical(1))))
+  expect_true(any(vapply(built$data, function(layer) {
+    all(c("xmin", "xmax") %in% names(layer)) && any(layer$xmin == 48) && any(layer$xmax == 52)
+  }, logical(1))))
+  expect_true(any(vapply(built$data, function(layer) {
+    "label" %in% names(layer) && any(layer$label == "50%")
   }, logical(1))))
 })
