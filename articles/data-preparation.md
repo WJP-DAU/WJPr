@@ -452,4 +452,4 @@ data <- raw_data %>%
 | [`wjp_gauge()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_gauge.md) | target, colors | labels, factor_order |
 | [`wjp_lollipops()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lollipops.md) | target, grouping | order |
 | [`wjp_edgebars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_edgebars.md) | target, grouping, labels | x_lab_pos |
-| [`wjp_groupbars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_groupbars.md) | target, grouping, levels | labels, group_order, sd + sample_size (for CI) |
+| [`wjp_groupbars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_groupbars.md) | target, grouping, levels | labels, group_order, level_order, ci_lower + ci_upper or sd + sample_size (for CI), show_national + national_value |

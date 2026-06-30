@@ -3,11 +3,25 @@
 wjp_groupbars() creates a faceted horizontal stacked bar chart where bars are
 grouped by categories and show a primary value (e.g., percentage) stacked with
 its complement. Useful for displaying survey results broken down by demographic
-groups like gender, age, income, etc."><meta property="og:description" content="
+groups like gender, age, income, etc.
+Values supplied to target, national_value, ci_lower, and
+ci_upper can be provided as proportions (0-1) or percentages (0-100).
+Internally they are plotted on a 0-100 percentage scale. Confidence intervals
+can be supplied directly with ci_lower and ci_upper, or computed
+from sd and sample_size. When show_national = TRUE,
+national_value is drawn as a vertical reference line and labeled with
+rich text when ggtext is available."><meta property="og:description" content="
 wjp_groupbars() creates a faceted horizontal stacked bar chart where bars are
 grouped by categories and show a primary value (e.g., percentage) stacked with
 its complement. Useful for displaying survey results broken down by demographic
-groups like gender, age, income, etc."><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin></head><body>
+groups like gender, age, income, etc.
+Values supplied to target, national_value, ci_lower, and
+ci_upper can be provided as proportions (0-1) or percentages (0-100).
+Internally they are plotted on a 0-100 percentage scale. Confidence intervals
+can be supplied directly with ci_lower and ci_upper, or computed
+from sd and sample_size. When show_national = TRUE,
+national_value is drawn as a vertical reference line and labeled with
+rich text when ggtext is available."><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -84,6 +98,13 @@ groups like gender, age, income, etc."><link rel="preconnect" href="https://font
 grouped by categories and show a primary value (e.g., percentage) stacked with
 its complement. Useful for displaying survey results broken down by demographic
 groups like gender, age, income, etc.</p>
+<p>Values supplied to <code>target</code>, <code>national_value</code>, <code>ci_lower</code>, and
+<code>ci_upper</code> can be provided as proportions (0-1) or percentages (0-100).
+Internally they are plotted on a 0-100 percentage scale. Confidence intervals
+can be supplied directly with <code>ci_lower</code> and <code>ci_upper</code>, or computed
+from <code>sd</code> and <code>sample_size</code>. When <code>show_national = TRUE</code>,
+<code>national_value</code> is drawn as a vertical reference line and labeled with
+rich text when <span class="pkg">ggtext</span> is available.</p>
     </div>
 
     <div class="section level2">
@@ -100,10 +121,16 @@ groups like gender, age, income, etc.</p>
 <span>  show_national <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  national_value <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  draw_ci <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  ci_lower <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ci_upper <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  sd <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  sample_size <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ci_level <span class="op">=</span> <span class="fl">0.95</span>,</span>
-<span>  ptheme <span class="op">=</span> <span class="fu"><a href="WJP_theme.html">WJP_theme</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  ptheme <span class="op">=</span> <span class="fu"><a href="WJP_theme.html">WJP_theme</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  national_label <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  label_position <span class="op">=</span> <span class="st">"end"</span>,</span>
+<span>  facet_ncol <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  bar_width <span class="op">=</span> <span class="fl">0.7</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -116,7 +143,8 @@ groups like gender, age, income, etc.</p>
 
 
 <dt id="arg-target">target<a class="anchor" aria-label="anchor" href="#arg-target"></a></dt>
-<dd><p>String. Column name containing the numeric values to plot (typically proportions 0-1).</p></dd>
+<dd><p>String. Column name containing the numeric values to plot. Values
+can be proportions (0-1) or percentages (0-100).</p></dd>
 
 
 <dt id="arg-grouping">grouping<a class="anchor" aria-label="anchor" href="#arg-grouping"></a></dt>
@@ -138,7 +166,8 @@ Default is NULL.</p></dd>
 
 
 <dt id="arg-group-order">group_order<a class="anchor" aria-label="anchor" href="#arg-group-order"></a></dt>
-<dd><p>Character vector specifying the order of facet groups. Default is NULL (uses data order).</p></dd>
+<dd><p>Character vector specifying the order of all facet groups.
+Default is NULL (uses data order).</p></dd>
 
 
 <dt id="arg-level-order">level_order<a class="anchor" aria-label="anchor" href="#arg-level-order"></a></dt>
@@ -147,27 +176,44 @@ specifying the order of levels within each group. Default is NULL (uses data ord
 
 
 <dt id="arg-show-national">show_national<a class="anchor" aria-label="anchor" href="#arg-show-national"></a></dt>
-<dd><p>Logical. If TRUE, adds a "National Average" row at the top. Default is FALSE.</p></dd>
+<dd><p>Logical. If TRUE, adds a vertical national average line
+and a rich text annotation. Default is FALSE.</p></dd>
 
 
 <dt id="arg-national-value">national_value<a class="anchor" aria-label="anchor" href="#arg-national-value"></a></dt>
 <dd><p>Numeric. The national average value to display when show_national is TRUE.</p></dd>
 
 
+<dt id="arg-national-label">national_label<a class="anchor" aria-label="anchor" href="#arg-national-label"></a></dt>
+<dd><p>String. Optional single rich text label for the national
+average annotation. If NULL, a label is generated from <code>national_value</code>.</p></dd>
+
+
 <dt id="arg-draw-ci">draw_ci<a class="anchor" aria-label="anchor" href="#arg-draw-ci"></a></dt>
 <dd><p>Logical. If TRUE, draws a per-category confidence interval on each
-primary bar using a normal approximation built from <code>sd</code> and <code>sample_size</code>.
-Default is FALSE.</p></dd>
+primary bar. Default is FALSE.</p></dd>
+
+
+<dt id="arg-ci-lower">ci_lower<a class="anchor" aria-label="anchor" href="#arg-ci-lower"></a></dt>
+<dd><p>String. Optional column name with precomputed lower confidence
+interval bounds. If supplied, <code>ci_upper</code> must also be supplied.</p></dd>
+
+
+<dt id="arg-ci-upper">ci_upper<a class="anchor" aria-label="anchor" href="#arg-ci-upper"></a></dt>
+<dd><p>String. Optional column name with precomputed upper confidence
+interval bounds. If supplied, <code>ci_lower</code> must also be supplied.</p></dd>
 
 
 <dt id="arg-sd">sd<a class="anchor" aria-label="anchor" href="#arg-sd"></a></dt>
 <dd><p>String. Column name with the standard deviation used to build the
-confidence interval. Required when <code>draw_ci = TRUE</code>. Default is NULL.</p></dd>
+confidence interval when <code>ci_lower</code> and <code>ci_upper</code> are not supplied.
+Default is NULL.</p></dd>
 
 
 <dt id="arg-sample-size">sample_size<a class="anchor" aria-label="anchor" href="#arg-sample-size"></a></dt>
 <dd><p>String. Column name with the number of observations used to
-build the confidence interval. Required when <code>draw_ci = TRUE</code>. Default is NULL.</p></dd>
+build the confidence interval when <code>ci_lower</code> and <code>ci_upper</code> are not
+supplied. Default is NULL.</p></dd>
 
 
 <dt id="arg-ci-level">ci_level<a class="anchor" aria-label="anchor" href="#arg-ci-level"></a></dt>
@@ -176,6 +222,19 @@ build the confidence interval. Required when <code>draw_ci = TRUE</code>. Defaul
 
 <dt id="arg-ptheme">ptheme<a class="anchor" aria-label="anchor" href="#arg-ptheme"></a></dt>
 <dd><p>A ggplot2 theme. Default is WJP_theme().</p></dd>
+
+
+<dt id="arg-label-position">label_position<a class="anchor" aria-label="anchor" href="#arg-label-position"></a></dt>
+<dd><p>String. Position for value labels: "end", "inside", or
+"none". Default is "end".</p></dd>
+
+
+<dt id="arg-facet-ncol">facet_ncol<a class="anchor" aria-label="anchor" href="#arg-facet-ncol"></a></dt>
+<dd><p>Integer. Number of facet columns. Default is 1.</p></dd>
+
+
+<dt id="arg-bar-width">bar_width<a class="anchor" aria-label="anchor" href="#arg-bar-width"></a></dt>
+<dd><p>Numeric. Width of bars. Default is 0.7.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -237,6 +296,29 @@ build the confidence interval. Required when <code>draw_ci = TRUE</code>. Defaul
 <span class="r-in"><span>  sample_size <span class="op">=</span> <span class="st">"n"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="wjp_groupbars-3.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Percentage-scale input with precomputed confidence intervals and a general line</span></span></span>
+<span class="r-in"><span><span class="va">data_pct</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  group    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Gender"</span>, <span class="st">"Gender"</span>, <span class="st">"Age"</span>, <span class="st">"Age"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  category <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Male"</span>, <span class="st">"Female"</span>, <span class="st">"18-29"</span>, <span class="st">"50+"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  value    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">74.4</span>, <span class="fl">70.3</span>, <span class="fl">72.1</span>, <span class="fl">73.0</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  lower    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">72.4</span>, <span class="fl">68.4</span>, <span class="fl">70.1</span>, <span class="fl">70.8</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  upper    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">76.4</span>, <span class="fl">72.1</span>, <span class="fl">74.5</span>, <span class="fl">75.2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">wjp_groupbars</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">data_pct</span>,</span></span>
+<span class="r-in"><span>  target         <span class="op">=</span> <span class="st">"value"</span>,</span></span>
+<span class="r-in"><span>  grouping       <span class="op">=</span> <span class="st">"group"</span>,</span></span>
+<span class="r-in"><span>  levels         <span class="op">=</span> <span class="st">"category"</span>,</span></span>
+<span class="r-in"><span>  draw_ci        <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  ci_lower       <span class="op">=</span> <span class="st">"lower"</span>,</span></span>
+<span class="r-in"><span>  ci_upper       <span class="op">=</span> <span class="st">"upper"</span>,</span></span>
+<span class="r-in"><span>  show_national  <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  national_value <span class="op">=</span> <span class="fl">72.3</span>,</span></span>
+<span class="r-in"><span>  national_label <span class="op">=</span> <span class="st">"General"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="wjp_groupbars-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

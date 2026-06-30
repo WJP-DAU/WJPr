@@ -885,7 +885,12 @@ category</caption>
 <h2 id="grouped-bars">Grouped Bars<a class="anchor" aria-label="anchor" href="#grouped-bars"></a>
 </h2>
 <p><code><a href="../reference/wjp_groupbars.html">wjp_groupbars()</a></code> - Faceted bars that compare a value
-across demographic groups (one facet per <code>grouping</code>).</p>
+across demographic groups (one facet per <code>grouping</code>). Values
+can be supplied as proportions (<code>0-1</code>) or percentages
+(<code>0-100</code>). Confidence intervals can be calculated from
+<code>sd</code> and <code>sample_size</code>, or supplied directly with
+<code>ci_lower</code> and <code>ci_upper</code>. A national/general
+reference can be added with <code>show_national = TRUE</code>.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Value by country, plus the same value broken down by gender.</span></span>
 <span><span class="co"># Keep the standard deviation (sd) and sample size (n) per category so we can</span></span>
@@ -920,27 +925,38 @@ across demographic groups (one facet per <code>grouping</code>).</p>
 <span></span>
 <span><span class="va">data_groupbars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">country_level</span>, <span class="va">gender_level</span><span class="op">)</span></span>
 <span></span>
+<span><span class="va">national_value</span> <span class="op">&lt;-</span> <span class="va">country_level</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">value</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu"><a href="../reference/wjp_groupbars.html">wjp_groupbars</a></span><span class="op">(</span></span>
 <span>  <span class="va">data_groupbars</span>,</span>
-<span>  target      <span class="op">=</span> <span class="st">"value"</span>,</span>
-<span>  grouping    <span class="op">=</span> <span class="st">"group"</span>,</span>
-<span>  levels      <span class="op">=</span> <span class="st">"category"</span>,</span>
-<span>  colors      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#482d8b"</span>, <span class="st">"#2894aa"</span><span class="op">)</span>,</span>
-<span>  group_order <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Country"</span>, <span class="st">"Gender"</span><span class="op">)</span>,</span>
-<span>  draw_ci     <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  sd          <span class="op">=</span> <span class="st">"sd"</span>,</span>
-<span>  sample_size <span class="op">=</span> <span class="st">"n"</span></span>
+<span>  target         <span class="op">=</span> <span class="st">"value"</span>,</span>
+<span>  grouping       <span class="op">=</span> <span class="st">"group"</span>,</span>
+<span>  levels         <span class="op">=</span> <span class="st">"category"</span>,</span>
+<span>  colors         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#482d8b"</span>, <span class="st">"#2894aa"</span><span class="op">)</span>,</span>
+<span>  group_order    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Country"</span>, <span class="st">"Gender"</span><span class="op">)</span>,</span>
+<span>  draw_ci        <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  sd             <span class="op">=</span> <span class="st">"sd"</span>,</span>
+<span>  sample_size    <span class="op">=</span> <span class="st">"n"</span>,</span>
+<span>  show_national  <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  national_value <span class="op">=</span> <span class="va">national_value</span>,</span>
+<span>  national_label <span class="op">=</span> <span class="st">"General"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="gallery_files/figure-html/groupbars-1.png" class="r-plt" alt="" width="100%"></p>
 <p><strong>Expected input structure</strong> — one row per
 <code>levels</code> category, tagged with the <code>grouping</code>
-(facet) it belongs to and its <code>target</code> value. To draw a
+(facet) it belongs to and its <code>target</code> value.
+<code>target</code>, <code>national_value</code>, <code>ci_lower</code>,
+and <code>ci_upper</code> may be proportions or percentages. To draw a
 confidence interval on each bar, set <code>draw_ci = TRUE</code> and
-supply per-category <code>sd</code> (standard deviation) and
-<code>sample_size</code> columns.</p>
+either supply per-category <code>sd</code> plus
+<code>sample_size</code>, or pass precomputed <code>ci_lower</code> and
+<code>ci_upper</code> columns.</p>
 <table class="table">
 <caption>Input data for wjp_groupbars(): target = value, grouping =
-group, levels = category, sd/n for the confidence interval</caption>
+group, levels = category, sd/n for calculated confidence
+intervals</caption>
 <thead><tr class="header">
 <th align="left">category</th>
 <th align="right">value</th>

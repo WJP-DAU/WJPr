@@ -560,7 +560,10 @@ Input data for wjp_gauge(): target = value, colors = category {.table}
 
 [`wjp_groupbars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_groupbars.md) -
 Faceted bars that compare a value across demographic groups (one facet
-per `grouping`).
+per `grouping`). Values can be supplied as proportions (`0-1`) or
+percentages (`0-100`). Confidence intervals can be calculated from `sd`
+and `sample_size`, or supplied directly with `ci_lower` and `ci_upper`.
+A national/general reference can be added with `show_national = TRUE`.
 
 ``` r
 
@@ -597,25 +600,34 @@ gender_level <- gpp_data %>%
 
 data_groupbars <- bind_rows(country_level, gender_level)
 
+national_value <- country_level %>%
+  summarise(value = mean(value, na.rm = TRUE)) %>%
+  pull(value)
+
 wjp_groupbars(
   data_groupbars,
-  target      = "value",
-  grouping    = "group",
-  levels      = "category",
-  colors      = c("#482d8b", "#2894aa"),
-  group_order = c("Country", "Gender"),
-  draw_ci     = TRUE,
-  sd          = "sd",
-  sample_size = "n"
+  target         = "value",
+  grouping       = "group",
+  levels         = "category",
+  colors         = c("#482d8b", "#2894aa"),
+  group_order    = c("Country", "Gender"),
+  draw_ci        = TRUE,
+  sd             = "sd",
+  sample_size    = "n",
+  show_national  = TRUE,
+  national_value = national_value,
+  national_label = "General"
 )
 ```
 
 ![](gallery_files/figure-html/groupbars-1.png)
 
 **Expected input structure** — one row per `levels` category, tagged
-with the `grouping` (facet) it belongs to and its `target` value. To
-draw a confidence interval on each bar, set `draw_ci = TRUE` and supply
-per-category `sd` (standard deviation) and `sample_size` columns.
+with the `grouping` (facet) it belongs to and its `target` value.
+`target`, `national_value`, `ci_lower`, and `ci_upper` may be
+proportions or percentages. To draw a confidence interval on each bar,
+set `draw_ci = TRUE` and either supply per-category `sd` plus
+`sample_size`, or pass precomputed `ci_lower` and `ci_upper` columns.
 
 | category  |     value |        sd |   n | group   |
 |:----------|----------:|----------:|----:|:--------|
@@ -626,7 +638,7 @@ per-category `sd` (standard deviation) and `sample_size` columns.
 | Male      | 0.5675676 | 0.4987953 |  74 | Gender  |
 
 Input data for wjp_groupbars(): target = value, grouping = group, levels
-= category, sd/n for the confidence interval {.table}
+= category, sd/n for calculated confidence intervals {.table}
 
 ------------------------------------------------------------------------
 
