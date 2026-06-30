@@ -154,22 +154,27 @@ groupbars <- data.frame(
 
 wjp_groupbars(
   groupbars,
-  target         = "pct_weighted",
-  grouping       = "disaggregation",
-  levels         = "demographics",
-  draw_ci        = TRUE,
-  ci_lower       = "ci_lower",
-  ci_upper       = "ci_upper",
-  show_national  = TRUE,
-  national_value = 72.3,
-  national_label = "General"
+  target            = "pct_weighted",
+  grouping          = "disaggregation",
+  levels            = "demographics",
+  draw_ci           = TRUE,
+  ci_lower          = "ci_lower",
+  ci_upper          = "ci_upper",
+  show_national     = TRUE,
+  national_value    = 72.3,
+  national_style    = "bar",
+  national_label    = "National Average",
+  national_ci_lower = 70.0,
+  national_ci_upper = 74.6
 )
 ```
 
 Confidence intervals can also be calculated by passing `sd` and
-`sample_size` instead of precomputed `ci_lower` and `ci_upper`.
-`show_national = TRUE` adds a dashed vertical reference line plus a rich
-text label.
+`sample_size` instead of precomputed `ci_lower` and `ci_upper`. Use
+`national_style = "bar"` when the national value should appear as its
+own bar above or below the disaggregations; use
+`national_style = "line"` when it should be a dashed vertical reference
+line.
 
 ### Validate Your Data
 

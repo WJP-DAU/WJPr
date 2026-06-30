@@ -563,7 +563,9 @@ Faceted bars that compare a value across demographic groups (one facet
 per `grouping`). Values can be supplied as proportions (`0-1`) or
 percentages (`0-100`). Confidence intervals can be calculated from `sd`
 and `sample_size`, or supplied directly with `ci_lower` and `ci_upper`.
-A national/general reference can be added with `show_national = TRUE`.
+A national/general value can be added either as its own bar
+(`national_style = "bar"`) or as a vertical reference line
+(`national_style = "line"`).
 
 ``` r
 
@@ -616,6 +618,7 @@ wjp_groupbars(
   sample_size    = "n",
   show_national  = TRUE,
   national_value = national_value,
+  national_style = "bar",
   national_label = "General"
 )
 ```
@@ -628,6 +631,9 @@ with the `grouping` (facet) it belongs to and its `target` value.
 proportions or percentages. To draw a confidence interval on each bar,
 set `draw_ci = TRUE` and either supply per-category `sd` plus
 `sample_size`, or pass precomputed `ci_lower` and `ci_upper` columns.
+When `national_style = "bar"`, the national value is inserted as a
+regular bar row and can receive its own `national_ci_lower` and
+`national_ci_upper`.
 
 | category  |     value |        sd |   n | group   |
 |:----------|----------:|----------:|----:|:--------|

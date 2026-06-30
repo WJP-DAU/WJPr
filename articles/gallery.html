@@ -890,7 +890,9 @@ can be supplied as proportions (<code>0-1</code>) or percentages
 (<code>0-100</code>). Confidence intervals can be calculated from
 <code>sd</code> and <code>sample_size</code>, or supplied directly with
 <code>ci_lower</code> and <code>ci_upper</code>. A national/general
-reference can be added with <code>show_national = TRUE</code>.</p>
+value can be added either as its own bar
+(<code>national_style = "bar"</code>) or as a vertical reference line
+(<code>national_style = "line"</code>).</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Value by country, plus the same value broken down by gender.</span></span>
 <span><span class="co"># Keep the standard deviation (sd) and sample size (n) per category so we can</span></span>
@@ -941,6 +943,7 @@ reference can be added with <code>show_national = TRUE</code>.</p>
 <span>  sample_size    <span class="op">=</span> <span class="st">"n"</span>,</span>
 <span>  show_national  <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  national_value <span class="op">=</span> <span class="va">national_value</span>,</span>
+<span>  national_style <span class="op">=</span> <span class="st">"bar"</span>,</span>
 <span>  national_label <span class="op">=</span> <span class="st">"General"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="gallery_files/figure-html/groupbars-1.png" class="r-plt" alt="" width="100%"></p>
@@ -952,7 +955,10 @@ and <code>ci_upper</code> may be proportions or percentages. To draw a
 confidence interval on each bar, set <code>draw_ci = TRUE</code> and
 either supply per-category <code>sd</code> plus
 <code>sample_size</code>, or pass precomputed <code>ci_lower</code> and
-<code>ci_upper</code> columns.</p>
+<code>ci_upper</code> columns. When <code>national_style = "bar"</code>,
+the national value is inserted as a regular bar row and can receive its
+own <code>national_ci_lower</code> and
+<code>national_ci_upper</code>.</p>
 <table class="table">
 <caption>Input data for wjp_groupbars(): target = value, grouping =
 group, levels = category, sd/n for calculated confidence

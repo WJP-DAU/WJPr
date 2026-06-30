@@ -11,9 +11,11 @@ Values supplied to `target`, `national_value`, `ci_lower`, and
 `ci_upper` can be provided as proportions (0-1) or percentages (0-100).
 Internally they are plotted on a 0-100 percentage scale. Confidence
 intervals can be supplied directly with `ci_lower` and `ci_upper`, or
-computed from `sd` and `sample_size`. When `show_national = TRUE`,
-`national_value` is drawn as a vertical reference line and labeled with
-rich text when ggtext is available.
+computed from `sd` and `sample_size`. When `show_national = TRUE`, use
+`national_style = "line"` to draw `national_value` as a vertical
+reference line, or `national_style = "bar"` to add it as a full bar row
+using the same geometry, confidence interval, and label logic as the
+other rows.
 
 ## Usage
 
@@ -37,7 +39,13 @@ wjp_groupbars(
   ci_level = 0.95,
   ptheme = WJP_theme(),
   national_label = NULL,
+  national_style = "line",
+  national_position = "top",
+  national_ci_lower = NULL,
+  national_ci_upper = NULL,
+  national_group_label = " ",
   label_position = "end",
+  label_after_ci = TRUE,
   facet_ncol = 1,
   bar_width = 0.7
 )
@@ -88,7 +96,8 @@ wjp_groupbars(
 - show_national:
 
   Logical. If TRUE, adds a vertical national average line and a rich
-  text annotation. Default is FALSE.
+  text annotation by default, or a national average bar when
+  `national_style = "bar"`. Default is FALSE.
 
 - national_value:
 
@@ -99,6 +108,31 @@ wjp_groupbars(
 
   String. Optional single rich text label for the national average
   annotation. If NULL, a label is generated from `national_value`.
+
+- national_style:
+
+  String. How to display the national value when `show_national = TRUE`:
+  "line", "bar", or "none". Default is "line".
+
+- national_position:
+
+  String. Position of the national bar when `national_style = "bar"`:
+  "top" or "bottom". Default is "top".
+
+- national_ci_lower:
+
+  Numeric. Optional lower confidence interval bound for the national
+  bar. Uses the same 0-1 or 0-100 scale detection as `target`.
+
+- national_ci_upper:
+
+  Numeric. Optional upper confidence interval bound for the national
+  bar. Uses the same 0-1 or 0-100 scale detection as `target`.
+
+- national_group_label:
+
+  String. Facet label used for the national bar. Default is " " to
+  create a blank facet strip.
 
 - draw_ci:
 
@@ -139,6 +173,11 @@ wjp_groupbars(
 
   String. Position for value labels: "end", "inside", or "none". Default
   is "end".
+
+- label_after_ci:
+
+  Logical. If TRUE and confidence intervals are drawn, places labels
+  after the upper CI bound when available. Default is TRUE.
 
 - facet_ncol:
 
@@ -228,6 +267,24 @@ wjp_groupbars(
   show_national  = TRUE,
   national_value = 72.3,
   national_label = "General"
+)
+
+
+# National average as its own bar with its own confidence interval
+wjp_groupbars(
+  data_pct,
+  target            = "value",
+  grouping          = "group",
+  levels            = "category",
+  draw_ci           = TRUE,
+  ci_lower          = "lower",
+  ci_upper          = "upper",
+  show_national     = TRUE,
+  national_value    = 72.3,
+  national_style    = "bar",
+  national_label    = "National Average",
+  national_ci_lower = 70.0,
+  national_ci_upper = 74.6
 )
 
 ```

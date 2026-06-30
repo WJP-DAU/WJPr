@@ -98,7 +98,7 @@ for further customization - Use common parameters: `target`, `grouping`,
 | [`wjp_gauge()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_gauge.md) | gaugeChart.R | Gauge/speedometer charts |
 | [`wjp_lollipops()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_lollipops.md) | lollipopChart.R | Lollipop charts |
 | [`wjp_edgebars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_edgebars.md) | edgebarsChart.R | Edge-aligned horizontal bars |
-| [`wjp_groupbars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_groupbars.md) | groupbarsChart.R | Faceted stacked bars by demographic groups, with optional CI and national reference line |
+| [`wjp_groupbars()`](https://worldjusticeproject-org.github.io/WJPr/reference/wjp_groupbars.md) | groupbarsChart.R | Faceted stacked bars by demographic groups, with optional CI and national line/bar |
 | `wjp_diffmeans()` | diffmeans.R | Difference in means analysis |
 
 ### Styling Conventions
