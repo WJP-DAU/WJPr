@@ -96,9 +96,102 @@ test_that("optional arguments validate invalid inputs clearly", {
     "positive finite"
   )
 
-  groupbars <- data.frame(group = "G", level = "L", value = 45)
+  groupbars <- data.frame(group = "G", level = "L", value = 145)
   expect_error(
     wjp_groupbars(groupbars, "value", "group", "level"),
-    "between 0 and 1"
+    "0-100"
   )
+
+  groupbars <- data.frame(group = "G", level = "L", value = 0.45)
+  expect_error(
+    wjp_groupbars(groupbars, "value", "group", "level", show_national = TRUE),
+    "`national_value`"
+  )
+
+  expect_error(
+    wjp_groupbars(groupbars, "value", "group", "level", group_order = "Missing"),
+    "`group_order`"
+  )
+
+  groupbars <- data.frame(
+    group = c("Gender", "Age"),
+    level = c("Male", "Young"),
+    value = c(0.45, 0.35)
+  )
+  expect_error(
+    wjp_groupbars(groupbars, "value", "group", "level", group_order = "Gender"),
+    "`group_order`"
+  )
+
+  expect_error(
+    wjp_groupbars(
+      groupbars,
+      "value",
+      "group",
+      "level",
+      show_national  = TRUE,
+      national_value = 0.5,
+      national_label = c("A", "B")
+    ),
+    "`national_label`"
+  )
+})
+
+test_that("wjp_groupbars draws national average as annotation, not as a data row", {
+  groupbars <- data.frame(
+    group = c("Gender", "Gender", "Age", "Age"),
+    level = c("Male", "Female", "Young", "Old"),
+    value = c(0.45, 0.55, 0.35, 0.62)
+  )
+
+  plot <- wjp_groupbars(
+    groupbars,
+    "value",
+    "group",
+    "level",
+    show_national  = TRUE,
+    national_value = 0.5
+  )
+
+  expect_s3_class(plot, "ggplot")
+  expect_no_error(built <- ggplot2::ggplot_build(plot))
+  expect_equal(nrow(built$data[[1]]), nrow(groupbars) * 2)
+  expect_true(any(vapply(built$data, function(layer) {
+    "xintercept" %in% names(layer) && any(layer$xintercept == 50)
+  }, logical(1))))
+  expect_true(any(vapply(built$data, function(layer) {
+    "label" %in% names(layer) && any(grepl("National Average", layer$label, fixed = TRUE))
+  }, logical(1))))
+})
+
+test_that("wjp_groupbars supports percentage inputs and precomputed confidence intervals", {
+  groupbars <- data.frame(
+    group = c("Gender", "Gender", "Age", "Age"),
+    level = c("Male", "Female", "Young", "Old"),
+    value = c(45, 55, 35, 62),
+    lower = c(40, 50, 30, 57),
+    upper = c(50, 60, 40, 67)
+  )
+
+  plot <- wjp_groupbars(
+    groupbars,
+    "value",
+    "group",
+    "level",
+    draw_ci  = TRUE,
+    ci_lower = "lower",
+    ci_upper = "upper",
+    show_national  = TRUE,
+    national_value = 50,
+    national_label = "General"
+  )
+
+  expect_no_error(built <- ggplot2::ggplot_build(plot))
+  expect_equal(nrow(built$data[[1]]), nrow(groupbars) * 2)
+  expect_true(any(vapply(built$data, function(layer) {
+    all(c("xmin", "xmax") %in% names(layer)) && any(layer$xmin == 40) && any(layer$xmax == 67)
+  }, logical(1))))
+  expect_true(any(vapply(built$data, function(layer) {
+    "label" %in% names(layer) && any(grepl("General", layer$label, fixed = TRUE))
+  }, logical(1))))
 })

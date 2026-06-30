@@ -123,6 +123,35 @@ All WJPr visualization functions expect data in **long (tidy) format**:
 | `cvec`     | Named vector mapping values to colors| `c("A" = "#HEX")`|
 | `labels`   | Text labels to display               | Character column|
 
+### Grouped Bars
+
+`wjp_groupbars()` compares a percentage across demographic groups in separate facets. The `target` column can be supplied as proportions (`0-1`) or percentages (`0-100`); the function plots both on a 0-100 percentage scale.
+
+```R
+groupbars <- data.frame(
+  disaggregation = c("age", "age", "profile_gender", "profile_gender"),
+  demographics   = c("18-24", "55+", "Men", "Women"),
+  pct_weighted   = c(72.1, 73.0, 74.4, 70.3),
+  ci_lower       = c(70.1, 70.8, 72.4, 68.4),
+  ci_upper       = c(74.5, 75.2, 76.4, 72.1)
+)
+
+wjp_groupbars(
+  groupbars,
+  target         = "pct_weighted",
+  grouping       = "disaggregation",
+  levels         = "demographics",
+  draw_ci        = TRUE,
+  ci_lower       = "ci_lower",
+  ci_upper       = "ci_upper",
+  show_national  = TRUE,
+  national_value = 72.3,
+  national_label = "General"
+)
+```
+
+Confidence intervals can also be calculated by passing `sd` and `sample_size` instead of precomputed `ci_lower` and `ci_upper`. `show_national = TRUE` adds a dashed vertical reference line plus a rich text label.
+
 ### Validate Your Data
 
 Use `wjp_check_data()` to verify your data structure before plotting:

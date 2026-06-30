@@ -520,16 +520,24 @@ data_groupbars <- gpp_data %>%
       rename(category = gender)
   )
 
+national_groupbars <- data_groupbars %>%
+  filter(group == "Country") %>%
+  summarise(value = mean(value, na.rm = TRUE)) %>%
+  pull(value)
+
 plot_groupbars <- wjp_groupbars(
   data_groupbars,
-  target      = "value",
-  grouping    = "group",
-  levels      = "category",
-  colors      = c("#482d8b", "#2894aa"),
-  group_order = c("Country", "Gender"),
-  draw_ci     = TRUE,
-  sd          = "sd",
-  sample_size = "n"
+  target         = "value",
+  grouping       = "group",
+  levels         = "category",
+  colors         = c("#482d8b", "#2894aa"),
+  group_order    = c("Country", "Gender"),
+  draw_ci        = TRUE,
+  sd             = "sd",
+  sample_size    = "n",
+  show_national  = TRUE,
+  national_value = national_groupbars,
+  national_label = "General"
 )
 
 save_example(plot_groupbars, "groupbars", width = 6, height = 5)

@@ -70,7 +70,7 @@ All visualization functions follow a consistent pattern:
 | `wjp_gauge()` | gaugeChart.R | Gauge/speedometer charts |
 | `wjp_lollipops()` | lollipopChart.R | Lollipop charts |
 | `wjp_edgebars()` | edgebarsChart.R | Edge-aligned horizontal bars |
-| `wjp_groupbars()` | groupbarsChart.R | Faceted stacked bars by demographic groups |
+| `wjp_groupbars()` | groupbarsChart.R | Faceted stacked bars by demographic groups, with optional CI and national reference line |
 | `wjp_diffmeans()` | diffmeans.R | Difference in means analysis |
 
 ### Styling Conventions
