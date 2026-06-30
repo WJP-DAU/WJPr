@@ -2,14 +2,16 @@ Type: Package
 Package: WJPr
 Title: World Justice Project Data and Visualization Tools
 Version: 1.0.1
-Authors@R:
-    person(
-        given = "Carlos A.",
-        family = "Toruno Paniagua",
-        email = "ctoruno@worldjusticeproject.org",
-        role = c("aut", "cre")
+Authors@R: c(
+    person("World Justice Project", "Data Analytics Unit",
+           email = "data-analytics@worldjusticeproject.org",
+           role = c("aut", "cph")),
+    person("Carlos A.", "Toruno Paniagua",
+           email = "ctoruno@worldjusticeproject.org",
+           role = "cre")
     )
-Author: Carlos A. Toruno Paniagua [aut, cre]
+Author: World Justice Project - Data Analytics Unit [aut, cph],
+    Carlos A. Toruno Paniagua [cre]
 Maintainer: Carlos A. Toruno Paniagua <ctoruno@worldjusticeproject.org>
 Description: The WJPr package contains the most important data and
     visualization tools used by Data Analytics Unit at The World Justice

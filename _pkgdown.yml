@@ -1,5 +1,9 @@
 url: https://worldjusticeproject-org.github.io/WJPr/
 
+authors:
+  World Justice Project - Data Analytics Unit:
+    href: https://worldjusticeproject.org
+
 template:
   bootstrap: 5
   bslib:
@@ -15,8 +19,11 @@ template:
     navbar-light-color: "rgba(255,255,255,0.9)"
     navbar-light-active-color: "#ffffff"
     navbar-light-hover-color: "#ffffff"
-    link-color: "#482d8b"
+    link-color: "#555659"
     code-color: "#2e1c5c"
+    body-color: "#555659"
+    toc-color: "#555659"
+    toc-font-size: "0.875rem"
     base_font:
       google: "Lato"
     heading_font:
