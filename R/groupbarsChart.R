@@ -67,6 +67,11 @@
 #'   places labels after the upper CI bound when available. Default is TRUE.
 #' @param facet_ncol Integer. Number of facet columns. Default is 1.
 #' @param bar_width Numeric. Width of bars. Default is 0.7.
+#' @param show_axis Logical. If TRUE, displays the X axis with percentage breaks
+#'   (0%, 25%, 50%, 75%, 100%) at the bottom. Default is FALSE.
+#' @param strip_position String. Position of facet strip labels: "left" places them
+#'   vertically on the left side, "top" places them horizontally above each group.
+#'   Default is "left".
 #'
 #' @return A ggplot object representing the grouped stacked bar chart.
 #' @export
@@ -161,6 +166,25 @@
 #'   national_ci_upper = 74.6
 #' )
 #'
+#' # With visible X axis and strip labels on top (publication-style layout)
+#' wjp_groupbars(
+#'   data_pct,
+#'   target            = "value",
+#'   grouping          = "group",
+#'   levels            = "category",
+#'   draw_ci           = TRUE,
+#'   ci_lower          = "lower",
+#'   ci_upper          = "upper",
+#'   show_national     = TRUE,
+#'   national_value    = 72.3,
+#'   national_style    = "bar",
+#'   national_label    = "National Average",
+#'   national_ci_lower = 70.0,
+#'   national_ci_upper = 74.6,
+#'   show_axis         = TRUE,
+#'   strip_position    = "top"
+#' )
+#'
 
 wjp_groupbars <- function(
     data,
@@ -189,7 +213,9 @@ wjp_groupbars <- function(
     label_position = "end",
     label_after_ci = TRUE,
     facet_ncol     = 1,
-    bar_width      = 0.7
+    bar_width      = 0.7,
+    show_axis      = FALSE,
+    strip_position = "left"
 ) {
 
   # ===========================================================================
@@ -281,6 +307,12 @@ wjp_groupbars <- function(
   if (length(national_group_label) != 1) {
     stop("`national_group_label` must be a single string.", call. = FALSE)
   }
+  if (length(show_axis) != 1 || !is.logical(show_axis)) {
+    stop("`show_axis` must be TRUE or FALSE.", call. = FALSE)
+  }
+  if (!strip_position %in% c("left", "top")) {
+    stop('`strip_position` must be one of "left" or "top".', call. = FALSE)
+  }
 
   national_value_pct <- NULL
   national_ci_lower_pct <- NULL
@@ -368,6 +400,9 @@ wjp_groupbars <- function(
 
   national_is_bar <- isTRUE(show_national) && national_style == "bar"
   national_is_line <- isTRUE(show_national) && national_style == "line"
+
+  # Store national bar label for later use in axis styling
+  national_bar_label <- NULL
 
   if (national_is_bar) {
     national_bar_label <- if (is.null(national_label)) {
@@ -567,32 +602,53 @@ wjp_groupbars <- function(
     ggplot2::scale_fill_manual(values = cvec) +
     ggplot2::scale_x_continuous(
       expand   = c(0, 0),
-      limits   = c(0, 115),
-      position = "top"
+      limits   = c(0, if (show_axis) 100 else 115),
+      breaks   = if (show_axis) c(0, 25, 50, 75, 100) else ggplot2::waiver(),
+      labels   = if (show_axis) function(x) paste0(x, "%") else ggplot2::waiver(),
+      position = if (show_axis) "bottom" else "top"
     ) +
     ggplot2::scale_y_discrete(
       labels = function(x) {
         label <- sub("^.* \\| ", "", x)
-        ifelse(label == ".national_average", "", label)
+        label <- ifelse(label == ".national_average", "", label)
+        # Color national bar label with primary color if ggtext is available
+        if (!is.null(national_bar_label) && requireNamespace("ggtext", quietly = TRUE)) {
+          label <- ifelse(
+            label == national_bar_label,
+            paste0("<span style='color:", colors[1], "'>", label, "</span>"),
+            label
+          )
+        }
+        label
       }
     ) +
     ggplot2::coord_cartesian(clip = "off") +
     ggplot2::labs(x = "", y = "")
 
   if (facet_ncol == 1) {
-    plt <- plt +
-      ggplot2::facet_grid(
-        rows   = ggplot2::vars(grouping_var),
-        scales = "free",
-        space  = "free_y",
-        switch = "y"
-      )
+    if (strip_position == "top") {
+      plt <- plt +
+        ggplot2::facet_grid(
+          rows   = ggplot2::vars(grouping_var),
+          scales = "free",
+          space  = "free_y"
+        )
+    } else {
+      plt <- plt +
+        ggplot2::facet_grid(
+          rows   = ggplot2::vars(grouping_var),
+          scales = "free",
+          space  = "free_y",
+          switch = "y"
+        )
+    }
   } else {
     plt <- plt +
       ggplot2::facet_wrap(
         ggplot2::vars(grouping_var),
         scales = "free_y",
-        ncol   = facet_ncol
+        ncol   = facet_ncol,
+        strip.position = if (strip_position == "top") "top" else "left"
       )
   }
 
@@ -673,25 +729,74 @@ wjp_groupbars <- function(
   # 6. APPLY THEME
   # ===========================================================================
 
-  plt <- plt +
-    ptheme +
-    ggplot2::theme(
-      strip.placement      = "outside",
-      strip.background     = ggplot2::element_blank(),
-      axis.title.x         = ggplot2::element_blank(),
-      axis.title.y         = ggplot2::element_blank(),
-      axis.text.x          = ggplot2::element_blank(),
-      axis.text.y          = ggplot2::element_text(
+  # Base theme adjustments
+
+  theme_base <- ggplot2::theme(
+    strip.placement      = "outside",
+    strip.background     = ggplot2::element_blank(),
+    axis.title.x         = ggplot2::element_blank(),
+    axis.title.y         = ggplot2::element_blank(),
+    panel.grid.major.y   = ggplot2::element_blank(),
+    panel.grid.major.x   = ggplot2::element_blank(),
+    panel.grid.minor.x   = ggplot2::element_blank(),
+    panel.spacing        = grid::unit(8, "mm"),
+    strip.clip           = "off",
+    legend.position      = "none"
+  )
+
+  # Axis X styling based on show_axis
+  if (show_axis) {
+    theme_axis <- ggplot2::theme(
+      axis.text.x = ggplot2::element_text(
+        size   = 9,
+        family = "Lato Full",
+        face   = "plain",
+        color  = "#4a4a4a"
+      ),
+      axis.ticks.x = ggplot2::element_line(color = "#d0d0d0", linewidth = 0.3),
+      axis.ticks.length.x = grid::unit(2, "mm")
+    )
+  } else {
+    theme_axis <- ggplot2::theme(
+      axis.text.x = ggplot2::element_blank()
+    )
+  }
+
+  # Axis Y styling - use element_markdown if ggtext available and national bar exists
+  if (!is.null(national_bar_label) && requireNamespace("ggtext", quietly = TRUE)) {
+    theme_axis_y <- ggplot2::theme(
+      axis.text.y = ggtext::element_markdown(
+        size   = 10,
+        hjust  = 1,
+        family = "Lato Full"
+      )
+    )
+  } else {
+    theme_axis_y <- ggplot2::theme(
+      axis.text.y = ggplot2::element_text(
         size   = 10,
         hjust  = 1,
         family = "Lato Full",
         face   = "plain"
+      )
+    )
+  }
+
+  # Strip styling based on strip_position
+  if (strip_position == "top") {
+    theme_strip <- ggplot2::theme(
+      strip.text.y = ggplot2::element_text(
+        size   = 11,
+        color  = colors[1],
+        hjust  = 0,
+        family = "Lato Full",
+        face   = "plain"
       ),
-      panel.grid.major.y   = ggplot2::element_blank(),
-      panel.grid.major.x   = ggplot2::element_blank(),
-      panel.grid.minor.x   = ggplot2::element_blank(),
-      panel.spacing        = grid::unit(8, "mm"),
-      strip.text.y.left    = ggplot2::element_text(
+      plot.margin = ggplot2::margin(10, 30, 10, 10)
+    )
+  } else {
+    theme_strip <- ggplot2::theme(
+      strip.text.y.left = ggplot2::element_text(
         angle  = 0,
         size   = 11,
         color  = colors[1],
@@ -702,10 +807,16 @@ wjp_groupbars <- function(
         margin = ggplot2::margin(-15, -25, 0, 40)
       ),
       strip.switch.pad.grid = grid::unit(-25, "mm"),
-      strip.clip            = "off",
-      legend.position       = "none",
-      plot.margin           = ggplot2::margin(10, 30, 10, 40)
+      plot.margin = ggplot2::margin(10, 30, 10, 40)
     )
+  }
+
+  plt <- plt +
+    ptheme +
+    theme_base +
+    theme_axis +
+    theme_axis_y +
+    theme_strip
 
   return(plt)
 }

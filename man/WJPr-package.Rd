@@ -22,7 +22,7 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Carlos A. Toruno Paniagua \email{ctoruno@worldjusticeproject.org}
+  \item World Justice Project Data Analytics Unit \email{data-analytics@worldjusticeproject.org} [copyright holder]
 }
 
 }
