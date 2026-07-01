@@ -47,7 +47,9 @@ wjp_groupbars(
   label_position = "end",
   label_after_ci = TRUE,
   facet_ncol = 1,
-  bar_width = 0.7
+  bar_width = 0.7,
+  show_axis = FALSE,
+  strip_position = "left"
 )
 ```
 
@@ -104,36 +106,6 @@ wjp_groupbars(
   Numeric. The national average value to display when show_national is
   TRUE.
 
-- national_label:
-
-  String. Optional single rich text label for the national average
-  annotation. If NULL, a label is generated from `national_value`.
-
-- national_style:
-
-  String. How to display the national value when `show_national = TRUE`:
-  "line", "bar", or "none". Default is "line".
-
-- national_position:
-
-  String. Position of the national bar when `national_style = "bar"`:
-  "top" or "bottom". Default is "top".
-
-- national_ci_lower:
-
-  Numeric. Optional lower confidence interval bound for the national
-  bar. Uses the same 0-1 or 0-100 scale detection as `target`.
-
-- national_ci_upper:
-
-  Numeric. Optional upper confidence interval bound for the national
-  bar. Uses the same 0-1 or 0-100 scale detection as `target`.
-
-- national_group_label:
-
-  String. Facet label used for the national bar. Default is " " to
-  create a blank facet strip.
-
 - draw_ci:
 
   Logical. If TRUE, draws a per-category confidence interval on each
@@ -169,6 +141,36 @@ wjp_groupbars(
 
   A ggplot2 theme. Default is WJP_theme().
 
+- national_label:
+
+  String. Optional single rich text label for the national average
+  annotation. If NULL, a label is generated from `national_value`.
+
+- national_style:
+
+  String. How to display the national value when `show_national = TRUE`:
+  "line", "bar", or "none". Default is "line".
+
+- national_position:
+
+  String. Position of the national bar when `national_style = "bar"`:
+  "top" or "bottom". Default is "top".
+
+- national_ci_lower:
+
+  Numeric. Optional lower confidence interval bound for the national
+  bar. Uses the same 0-1 or 0-100 scale detection as `target`.
+
+- national_ci_upper:
+
+  Numeric. Optional upper confidence interval bound for the national
+  bar. Uses the same 0-1 or 0-100 scale detection as `target`.
+
+- national_group_label:
+
+  String. Facet label used for the national bar. Default is " " to
+  create a blank facet strip.
+
 - label_position:
 
   String. Position for value labels: "end", "inside", or "none". Default
@@ -186,6 +188,17 @@ wjp_groupbars(
 - bar_width:
 
   Numeric. Width of bars. Default is 0.7.
+
+- show_axis:
+
+  Logical. If TRUE, displays the X axis with percentage breaks (0%, 25%,
+  50%, 75%, 100%) at the bottom. Default is FALSE.
+
+- strip_position:
+
+  String. Position of facet strip labels: "left" places them vertically
+  on the left side, "top" places them horizontally above each group.
+  Default is "left".
 
 ## Value
 
@@ -285,6 +298,26 @@ wjp_groupbars(
   national_label    = "National Average",
   national_ci_lower = 70.0,
   national_ci_upper = 74.6
+)
+
+
+# With visible X axis and strip labels on top (publication-style layout)
+wjp_groupbars(
+  data_pct,
+  target            = "value",
+  grouping          = "group",
+  levels            = "category",
+  draw_ci           = TRUE,
+  ci_lower          = "lower",
+  ci_upper          = "upper",
+  show_national     = TRUE,
+  national_value    = 72.3,
+  national_style    = "bar",
+  national_label    = "National Average",
+  national_ci_lower = 70.0,
+  national_ci_upper = 74.6,
+  show_axis         = TRUE,
+  strip_position    = "top"
 )
 
 ```

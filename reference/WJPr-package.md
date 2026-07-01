@@ -25,4 +25,5 @@ Useful links:
 
 Authors:
 
-- Carlos A. Toruno Paniagua <ctoruno@worldjusticeproject.org>
+- World Justice Project Data Analytics Unit
+  <data-analytics@worldjusticeproject.org> \[copyright holder\]
